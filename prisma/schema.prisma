@@ -1,0 +1,176 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Admin {
+  id            String   @id @default(uuid())
+  username      String   @unique
+  email         String   @unique
+  password_hash String   @db.Text
+  role          Role     @relation(fields: [role_id], references: [id])
+  role_id       Int      @unique
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+}
+
+model User {
+  id            String   @id @default(uuid())
+  username      String   @unique
+  email         String   @unique
+  password_hash String   @db.Text
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  transactions Transaction[]
+  user_packages UserPackage[]
+  user_exam_sessions UserExamSession[]
+}
+
+model Role {
+  id               Int      @id @default(autoincrement())
+  name             String   @unique
+  permissions_mask Int      @default(0)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  admin            Admin[]
+}
+
+model Permission {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  bit_value   Int      @default(0)
+  description String   @db.Text
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model Exam {
+  id              Int   @id @default(autoincrement())
+  title           String
+  description     String   @db.Text
+  total_questions Int      @default(0)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  questions       Question[]
+  package_exams   PackageExam[]
+  user_exam_sessions UserExamSession[]
+}
+
+model Question {
+  id              Int   @id @default(autoincrement())
+  exam            Exam  @relation(fields: [exam_id], references: [id])
+  exam_id         Int
+  question_text   String   @db.Text
+  question_image_url String   @db.Text
+  question_audio_url String   @db.Text
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  question_choices         QuestionChoice[]
+  user_answers UserAnswer[]
+}
+
+model QuestionChoice {
+  id              Int   @id @default(autoincrement())
+  question        Question @relation(fields: [question_id], references: [id])
+  question_id     Int
+  choice_text     String   @db.Text
+  choice_image_url String   @db.Text
+  choice_audio_url String   @db.Text
+  is_correct      Boolean  @default(false)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  user_answers UserAnswer[]
+}
+
+model Package {
+  id              Int   @id @default(autoincrement())
+  title           String
+  description     String   @db.Text
+  price           Float
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  package_exams PackageExam[]
+  transactions Transaction[]
+  user_packages UserPackage[]
+}
+
+model PackageExam {
+  id              Int   @id @default(autoincrement())
+  package         Package @relation(fields: [package_id], references: [id])
+  package_id      Int
+  exam            Exam  @relation(fields: [exam_id], references: [id])
+  exam_id         Int
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
+model Transaction {
+  id              Int   @id @default(autoincrement())
+  user            User  @relation(fields: [user_id], references: [id])
+  user_id         String
+  package         Package @relation(fields: [package_id], references: [id])
+  package_id      Int
+  amount          Float
+  payment_method  String
+  status          String
+  transaction_date DateTime @default(now())
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
+model UserPackage {
+  id              Int   @id @default(autoincrement())
+  user            User  @relation(fields: [user_id], references: [id])
+  user_id         String
+  package         Package @relation(fields: [package_id], references: [id])
+  package_id      Int
+  purchase_at     DateTime @default(now())
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
+model UserExamSession {
+  id              Int   @id @default(autoincrement())
+  user            User  @relation(fields: [user_id], references: [id])
+  user_id         String
+  exam            Exam  @relation(fields: [exam_id], references: [id])
+  exam_id         Int
+  question_order  Json
+  choice_order    Json
+  current_position Int @default(0)
+  started_at      DateTime @default(now())
+  completed_at    DateTime @default(now())
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  user_answers UserAnswer[]
+}
+
+model UserAnswer {
+  id              Int   @id @default(autoincrement())
+  session         UserExamSession @relation(fields: [session_id], references: [id])
+  session_id      Int
+  question        Question @relation(fields: [question_id], references: [id])
+  question_id     Int
+  choice          QuestionChoice @relation(fields: [choice_id], references: [id])
+  choice_id       Int
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
