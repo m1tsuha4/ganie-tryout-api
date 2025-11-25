@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { WinstonLoggerService } from './common/services/winston-logger.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { PrismaService } from './prisma/prisma.service';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { PrismaService } from './prisma/prisma.service';
       envFilePath: [`.env.${process.env.NODE_ENV || 'development'}`, '.env'],
     }),
     PrismaModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService, WinstonLoggerService],
