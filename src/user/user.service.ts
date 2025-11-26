@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -6,11 +10,11 @@ import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
-  constructor(private prismaService: PrismaService){}
+  constructor(private prismaService: PrismaService) {}
   async create(createUserDto: CreateUserDto) {
     const existingEmailUser = await this.prismaService.user.findUnique({
       where: {
-        email: createUserDto.email
+        email: createUserDto.email,
       },
     });
     if (existingEmailUser) {
@@ -18,7 +22,7 @@ export class UserService {
     }
     const existingUsernameUser = await this.prismaService.user.findUnique({
       where: {
-        username: createUserDto.username
+        username: createUserDto.username,
       },
     });
     if (existingUsernameUser) {
@@ -35,7 +39,7 @@ export class UserService {
 
   async findAll() {
     const existingUser = await this.prismaService.user.findMany();
-    if(existingUser.length === 0){
+    if (existingUser.length === 0) {
       throw new NotFoundException('User Not Found');
     }
     return existingUser;
@@ -45,9 +49,9 @@ export class UserService {
     const existingUser = await this.prismaService.user.findUnique({
       where: {
         id,
-      }
+      },
     });
-    if(!existingUser){
+    if (!existingUser) {
       throw new NotFoundException('User Not Found');
     }
     return existingUser;
@@ -57,25 +61,25 @@ export class UserService {
     const existingUser = await this.prismaService.user.findUnique({
       where: {
         id,
-      }
+      },
     });
-    if(!existingUser){
+    if (!existingUser) {
       throw new NotFoundException('User Not Found');
     }
     const emailUser = await this.prismaService.user.findUnique({
       where: {
         email: updateUserDto.email,
-      }
+      },
     });
-    if(emailUser && emailUser.id !== id){
+    if (emailUser && emailUser.id !== id) {
       throw new BadRequestException('Email already exists');
     }
     const usernameUser = await this.prismaService.user.findUnique({
       where: {
         username: updateUserDto.username,
-      }
+      },
     });
-    if(usernameUser && usernameUser.id !== id){
+    if (usernameUser && usernameUser.id !== id) {
       throw new BadRequestException('Username already exists');
     }
     const updateData = {
@@ -84,8 +88,8 @@ export class UserService {
       username: updateUserDto.username,
       ...(updateUserDto.password_hash && {
         password_hash: await bcrypt.hash(updateUserDto.password_hash, 10),
-      })
-    }
+      }),
+    };
     return this.prismaService.user.update({
       where: {
         id,
@@ -98,9 +102,9 @@ export class UserService {
     const existingUser = await this.prismaService.user.findUnique({
       where: {
         id,
-      }
+      },
     });
-    if(!existingUser){
+    if (!existingUser) {
       throw new NotFoundException('User Not Found');
     }
     return this.prismaService.user.delete({

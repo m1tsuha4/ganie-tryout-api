@@ -8,9 +8,9 @@ async function verify() {
     console.log('Connecting to database...');
     await prisma.onModuleInit();
     console.log('Successfully connected to database!');
-    
+
     // Optional: Try a simple query if possible, but connection check is good enough for now.
-    // const count = await prisma.user.count(); 
+    // const count = await prisma.user.count();
     // console.log(`User count: ${count}`);
 
     await prisma.onModuleDestroy();

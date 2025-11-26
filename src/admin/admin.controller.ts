@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDto, CreateAdminSchema } from './dto/create-admin.dto';
 import { UpdateAdminDto, UpdateAdminSchema } from './dto/update-admin.dto';
@@ -9,7 +17,10 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Post()
-  create(@Body(new ZodValidationPipe(CreateAdminSchema)) createAdminDto: CreateAdminDto) {
+  create(
+    @Body(new ZodValidationPipe(CreateAdminSchema))
+    createAdminDto: CreateAdminDto,
+  ) {
     return this.adminService.create(createAdminDto);
   }
 
@@ -24,7 +35,11 @@ export class AdminController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body(new ZodValidationPipe(UpdateAdminSchema)) updateAdminDto: UpdateAdminDto) {
+  update(
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(UpdateAdminSchema))
+    updateAdminDto: UpdateAdminDto,
+  ) {
     return this.adminService.update(id, updateAdminDto);
   }
 

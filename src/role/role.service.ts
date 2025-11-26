@@ -24,7 +24,7 @@ export class RoleService {
     const role = await this.prismaService.role.findUnique({
       where: {
         id,
-      }
+      },
     });
     if (!role) {
       throw new NotFoundException('Role not found');
@@ -36,7 +36,7 @@ export class RoleService {
     const existingRole = await this.prismaService.role.findUnique({
       where: {
         id,
-      }
+      },
     });
     if (!existingRole) {
       throw new NotFoundException('Role not found');
@@ -53,7 +53,7 @@ export class RoleService {
     const existingRole = this.prismaService.role.findUnique({
       where: {
         id,
-      }
+      },
     });
     if (!existingRole) {
       throw new NotFoundException('Role not found');

@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { RoleService } from './role.service';
 import { CreateRoleDto, CreateRoleSchema } from './dto/create-role.dto';
 import { UpdateRoleDto, UpdateRoleSchema } from './dto/update-role.dto';
@@ -9,7 +18,9 @@ export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @Post()
-  create(@Body(new ZodValidationPipe(CreateRoleSchema)) createRoleDto: CreateRoleDto) {
+  create(
+    @Body(new ZodValidationPipe(CreateRoleSchema)) createRoleDto: CreateRoleDto,
+  ) {
     return this.roleService.create(createRoleDto);
   }
 
@@ -24,7 +35,10 @@ export class RoleController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body(new ZodValidationPipe(UpdateRoleSchema)) updateRoleDto: UpdateRoleDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body(new ZodValidationPipe(UpdateRoleSchema)) updateRoleDto: UpdateRoleDto,
+  ) {
     return this.roleService.update(id, updateRoleDto);
   }
 
