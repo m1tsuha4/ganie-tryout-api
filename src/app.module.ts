@@ -7,6 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { PrismaService } from './prisma/prisma.service';
 import { RoleModule } from './role/role.module';
 import { AdminModule } from './admin/admin.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AdminModule } from './admin/admin.module';
     PrismaModule,
     RoleModule,
     AdminModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService, WinstonLoggerService],
