@@ -53,7 +53,7 @@ model Permission {
   id          Int      @id @default(autoincrement())
   name        String   @unique
   bit_value   Int      @default(0)
-  description String   @db.Text
+  description String?  @db.Text
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 }
@@ -61,8 +61,10 @@ model Permission {
 model Exam {
   id              Int   @id @default(autoincrement())
   title           String
-  description     String   @db.Text
+  description     String?  @db.Text 
+  duration        Int      @default(0)
   total_questions Int      @default(0)
+  type_exam       TypeExam @default(TKA)
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 
@@ -71,17 +73,25 @@ model Exam {
   user_exam_sessions UserExamSession[]
 }
 
+enum TypeExam {
+  TKA
+  TBI
+}
+
 model Question {
   id              Int   @id @default(autoincrement())
   exam            Exam  @relation(fields: [exam_id], references: [id])
   exam_id         Int
   question_text   String   @db.Text
-  question_image_url String   @db.Text
-  question_audio_url String   @db.Text
+  question_image_url String?   @db.Text
+  question_audio_url String?   @db.Text
+  discussion      String   @db.Text
+  video_discussion String?   @db.Text
+  difficulty      String?   
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 
-  question_choices         QuestionChoice[]
+  question_choices QuestionChoice[]
   user_answers UserAnswer[]
 }
 
@@ -102,8 +112,9 @@ model QuestionChoice {
 model Package {
   id              Int   @id @default(autoincrement())
   title           String
-  description     String   @db.Text
+  description     String?  @db.Text
   price           Float
+  published       Boolean @default(false)
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 
@@ -112,12 +123,18 @@ model Package {
   user_packages UserPackage[]
 }
 
+enum PackageType {
+  SARJANA
+  PASCASARJANA
+}
+
 model PackageExam {
   id              Int   @id @default(autoincrement())
   package         Package @relation(fields: [package_id], references: [id])
   package_id      Int
   exam            Exam  @relation(fields: [exam_id], references: [id])
   exam_id         Int
+  type            PackageType @default(SARJANA)
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 }
