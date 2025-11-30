@@ -11,7 +11,8 @@
 
 export const TypeExam = {
   TKA: 'TKA',
-  TBI: 'TBI'
+  TBI: 'TBI',
+  TKD: 'TKD'
 } as const
 
 export type TypeExam = (typeof TypeExam)[keyof typeof TypeExam]
