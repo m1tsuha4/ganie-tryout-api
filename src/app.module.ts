@@ -9,6 +9,8 @@ import { RoleModule } from './role/role.module';
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { PackageModule } from './sarjana-vokasi/package/package.module';
+import { QuestionModule } from './sarjana-vokasi/question/question.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { AuthModule } from './auth/auth.module';
     AdminModule,
     UserModule,
     AuthModule,
+    PackageModule,
+    QuestionModule,
   ],
   controllers: [AppController],
   providers: [AppService, WinstonLoggerService],
