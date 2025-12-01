@@ -5,6 +5,7 @@ import { LoginDto, LoginSchema } from './dto/login.dto';
 import { CreateUserDto, CreateUserSchema } from 'src/user/dto/create-user.dto';
 import { UserService } from 'src/user/user.service';
 import { JwtAuthGuard } from './guard/jwt-guard.auth';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -25,14 +26,9 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('logout-user')
-  logoutUser(@Request() req) {
-    return this.authService.logoutUser(req.user);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('logout-admin')
-  logoutAdmin(@Request() req) {
-    return this.authService.logoutAdmin(req.user);
+  @ApiBearerAuth()
+  @Post('logout')
+  logout(@Request() req) {
+    return this.authService.logout(req.user);
   }
 }

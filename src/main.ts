@@ -11,6 +11,7 @@ async function bootstrap() {
     .setTitle('Ganie Tryout API')
     .setDescription('Ganie Tryout API documentation')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
