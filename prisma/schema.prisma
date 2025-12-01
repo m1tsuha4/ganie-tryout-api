@@ -20,7 +20,7 @@ model Admin {
   email         String   @unique
   password_hash String   @db.Text
   role          Role     @relation(fields: [role_id], references: [id])
-  role_id       Int      @unique
+  role_id       Int      
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 }

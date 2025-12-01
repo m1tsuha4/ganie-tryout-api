@@ -20,10 +20,12 @@ export class AdminService {
     if (exsitingAdmin) {
       throw new BadRequestException('Admin already exists');
     }
-    const hashPassword = await bcrypt.hash(createAdminDto.password_hash, 10);
+    const hashPassword = await bcrypt.hash(createAdminDto.password, 10);
     return this.prismaService.admin.create({
       data: {
-        ...createAdminDto,
+        username: createAdminDto.username,
+        email: createAdminDto.email,
+        role_id: createAdminDto.role_id,
         password_hash: hashPassword,
       },
       select: {
@@ -89,8 +91,8 @@ export class AdminService {
       email: updateAdminDto.email,
       username: updateAdminDto.username,
       role_id: updateAdminDto.role_id,
-      ...(updateAdminDto.password_hash && {
-        password_hash: await bcrypt.hash(updateAdminDto.password_hash, 10),
+      ...(updateAdminDto.password && {
+        password_hash: await bcrypt.hash(updateAdminDto.password, 10),
       }),
     };
     return this.prismaService.admin.update({
