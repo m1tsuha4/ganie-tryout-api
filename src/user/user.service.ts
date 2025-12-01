@@ -28,10 +28,12 @@ export class UserService {
     if (existingUsernameUser) {
       throw new BadRequestException('Username already exists');
     }
-    const hashPassword = await bcrypt.hash(createUserDto.password_hash, 10);
+    const hashPassword = await bcrypt.hash(createUserDto.password, 10);
     return this.prismaService.user.create({
       data: {
-        ...createUserDto,
+        username: createUserDto.username,
+        name: createUserDto.name,
+        email: createUserDto.email,
         password_hash: hashPassword,
       },
       select: {
@@ -105,8 +107,8 @@ export class UserService {
       email: updateUserDto.email,
       name: updateUserDto.name,
       username: updateUserDto.username,
-      ...(updateUserDto.password_hash && {
-        password_hash: await bcrypt.hash(updateUserDto.password_hash, 10),
+      ...(updateUserDto.password && {
+        password_hash: await bcrypt.hash(updateUserDto.password, 10),
       }),
     };
     return this.prismaService.user.update({
