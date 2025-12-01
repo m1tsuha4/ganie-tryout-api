@@ -26,11 +26,24 @@ export class AdminService {
         ...createAdminDto,
         password_hash: hashPassword,
       },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role_id: true,
+      },
     });
   }
 
   async findAll() {
-    const existingAdmin = await this.prismaService.admin.findMany();
+    const existingAdmin = await this.prismaService.admin.findMany({
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role_id: true,
+      },
+    });
     if (existingAdmin.length === 0) {
       throw new NotFoundException('Admin not found');
     }
@@ -41,6 +54,12 @@ export class AdminService {
     const existingAdmin = await this.prismaService.admin.findUnique({
       where: {
         id,
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role_id: true,
       },
     });
     if (!existingAdmin) {
@@ -79,6 +98,12 @@ export class AdminService {
         id,
       },
       data: updateData,
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role_id: true,
+      },
     });
   }
 

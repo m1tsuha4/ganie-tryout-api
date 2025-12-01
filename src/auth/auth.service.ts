@@ -72,4 +72,15 @@ export class AuthService {
       token,
     };
   }
+  async logoutUser(user: any) {
+    return {
+      message: 'User logged out successfully',
+    };
+  }
+
+  async logoutAdmin(admin: any) {
+    return {
+      message: 'Admin logged out successfully',
+    };
+  }
 }

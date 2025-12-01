@@ -34,11 +34,24 @@ export class UserService {
         ...createUserDto,
         password_hash: hashPassword,
       },
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        email: true,
+      },
     });
   }
 
   async findAll() {
-    const existingUser = await this.prismaService.user.findMany();
+    const existingUser = await this.prismaService.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        email: true,
+      },
+    });
     if (existingUser.length === 0) {
       throw new NotFoundException('User Not Found');
     }
@@ -49,6 +62,12 @@ export class UserService {
     const existingUser = await this.prismaService.user.findUnique({
       where: {
         id,
+      },
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        email: true,
       },
     });
     if (!existingUser) {
@@ -95,6 +114,12 @@ export class UserService {
         id,
       },
       data: updateData,
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        email: true,
+      },
     });
   }
 

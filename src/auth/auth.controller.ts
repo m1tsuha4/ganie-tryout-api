@@ -1,9 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ZodValidationPipe } from 'src/common/pipes/zod-validation.pipe';
 import { LoginDto, LoginSchema } from './dto/login.dto';
 import { CreateUserDto, CreateUserSchema } from 'src/user/dto/create-user.dto';
 import { UserService } from 'src/user/user.service';
+import { JwtAuthGuard } from './guard/jwt-guard.auth';
 
 @Controller('auth')
 export class AuthController {
@@ -21,5 +22,17 @@ export class AuthController {
   @Post('admin')
   loginAdmin(@Body(new ZodValidationPipe(LoginSchema)) loginDto: LoginDto) {
     return this.authService.loginAdmin(loginDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('logout-user')
+  logoutUser(@Request() req) {
+    return this.authService.logoutUser(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('logout-admin')
+  logoutAdmin(@Request() req) {
+    return this.authService.logoutAdmin(req.user);
   }
 }
