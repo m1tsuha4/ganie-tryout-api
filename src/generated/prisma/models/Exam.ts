@@ -46,7 +46,11 @@ export type ExamMinAggregateOutputType = {
   total_questions: number | null
   type_exam: $Enums.TypeExam | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
+  updated_by: string | null
+  deleted_at: Date | null
+  deleted_by: string | null
 }
 
 export type ExamMaxAggregateOutputType = {
@@ -57,7 +61,11 @@ export type ExamMaxAggregateOutputType = {
   total_questions: number | null
   type_exam: $Enums.TypeExam | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
+  updated_by: string | null
+  deleted_at: Date | null
+  deleted_by: string | null
 }
 
 export type ExamCountAggregateOutputType = {
@@ -68,7 +76,11 @@ export type ExamCountAggregateOutputType = {
   total_questions: number
   type_exam: number
   created_at: number
+  created_by: number
   updated_at: number
+  updated_by: number
+  deleted_at: number
+  deleted_by: number
   _all: number
 }
 
@@ -93,7 +105,11 @@ export type ExamMinAggregateInputType = {
   total_questions?: true
   type_exam?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
 }
 
 export type ExamMaxAggregateInputType = {
@@ -104,7 +120,11 @@ export type ExamMaxAggregateInputType = {
   total_questions?: true
   type_exam?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
 }
 
 export type ExamCountAggregateInputType = {
@@ -115,7 +135,11 @@ export type ExamCountAggregateInputType = {
   total_questions?: true
   type_exam?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -213,7 +237,11 @@ export type ExamGroupByOutputType = {
   total_questions: number
   type_exam: $Enums.TypeExam
   created_at: Date
+  created_by: string | null
   updated_at: Date
+  updated_by: string | null
+  deleted_at: Date
+  deleted_by: string | null
   _count: ExamCountAggregateOutputType | null
   _avg: ExamAvgAggregateOutputType | null
   _sum: ExamSumAggregateOutputType | null
@@ -247,7 +275,11 @@ export type ExamWhereInput = {
   total_questions?: Prisma.IntFilter<"Exam"> | number
   type_exam?: Prisma.EnumTypeExamFilter<"Exam"> | $Enums.TypeExam
   created_at?: Prisma.DateTimeFilter<"Exam"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"Exam"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Exam"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"Exam"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"Exam"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"Exam"> | string | null
   questions?: Prisma.QuestionListRelationFilter
   package_exams?: Prisma.PackageExamListRelationFilter
   user_exam_sessions?: Prisma.UserExamSessionListRelationFilter
@@ -261,11 +293,14 @@ export type ExamOrderByWithRelationInput = {
   total_questions?: Prisma.SortOrder
   type_exam?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   questions?: Prisma.QuestionOrderByRelationAggregateInput
   package_exams?: Prisma.PackageExamOrderByRelationAggregateInput
   user_exam_sessions?: Prisma.UserExamSessionOrderByRelationAggregateInput
-  _relevance?: Prisma.ExamOrderByRelevanceInput
 }
 
 export type ExamWhereUniqueInput = Prisma.AtLeast<{
@@ -279,7 +314,11 @@ export type ExamWhereUniqueInput = Prisma.AtLeast<{
   total_questions?: Prisma.IntFilter<"Exam"> | number
   type_exam?: Prisma.EnumTypeExamFilter<"Exam"> | $Enums.TypeExam
   created_at?: Prisma.DateTimeFilter<"Exam"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"Exam"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Exam"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"Exam"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"Exam"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"Exam"> | string | null
   questions?: Prisma.QuestionListRelationFilter
   package_exams?: Prisma.PackageExamListRelationFilter
   user_exam_sessions?: Prisma.UserExamSessionListRelationFilter
@@ -293,7 +332,11 @@ export type ExamOrderByWithAggregationInput = {
   total_questions?: Prisma.SortOrder
   type_exam?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ExamCountOrderByAggregateInput
   _avg?: Prisma.ExamAvgOrderByAggregateInput
   _max?: Prisma.ExamMaxOrderByAggregateInput
@@ -312,7 +355,11 @@ export type ExamScalarWhereWithAggregatesInput = {
   total_questions?: Prisma.IntWithAggregatesFilter<"Exam"> | number
   type_exam?: Prisma.EnumTypeExamWithAggregatesFilter<"Exam"> | $Enums.TypeExam
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
+  created_by?: Prisma.StringNullableWithAggregatesFilter<"Exam"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
+  updated_by?: Prisma.StringNullableWithAggregatesFilter<"Exam"> | string | null
+  deleted_at?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
+  deleted_by?: Prisma.StringNullableWithAggregatesFilter<"Exam"> | string | null
 }
 
 export type ExamCreateInput = {
@@ -322,7 +369,11 @@ export type ExamCreateInput = {
   total_questions?: number
   type_exam?: $Enums.TypeExam
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   questions?: Prisma.QuestionCreateNestedManyWithoutExamInput
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutExamInput
   user_exam_sessions?: Prisma.UserExamSessionCreateNestedManyWithoutExamInput
@@ -336,7 +387,11 @@ export type ExamUncheckedCreateInput = {
   total_questions?: number
   type_exam?: $Enums.TypeExam
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutExamInput
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutExamInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedCreateNestedManyWithoutExamInput
@@ -349,7 +404,11 @@ export type ExamUpdateInput = {
   total_questions?: Prisma.IntFieldUpdateOperationsInput | number
   type_exam?: Prisma.EnumTypeExamFieldUpdateOperationsInput | $Enums.TypeExam
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questions?: Prisma.QuestionUpdateManyWithoutExamNestedInput
   package_exams?: Prisma.PackageExamUpdateManyWithoutExamNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUpdateManyWithoutExamNestedInput
@@ -363,7 +422,11 @@ export type ExamUncheckedUpdateInput = {
   total_questions?: Prisma.IntFieldUpdateOperationsInput | number
   type_exam?: Prisma.EnumTypeExamFieldUpdateOperationsInput | $Enums.TypeExam
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questions?: Prisma.QuestionUncheckedUpdateManyWithoutExamNestedInput
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutExamNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedUpdateManyWithoutExamNestedInput
@@ -377,7 +440,11 @@ export type ExamCreateManyInput = {
   total_questions?: number
   type_exam?: $Enums.TypeExam
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
 }
 
 export type ExamUpdateManyMutationInput = {
@@ -387,7 +454,11 @@ export type ExamUpdateManyMutationInput = {
   total_questions?: Prisma.IntFieldUpdateOperationsInput | number
   type_exam?: Prisma.EnumTypeExamFieldUpdateOperationsInput | $Enums.TypeExam
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ExamUncheckedUpdateManyInput = {
@@ -398,13 +469,11 @@ export type ExamUncheckedUpdateManyInput = {
   total_questions?: Prisma.IntFieldUpdateOperationsInput | number
   type_exam?: Prisma.EnumTypeExamFieldUpdateOperationsInput | $Enums.TypeExam
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ExamOrderByRelevanceInput = {
-  fields: Prisma.ExamOrderByRelevanceFieldEnum | Prisma.ExamOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ExamCountOrderByAggregateInput = {
@@ -415,7 +484,11 @@ export type ExamCountOrderByAggregateInput = {
   total_questions?: Prisma.SortOrder
   type_exam?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type ExamAvgOrderByAggregateInput = {
@@ -432,7 +505,11 @@ export type ExamMaxOrderByAggregateInput = {
   total_questions?: Prisma.SortOrder
   type_exam?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type ExamMinOrderByAggregateInput = {
@@ -443,7 +520,11 @@ export type ExamMinOrderByAggregateInput = {
   total_questions?: Prisma.SortOrder
   type_exam?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type ExamSumOrderByAggregateInput = {
@@ -510,7 +591,11 @@ export type ExamCreateWithoutQuestionsInput = {
   total_questions?: number
   type_exam?: $Enums.TypeExam
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutExamInput
   user_exam_sessions?: Prisma.UserExamSessionCreateNestedManyWithoutExamInput
 }
@@ -523,7 +608,11 @@ export type ExamUncheckedCreateWithoutQuestionsInput = {
   total_questions?: number
   type_exam?: $Enums.TypeExam
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutExamInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedCreateNestedManyWithoutExamInput
 }
@@ -551,7 +640,11 @@ export type ExamUpdateWithoutQuestionsInput = {
   total_questions?: Prisma.IntFieldUpdateOperationsInput | number
   type_exam?: Prisma.EnumTypeExamFieldUpdateOperationsInput | $Enums.TypeExam
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUpdateManyWithoutExamNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUpdateManyWithoutExamNestedInput
 }
@@ -564,7 +657,11 @@ export type ExamUncheckedUpdateWithoutQuestionsInput = {
   total_questions?: Prisma.IntFieldUpdateOperationsInput | number
   type_exam?: Prisma.EnumTypeExamFieldUpdateOperationsInput | $Enums.TypeExam
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutExamNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedUpdateManyWithoutExamNestedInput
 }
@@ -576,7 +673,11 @@ export type ExamCreateWithoutPackage_examsInput = {
   total_questions?: number
   type_exam?: $Enums.TypeExam
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   questions?: Prisma.QuestionCreateNestedManyWithoutExamInput
   user_exam_sessions?: Prisma.UserExamSessionCreateNestedManyWithoutExamInput
 }
@@ -589,7 +690,11 @@ export type ExamUncheckedCreateWithoutPackage_examsInput = {
   total_questions?: number
   type_exam?: $Enums.TypeExam
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutExamInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedCreateNestedManyWithoutExamInput
 }
@@ -617,7 +722,11 @@ export type ExamUpdateWithoutPackage_examsInput = {
   total_questions?: Prisma.IntFieldUpdateOperationsInput | number
   type_exam?: Prisma.EnumTypeExamFieldUpdateOperationsInput | $Enums.TypeExam
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questions?: Prisma.QuestionUpdateManyWithoutExamNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUpdateManyWithoutExamNestedInput
 }
@@ -630,7 +739,11 @@ export type ExamUncheckedUpdateWithoutPackage_examsInput = {
   total_questions?: Prisma.IntFieldUpdateOperationsInput | number
   type_exam?: Prisma.EnumTypeExamFieldUpdateOperationsInput | $Enums.TypeExam
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questions?: Prisma.QuestionUncheckedUpdateManyWithoutExamNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedUpdateManyWithoutExamNestedInput
 }
@@ -642,7 +755,11 @@ export type ExamCreateWithoutUser_exam_sessionsInput = {
   total_questions?: number
   type_exam?: $Enums.TypeExam
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   questions?: Prisma.QuestionCreateNestedManyWithoutExamInput
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutExamInput
 }
@@ -655,7 +772,11 @@ export type ExamUncheckedCreateWithoutUser_exam_sessionsInput = {
   total_questions?: number
   type_exam?: $Enums.TypeExam
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutExamInput
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutExamInput
 }
@@ -683,7 +804,11 @@ export type ExamUpdateWithoutUser_exam_sessionsInput = {
   total_questions?: Prisma.IntFieldUpdateOperationsInput | number
   type_exam?: Prisma.EnumTypeExamFieldUpdateOperationsInput | $Enums.TypeExam
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questions?: Prisma.QuestionUpdateManyWithoutExamNestedInput
   package_exams?: Prisma.PackageExamUpdateManyWithoutExamNestedInput
 }
@@ -696,7 +821,11 @@ export type ExamUncheckedUpdateWithoutUser_exam_sessionsInput = {
   total_questions?: Prisma.IntFieldUpdateOperationsInput | number
   type_exam?: Prisma.EnumTypeExamFieldUpdateOperationsInput | $Enums.TypeExam
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questions?: Prisma.QuestionUncheckedUpdateManyWithoutExamNestedInput
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutExamNestedInput
 }
@@ -758,14 +887,46 @@ export type ExamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   total_questions?: boolean
   type_exam?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
   questions?: boolean | Prisma.Exam$questionsArgs<ExtArgs>
   package_exams?: boolean | Prisma.Exam$package_examsArgs<ExtArgs>
   user_exam_sessions?: boolean | Prisma.Exam$user_exam_sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.ExamCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["exam"]>
 
+export type ExamSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  title?: boolean
+  description?: boolean
+  duration?: boolean
+  total_questions?: boolean
+  type_exam?: boolean
+  created_at?: boolean
+  created_by?: boolean
+  updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
+}, ExtArgs["result"]["exam"]>
 
+export type ExamSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  title?: boolean
+  description?: boolean
+  duration?: boolean
+  total_questions?: boolean
+  type_exam?: boolean
+  created_at?: boolean
+  created_by?: boolean
+  updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
+}, ExtArgs["result"]["exam"]>
 
 export type ExamSelectScalar = {
   id?: boolean
@@ -775,16 +936,22 @@ export type ExamSelectScalar = {
   total_questions?: boolean
   type_exam?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
 }
 
-export type ExamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "duration" | "total_questions" | "type_exam" | "created_at" | "updated_at", ExtArgs["result"]["exam"]>
+export type ExamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "duration" | "total_questions" | "type_exam" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["exam"]>
 export type ExamInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   questions?: boolean | Prisma.Exam$questionsArgs<ExtArgs>
   package_exams?: boolean | Prisma.Exam$package_examsArgs<ExtArgs>
   user_exam_sessions?: boolean | Prisma.Exam$user_exam_sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.ExamCountOutputTypeDefaultArgs<ExtArgs>
 }
+export type ExamIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ExamIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $ExamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Exam"
@@ -801,7 +968,11 @@ export type $ExamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     total_questions: number
     type_exam: $Enums.TypeExam
     created_at: Date
+    created_by: string | null
     updated_at: Date
+    updated_by: string | null
+    deleted_at: Date
+    deleted_by: string | null
   }, ExtArgs["result"]["exam"]>
   composites: {}
 }
@@ -920,6 +1091,30 @@ export interface ExamDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
   createMany<T extends ExamCreateManyArgs>(args?: Prisma.SelectSubset<T, ExamCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many Exams and returns the data saved in the database.
+   * @param {ExamCreateManyAndReturnArgs} args - Arguments to create many Exams.
+   * @example
+   * // Create many Exams
+   * const exam = await prisma.exam.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many Exams and only return the `id`
+   * const examWithIdOnly = await prisma.exam.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends ExamCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ExamCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a Exam.
    * @param {ExamDeleteArgs} args - Arguments to delete one Exam.
    * @example
@@ -982,6 +1177,36 @@ export interface ExamDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    * 
    */
   updateMany<T extends ExamUpdateManyArgs>(args: Prisma.SelectSubset<T, ExamUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more Exams and returns the data updated in the database.
+   * @param {ExamUpdateManyAndReturnArgs} args - Arguments to update many Exams.
+   * @example
+   * // Update many Exams
+   * const exam = await prisma.exam.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more Exams and only return the `id`
+   * const examWithIdOnly = await prisma.exam.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends ExamUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ExamUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Exam.
@@ -1181,7 +1406,11 @@ export interface ExamFieldRefs {
   readonly total_questions: Prisma.FieldRef<"Exam", 'Int'>
   readonly type_exam: Prisma.FieldRef<"Exam", 'TypeExam'>
   readonly created_at: Prisma.FieldRef<"Exam", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"Exam", 'String'>
   readonly updated_at: Prisma.FieldRef<"Exam", 'DateTime'>
+  readonly updated_by: Prisma.FieldRef<"Exam", 'String'>
+  readonly deleted_at: Prisma.FieldRef<"Exam", 'DateTime'>
+  readonly deleted_by: Prisma.FieldRef<"Exam", 'String'>
 }
     
 
@@ -1415,6 +1644,25 @@ export type ExamCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * Exam createManyAndReturn
+ */
+export type ExamCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Exam
+   */
+  select?: Prisma.ExamSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Exam
+   */
+  omit?: Prisma.ExamOmit<ExtArgs> | null
+  /**
+   * The data used to create many Exams.
+   */
+  data: Prisma.ExamCreateManyInput | Prisma.ExamCreateManyInput[]
+  skipDuplicates?: boolean
+}
+
+/**
  * Exam update
  */
 export type ExamUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1444,6 +1692,32 @@ export type ExamUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
  * Exam updateMany
  */
 export type ExamUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * The data used to update Exams.
+   */
+  data: Prisma.XOR<Prisma.ExamUpdateManyMutationInput, Prisma.ExamUncheckedUpdateManyInput>
+  /**
+   * Filter which Exams to update
+   */
+  where?: Prisma.ExamWhereInput
+  /**
+   * Limit how many Exams to update.
+   */
+  limit?: number
+}
+
+/**
+ * Exam updateManyAndReturn
+ */
+export type ExamUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Exam
+   */
+  select?: Prisma.ExamSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Exam
+   */
+  omit?: Prisma.ExamOmit<ExtArgs> | null
   /**
    * The data used to update Exams.
    */

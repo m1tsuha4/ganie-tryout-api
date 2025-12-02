@@ -46,7 +46,11 @@ export type QuestionMinAggregateOutputType = {
   video_discussion: string | null
   difficulty: string | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
+  updated_by: string | null
+  deleted_at: Date | null
+  deleted_by: string | null
 }
 
 export type QuestionMaxAggregateOutputType = {
@@ -59,7 +63,11 @@ export type QuestionMaxAggregateOutputType = {
   video_discussion: string | null
   difficulty: string | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
+  updated_by: string | null
+  deleted_at: Date | null
+  deleted_by: string | null
 }
 
 export type QuestionCountAggregateOutputType = {
@@ -72,7 +80,11 @@ export type QuestionCountAggregateOutputType = {
   video_discussion: number
   difficulty: number
   created_at: number
+  created_by: number
   updated_at: number
+  updated_by: number
+  deleted_at: number
+  deleted_by: number
   _all: number
 }
 
@@ -97,7 +109,11 @@ export type QuestionMinAggregateInputType = {
   video_discussion?: true
   difficulty?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
 }
 
 export type QuestionMaxAggregateInputType = {
@@ -110,7 +126,11 @@ export type QuestionMaxAggregateInputType = {
   video_discussion?: true
   difficulty?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
 }
 
 export type QuestionCountAggregateInputType = {
@@ -123,7 +143,11 @@ export type QuestionCountAggregateInputType = {
   video_discussion?: true
   difficulty?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -223,7 +247,11 @@ export type QuestionGroupByOutputType = {
   video_discussion: string | null
   difficulty: string | null
   created_at: Date
+  created_by: string | null
   updated_at: Date
+  updated_by: string | null
+  deleted_at: Date
+  deleted_by: string | null
   _count: QuestionCountAggregateOutputType | null
   _avg: QuestionAvgAggregateOutputType | null
   _sum: QuestionSumAggregateOutputType | null
@@ -259,7 +287,11 @@ export type QuestionWhereInput = {
   video_discussion?: Prisma.StringNullableFilter<"Question"> | string | null
   difficulty?: Prisma.StringNullableFilter<"Question"> | string | null
   created_at?: Prisma.DateTimeFilter<"Question"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"Question"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Question"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"Question"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"Question"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"Question"> | string | null
   exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
   question_choices?: Prisma.QuestionChoiceListRelationFilter
   user_answers?: Prisma.UserAnswerListRelationFilter
@@ -275,11 +307,14 @@ export type QuestionOrderByWithRelationInput = {
   video_discussion?: Prisma.SortOrderInput | Prisma.SortOrder
   difficulty?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   exam?: Prisma.ExamOrderByWithRelationInput
   question_choices?: Prisma.QuestionChoiceOrderByRelationAggregateInput
   user_answers?: Prisma.UserAnswerOrderByRelationAggregateInput
-  _relevance?: Prisma.QuestionOrderByRelevanceInput
 }
 
 export type QuestionWhereUniqueInput = Prisma.AtLeast<{
@@ -295,7 +330,11 @@ export type QuestionWhereUniqueInput = Prisma.AtLeast<{
   video_discussion?: Prisma.StringNullableFilter<"Question"> | string | null
   difficulty?: Prisma.StringNullableFilter<"Question"> | string | null
   created_at?: Prisma.DateTimeFilter<"Question"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"Question"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Question"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"Question"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"Question"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"Question"> | string | null
   exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
   question_choices?: Prisma.QuestionChoiceListRelationFilter
   user_answers?: Prisma.UserAnswerListRelationFilter
@@ -311,7 +350,11 @@ export type QuestionOrderByWithAggregationInput = {
   video_discussion?: Prisma.SortOrderInput | Prisma.SortOrder
   difficulty?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.QuestionCountOrderByAggregateInput
   _avg?: Prisma.QuestionAvgOrderByAggregateInput
   _max?: Prisma.QuestionMaxOrderByAggregateInput
@@ -332,7 +375,11 @@ export type QuestionScalarWhereWithAggregatesInput = {
   video_discussion?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
   difficulty?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Question"> | Date | string
+  created_by?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Question"> | Date | string
+  updated_by?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
+  deleted_at?: Prisma.DateTimeWithAggregatesFilter<"Question"> | Date | string
+  deleted_by?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
 }
 
 export type QuestionCreateInput = {
@@ -343,7 +390,11 @@ export type QuestionCreateInput = {
   video_discussion?: string | null
   difficulty?: string | null
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   exam: Prisma.ExamCreateNestedOneWithoutQuestionsInput
   question_choices?: Prisma.QuestionChoiceCreateNestedManyWithoutQuestionInput
   user_answers?: Prisma.UserAnswerCreateNestedManyWithoutQuestionInput
@@ -359,7 +410,11 @@ export type QuestionUncheckedCreateInput = {
   video_discussion?: string | null
   difficulty?: string | null
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   question_choices?: Prisma.QuestionChoiceUncheckedCreateNestedManyWithoutQuestionInput
   user_answers?: Prisma.UserAnswerUncheckedCreateNestedManyWithoutQuestionInput
 }
@@ -372,7 +427,11 @@ export type QuestionUpdateInput = {
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exam?: Prisma.ExamUpdateOneRequiredWithoutQuestionsNestedInput
   question_choices?: Prisma.QuestionChoiceUpdateManyWithoutQuestionNestedInput
   user_answers?: Prisma.UserAnswerUpdateManyWithoutQuestionNestedInput
@@ -388,7 +447,11 @@ export type QuestionUncheckedUpdateInput = {
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   question_choices?: Prisma.QuestionChoiceUncheckedUpdateManyWithoutQuestionNestedInput
   user_answers?: Prisma.UserAnswerUncheckedUpdateManyWithoutQuestionNestedInput
 }
@@ -403,7 +466,11 @@ export type QuestionCreateManyInput = {
   video_discussion?: string | null
   difficulty?: string | null
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
 }
 
 export type QuestionUpdateManyMutationInput = {
@@ -414,7 +481,11 @@ export type QuestionUpdateManyMutationInput = {
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type QuestionUncheckedUpdateManyInput = {
@@ -427,7 +498,11 @@ export type QuestionUncheckedUpdateManyInput = {
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type QuestionListRelationFilter = {
@@ -440,12 +515,6 @@ export type QuestionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type QuestionOrderByRelevanceInput = {
-  fields: Prisma.QuestionOrderByRelevanceFieldEnum | Prisma.QuestionOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
-}
-
 export type QuestionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   exam_id?: Prisma.SortOrder
@@ -456,7 +525,11 @@ export type QuestionCountOrderByAggregateInput = {
   video_discussion?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type QuestionAvgOrderByAggregateInput = {
@@ -474,7 +547,11 @@ export type QuestionMaxOrderByAggregateInput = {
   video_discussion?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type QuestionMinOrderByAggregateInput = {
@@ -487,7 +564,11 @@ export type QuestionMinOrderByAggregateInput = {
   video_discussion?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type QuestionSumOrderByAggregateInput = {
@@ -578,7 +659,11 @@ export type QuestionCreateWithoutExamInput = {
   video_discussion?: string | null
   difficulty?: string | null
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   question_choices?: Prisma.QuestionChoiceCreateNestedManyWithoutQuestionInput
   user_answers?: Prisma.UserAnswerCreateNestedManyWithoutQuestionInput
 }
@@ -592,7 +677,11 @@ export type QuestionUncheckedCreateWithoutExamInput = {
   video_discussion?: string | null
   difficulty?: string | null
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   question_choices?: Prisma.QuestionChoiceUncheckedCreateNestedManyWithoutQuestionInput
   user_answers?: Prisma.UserAnswerUncheckedCreateNestedManyWithoutQuestionInput
 }
@@ -636,7 +725,11 @@ export type QuestionScalarWhereInput = {
   video_discussion?: Prisma.StringNullableFilter<"Question"> | string | null
   difficulty?: Prisma.StringNullableFilter<"Question"> | string | null
   created_at?: Prisma.DateTimeFilter<"Question"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"Question"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Question"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"Question"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"Question"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"Question"> | string | null
 }
 
 export type QuestionCreateWithoutQuestion_choicesInput = {
@@ -647,7 +740,11 @@ export type QuestionCreateWithoutQuestion_choicesInput = {
   video_discussion?: string | null
   difficulty?: string | null
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   exam: Prisma.ExamCreateNestedOneWithoutQuestionsInput
   user_answers?: Prisma.UserAnswerCreateNestedManyWithoutQuestionInput
 }
@@ -662,7 +759,11 @@ export type QuestionUncheckedCreateWithoutQuestion_choicesInput = {
   video_discussion?: string | null
   difficulty?: string | null
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   user_answers?: Prisma.UserAnswerUncheckedCreateNestedManyWithoutQuestionInput
 }
 
@@ -690,7 +791,11 @@ export type QuestionUpdateWithoutQuestion_choicesInput = {
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exam?: Prisma.ExamUpdateOneRequiredWithoutQuestionsNestedInput
   user_answers?: Prisma.UserAnswerUpdateManyWithoutQuestionNestedInput
 }
@@ -705,7 +810,11 @@ export type QuestionUncheckedUpdateWithoutQuestion_choicesInput = {
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user_answers?: Prisma.UserAnswerUncheckedUpdateManyWithoutQuestionNestedInput
 }
 
@@ -717,7 +826,11 @@ export type QuestionCreateWithoutUser_answersInput = {
   video_discussion?: string | null
   difficulty?: string | null
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   exam: Prisma.ExamCreateNestedOneWithoutQuestionsInput
   question_choices?: Prisma.QuestionChoiceCreateNestedManyWithoutQuestionInput
 }
@@ -732,7 +845,11 @@ export type QuestionUncheckedCreateWithoutUser_answersInput = {
   video_discussion?: string | null
   difficulty?: string | null
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   question_choices?: Prisma.QuestionChoiceUncheckedCreateNestedManyWithoutQuestionInput
 }
 
@@ -760,7 +877,11 @@ export type QuestionUpdateWithoutUser_answersInput = {
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exam?: Prisma.ExamUpdateOneRequiredWithoutQuestionsNestedInput
   question_choices?: Prisma.QuestionChoiceUpdateManyWithoutQuestionNestedInput
 }
@@ -775,7 +896,11 @@ export type QuestionUncheckedUpdateWithoutUser_answersInput = {
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   question_choices?: Prisma.QuestionChoiceUncheckedUpdateManyWithoutQuestionNestedInput
 }
 
@@ -788,7 +913,11 @@ export type QuestionCreateManyExamInput = {
   video_discussion?: string | null
   difficulty?: string | null
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
 }
 
 export type QuestionUpdateWithoutExamInput = {
@@ -799,7 +928,11 @@ export type QuestionUpdateWithoutExamInput = {
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   question_choices?: Prisma.QuestionChoiceUpdateManyWithoutQuestionNestedInput
   user_answers?: Prisma.UserAnswerUpdateManyWithoutQuestionNestedInput
 }
@@ -813,7 +946,11 @@ export type QuestionUncheckedUpdateWithoutExamInput = {
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   question_choices?: Prisma.QuestionChoiceUncheckedUpdateManyWithoutQuestionNestedInput
   user_answers?: Prisma.UserAnswerUncheckedUpdateManyWithoutQuestionNestedInput
 }
@@ -827,7 +964,11 @@ export type QuestionUncheckedUpdateManyWithoutExamInput = {
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -880,14 +1021,52 @@ export type QuestionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   video_discussion?: boolean
   difficulty?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
   question_choices?: boolean | Prisma.Question$question_choicesArgs<ExtArgs>
   user_answers?: boolean | Prisma.Question$user_answersArgs<ExtArgs>
   _count?: boolean | Prisma.QuestionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["question"]>
 
+export type QuestionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  exam_id?: boolean
+  question_text?: boolean
+  question_image_url?: boolean
+  question_audio_url?: boolean
+  discussion?: boolean
+  video_discussion?: boolean
+  difficulty?: boolean
+  created_at?: boolean
+  created_by?: boolean
+  updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
+  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["question"]>
 
+export type QuestionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  exam_id?: boolean
+  question_text?: boolean
+  question_image_url?: boolean
+  question_audio_url?: boolean
+  discussion?: boolean
+  video_discussion?: boolean
+  difficulty?: boolean
+  created_at?: boolean
+  created_by?: boolean
+  updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
+  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["question"]>
 
 export type QuestionSelectScalar = {
   id?: boolean
@@ -899,15 +1078,25 @@ export type QuestionSelectScalar = {
   video_discussion?: boolean
   difficulty?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
 }
 
-export type QuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "exam_id" | "question_text" | "question_image_url" | "question_audio_url" | "discussion" | "video_discussion" | "difficulty" | "created_at" | "updated_at", ExtArgs["result"]["question"]>
+export type QuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "exam_id" | "question_text" | "question_image_url" | "question_audio_url" | "discussion" | "video_discussion" | "difficulty" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["question"]>
 export type QuestionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
   question_choices?: boolean | Prisma.Question$question_choicesArgs<ExtArgs>
   user_answers?: boolean | Prisma.Question$user_answersArgs<ExtArgs>
   _count?: boolean | Prisma.QuestionCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type QuestionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+}
+export type QuestionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
 }
 
 export type $QuestionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -927,7 +1116,11 @@ export type $QuestionPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     video_discussion: string | null
     difficulty: string | null
     created_at: Date
+    created_by: string | null
     updated_at: Date
+    updated_by: string | null
+    deleted_at: Date
+    deleted_by: string | null
   }, ExtArgs["result"]["question"]>
   composites: {}
 }
@@ -1046,6 +1239,30 @@ export interface QuestionDelegate<ExtArgs extends runtime.Types.Extensions.Inter
   createMany<T extends QuestionCreateManyArgs>(args?: Prisma.SelectSubset<T, QuestionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many Questions and returns the data saved in the database.
+   * @param {QuestionCreateManyAndReturnArgs} args - Arguments to create many Questions.
+   * @example
+   * // Create many Questions
+   * const question = await prisma.question.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many Questions and only return the `id`
+   * const questionWithIdOnly = await prisma.question.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends QuestionCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, QuestionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a Question.
    * @param {QuestionDeleteArgs} args - Arguments to delete one Question.
    * @example
@@ -1108,6 +1325,36 @@ export interface QuestionDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * 
    */
   updateMany<T extends QuestionUpdateManyArgs>(args: Prisma.SelectSubset<T, QuestionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more Questions and returns the data updated in the database.
+   * @param {QuestionUpdateManyAndReturnArgs} args - Arguments to update many Questions.
+   * @example
+   * // Update many Questions
+   * const question = await prisma.question.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more Questions and only return the `id`
+   * const questionWithIdOnly = await prisma.question.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends QuestionUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, QuestionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Question.
@@ -1309,7 +1556,11 @@ export interface QuestionFieldRefs {
   readonly video_discussion: Prisma.FieldRef<"Question", 'String'>
   readonly difficulty: Prisma.FieldRef<"Question", 'String'>
   readonly created_at: Prisma.FieldRef<"Question", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"Question", 'String'>
   readonly updated_at: Prisma.FieldRef<"Question", 'DateTime'>
+  readonly updated_by: Prisma.FieldRef<"Question", 'String'>
+  readonly deleted_at: Prisma.FieldRef<"Question", 'DateTime'>
+  readonly deleted_by: Prisma.FieldRef<"Question", 'String'>
 }
     
 
@@ -1543,6 +1794,29 @@ export type QuestionCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * Question createManyAndReturn
+ */
+export type QuestionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Question
+   */
+  select?: Prisma.QuestionSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Question
+   */
+  omit?: Prisma.QuestionOmit<ExtArgs> | null
+  /**
+   * The data used to create many Questions.
+   */
+  data: Prisma.QuestionCreateManyInput | Prisma.QuestionCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuestionIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * Question update
  */
 export type QuestionUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1584,6 +1858,36 @@ export type QuestionUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Questions to update.
    */
   limit?: number
+}
+
+/**
+ * Question updateManyAndReturn
+ */
+export type QuestionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Question
+   */
+  select?: Prisma.QuestionSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Question
+   */
+  omit?: Prisma.QuestionOmit<ExtArgs> | null
+  /**
+   * The data used to update Questions.
+   */
+  data: Prisma.XOR<Prisma.QuestionUpdateManyMutationInput, Prisma.QuestionUncheckedUpdateManyInput>
+  /**
+   * Filter which Questions to update
+   */
+  where?: Prisma.QuestionWhereInput
+  /**
+   * Limit how many Questions to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuestionIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

@@ -42,8 +42,8 @@ export type PackageExamMinAggregateOutputType = {
   id: number | null
   package_id: number | null
   exam_id: number | null
-  type: $Enums.PackageType | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
 }
 
@@ -51,8 +51,8 @@ export type PackageExamMaxAggregateOutputType = {
   id: number | null
   package_id: number | null
   exam_id: number | null
-  type: $Enums.PackageType | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
 }
 
@@ -60,8 +60,8 @@ export type PackageExamCountAggregateOutputType = {
   id: number
   package_id: number
   exam_id: number
-  type: number
   created_at: number
+  created_by: number
   updated_at: number
   _all: number
 }
@@ -83,8 +83,8 @@ export type PackageExamMinAggregateInputType = {
   id?: true
   package_id?: true
   exam_id?: true
-  type?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
 }
 
@@ -92,8 +92,8 @@ export type PackageExamMaxAggregateInputType = {
   id?: true
   package_id?: true
   exam_id?: true
-  type?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
 }
 
@@ -101,8 +101,8 @@ export type PackageExamCountAggregateInputType = {
   id?: true
   package_id?: true
   exam_id?: true
-  type?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
   _all?: true
 }
@@ -197,8 +197,8 @@ export type PackageExamGroupByOutputType = {
   id: number
   package_id: number
   exam_id: number
-  type: $Enums.PackageType
   created_at: Date
+  created_by: string | null
   updated_at: Date
   _count: PackageExamCountAggregateOutputType | null
   _avg: PackageExamAvgAggregateOutputType | null
@@ -229,8 +229,8 @@ export type PackageExamWhereInput = {
   id?: Prisma.IntFilter<"PackageExam"> | number
   package_id?: Prisma.IntFilter<"PackageExam"> | number
   exam_id?: Prisma.IntFilter<"PackageExam"> | number
-  type?: Prisma.EnumPackageTypeFilter<"PackageExam"> | $Enums.PackageType
   created_at?: Prisma.DateTimeFilter<"PackageExam"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"PackageExam"> | string | null
   updated_at?: Prisma.DateTimeFilter<"PackageExam"> | Date | string
   package?: Prisma.XOR<Prisma.PackageScalarRelationFilter, Prisma.PackageWhereInput>
   exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
@@ -240,8 +240,8 @@ export type PackageExamOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   package_id?: Prisma.SortOrder
   exam_id?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   package?: Prisma.PackageOrderByWithRelationInput
   exam?: Prisma.ExamOrderByWithRelationInput
@@ -254,8 +254,8 @@ export type PackageExamWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PackageExamWhereInput | Prisma.PackageExamWhereInput[]
   package_id?: Prisma.IntFilter<"PackageExam"> | number
   exam_id?: Prisma.IntFilter<"PackageExam"> | number
-  type?: Prisma.EnumPackageTypeFilter<"PackageExam"> | $Enums.PackageType
   created_at?: Prisma.DateTimeFilter<"PackageExam"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"PackageExam"> | string | null
   updated_at?: Prisma.DateTimeFilter<"PackageExam"> | Date | string
   package?: Prisma.XOR<Prisma.PackageScalarRelationFilter, Prisma.PackageWhereInput>
   exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
@@ -265,8 +265,8 @@ export type PackageExamOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   package_id?: Prisma.SortOrder
   exam_id?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   _count?: Prisma.PackageExamCountOrderByAggregateInput
   _avg?: Prisma.PackageExamAvgOrderByAggregateInput
@@ -282,14 +282,14 @@ export type PackageExamScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"PackageExam"> | number
   package_id?: Prisma.IntWithAggregatesFilter<"PackageExam"> | number
   exam_id?: Prisma.IntWithAggregatesFilter<"PackageExam"> | number
-  type?: Prisma.EnumPackageTypeWithAggregatesFilter<"PackageExam"> | $Enums.PackageType
   created_at?: Prisma.DateTimeWithAggregatesFilter<"PackageExam"> | Date | string
+  created_by?: Prisma.StringNullableWithAggregatesFilter<"PackageExam"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"PackageExam"> | Date | string
 }
 
 export type PackageExamCreateInput = {
-  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
   package: Prisma.PackageCreateNestedOneWithoutPackage_examsInput
   exam: Prisma.ExamCreateNestedOneWithoutPackage_examsInput
@@ -299,14 +299,14 @@ export type PackageExamUncheckedCreateInput = {
   id?: number
   package_id: number
   exam_id: number
-  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
 }
 
 export type PackageExamUpdateInput = {
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   package?: Prisma.PackageUpdateOneRequiredWithoutPackage_examsNestedInput
   exam?: Prisma.ExamUpdateOneRequiredWithoutPackage_examsNestedInput
@@ -316,8 +316,8 @@ export type PackageExamUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   package_id?: Prisma.IntFieldUpdateOperationsInput | number
   exam_id?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -325,14 +325,14 @@ export type PackageExamCreateManyInput = {
   id?: number
   package_id: number
   exam_id: number
-  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
 }
 
 export type PackageExamUpdateManyMutationInput = {
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -340,8 +340,8 @@ export type PackageExamUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   package_id?: Prisma.IntFieldUpdateOperationsInput | number
   exam_id?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -359,8 +359,8 @@ export type PackageExamCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   package_id?: Prisma.SortOrder
   exam_id?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
 
@@ -374,8 +374,8 @@ export type PackageExamMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   package_id?: Prisma.SortOrder
   exam_id?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
 
@@ -383,8 +383,8 @@ export type PackageExamMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   package_id?: Prisma.SortOrder
   exam_id?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
 
@@ -478,13 +478,9 @@ export type PackageExamUncheckedUpdateManyWithoutPackageNestedInput = {
   deleteMany?: Prisma.PackageExamScalarWhereInput | Prisma.PackageExamScalarWhereInput[]
 }
 
-export type EnumPackageTypeFieldUpdateOperationsInput = {
-  set?: $Enums.PackageType
-}
-
 export type PackageExamCreateWithoutExamInput = {
-  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
   package: Prisma.PackageCreateNestedOneWithoutPackage_examsInput
 }
@@ -492,8 +488,8 @@ export type PackageExamCreateWithoutExamInput = {
 export type PackageExamUncheckedCreateWithoutExamInput = {
   id?: number
   package_id: number
-  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
 }
 
@@ -530,14 +526,14 @@ export type PackageExamScalarWhereInput = {
   id?: Prisma.IntFilter<"PackageExam"> | number
   package_id?: Prisma.IntFilter<"PackageExam"> | number
   exam_id?: Prisma.IntFilter<"PackageExam"> | number
-  type?: Prisma.EnumPackageTypeFilter<"PackageExam"> | $Enums.PackageType
   created_at?: Prisma.DateTimeFilter<"PackageExam"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"PackageExam"> | string | null
   updated_at?: Prisma.DateTimeFilter<"PackageExam"> | Date | string
 }
 
 export type PackageExamCreateWithoutPackageInput = {
-  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
   exam: Prisma.ExamCreateNestedOneWithoutPackage_examsInput
 }
@@ -545,8 +541,8 @@ export type PackageExamCreateWithoutPackageInput = {
 export type PackageExamUncheckedCreateWithoutPackageInput = {
   id?: number
   exam_id: number
-  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
 }
 
@@ -579,14 +575,14 @@ export type PackageExamUpdateManyWithWhereWithoutPackageInput = {
 export type PackageExamCreateManyExamInput = {
   id?: number
   package_id: number
-  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
 }
 
 export type PackageExamUpdateWithoutExamInput = {
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   package?: Prisma.PackageUpdateOneRequiredWithoutPackage_examsNestedInput
 }
@@ -594,30 +590,30 @@ export type PackageExamUpdateWithoutExamInput = {
 export type PackageExamUncheckedUpdateWithoutExamInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   package_id?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type PackageExamUncheckedUpdateManyWithoutExamInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   package_id?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type PackageExamCreateManyPackageInput = {
   id?: number
   exam_id: number
-  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
 }
 
 export type PackageExamUpdateWithoutPackageInput = {
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exam?: Prisma.ExamUpdateOneRequiredWithoutPackage_examsNestedInput
 }
@@ -625,16 +621,16 @@ export type PackageExamUpdateWithoutPackageInput = {
 export type PackageExamUncheckedUpdateWithoutPackageInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   exam_id?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type PackageExamUncheckedUpdateManyWithoutPackageInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   exam_id?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -644,26 +640,54 @@ export type PackageExamSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   package_id?: boolean
   exam_id?: boolean
-  type?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
   package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["packageExam"]>
 
+export type PackageExamSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  package_id?: boolean
+  exam_id?: boolean
+  created_at?: boolean
+  created_by?: boolean
+  updated_at?: boolean
+  package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
+  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["packageExam"]>
 
+export type PackageExamSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  package_id?: boolean
+  exam_id?: boolean
+  created_at?: boolean
+  created_by?: boolean
+  updated_at?: boolean
+  package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
+  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["packageExam"]>
 
 export type PackageExamSelectScalar = {
   id?: boolean
   package_id?: boolean
   exam_id?: boolean
-  type?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
 }
 
-export type PackageExamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "package_id" | "exam_id" | "type" | "created_at" | "updated_at", ExtArgs["result"]["packageExam"]>
+export type PackageExamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "package_id" | "exam_id" | "created_at" | "created_by" | "updated_at", ExtArgs["result"]["packageExam"]>
 export type PackageExamInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
+  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+}
+export type PackageExamIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
+  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+}
+export type PackageExamIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
 }
@@ -678,8 +702,8 @@ export type $PackageExamPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: number
     package_id: number
     exam_id: number
-    type: $Enums.PackageType
     created_at: Date
+    created_by: string | null
     updated_at: Date
   }, ExtArgs["result"]["packageExam"]>
   composites: {}
@@ -799,6 +823,30 @@ export interface PackageExamDelegate<ExtArgs extends runtime.Types.Extensions.In
   createMany<T extends PackageExamCreateManyArgs>(args?: Prisma.SelectSubset<T, PackageExamCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many PackageExams and returns the data saved in the database.
+   * @param {PackageExamCreateManyAndReturnArgs} args - Arguments to create many PackageExams.
+   * @example
+   * // Create many PackageExams
+   * const packageExam = await prisma.packageExam.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many PackageExams and only return the `id`
+   * const packageExamWithIdOnly = await prisma.packageExam.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends PackageExamCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, PackageExamCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PackageExamPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a PackageExam.
    * @param {PackageExamDeleteArgs} args - Arguments to delete one PackageExam.
    * @example
@@ -861,6 +909,36 @@ export interface PackageExamDelegate<ExtArgs extends runtime.Types.Extensions.In
    * 
    */
   updateMany<T extends PackageExamUpdateManyArgs>(args: Prisma.SelectSubset<T, PackageExamUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more PackageExams and returns the data updated in the database.
+   * @param {PackageExamUpdateManyAndReturnArgs} args - Arguments to update many PackageExams.
+   * @example
+   * // Update many PackageExams
+   * const packageExam = await prisma.packageExam.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more PackageExams and only return the `id`
+   * const packageExamWithIdOnly = await prisma.packageExam.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends PackageExamUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, PackageExamUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PackageExamPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one PackageExam.
@@ -1055,8 +1133,8 @@ export interface PackageExamFieldRefs {
   readonly id: Prisma.FieldRef<"PackageExam", 'Int'>
   readonly package_id: Prisma.FieldRef<"PackageExam", 'Int'>
   readonly exam_id: Prisma.FieldRef<"PackageExam", 'Int'>
-  readonly type: Prisma.FieldRef<"PackageExam", 'PackageType'>
   readonly created_at: Prisma.FieldRef<"PackageExam", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"PackageExam", 'String'>
   readonly updated_at: Prisma.FieldRef<"PackageExam", 'DateTime'>
 }
     
@@ -1291,6 +1369,29 @@ export type PackageExamCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
+ * PackageExam createManyAndReturn
+ */
+export type PackageExamCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PackageExam
+   */
+  select?: Prisma.PackageExamSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the PackageExam
+   */
+  omit?: Prisma.PackageExamOmit<ExtArgs> | null
+  /**
+   * The data used to create many PackageExams.
+   */
+  data: Prisma.PackageExamCreateManyInput | Prisma.PackageExamCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PackageExamIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * PackageExam update
  */
 export type PackageExamUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1332,6 +1433,36 @@ export type PackageExamUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many PackageExams to update.
    */
   limit?: number
+}
+
+/**
+ * PackageExam updateManyAndReturn
+ */
+export type PackageExamUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PackageExam
+   */
+  select?: Prisma.PackageExamSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the PackageExam
+   */
+  omit?: Prisma.PackageExamOmit<ExtArgs> | null
+  /**
+   * The data used to update PackageExams.
+   */
+  data: Prisma.XOR<Prisma.PackageExamUpdateManyMutationInput, Prisma.PackageExamUncheckedUpdateManyInput>
+  /**
+   * Filter which PackageExams to update
+   */
+  where?: Prisma.PackageExamWhereInput
+  /**
+   * Limit how many PackageExams to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PackageExamIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

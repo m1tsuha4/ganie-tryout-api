@@ -770,7 +770,29 @@ export type UserAnswerSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   choice?: boolean | Prisma.QuestionChoiceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userAnswer"]>
 
+export type UserAnswerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  session_id?: boolean
+  question_id?: boolean
+  choice_id?: boolean
+  created_at?: boolean
+  updated_at?: boolean
+  session?: boolean | Prisma.UserExamSessionDefaultArgs<ExtArgs>
+  question?: boolean | Prisma.QuestionDefaultArgs<ExtArgs>
+  choice?: boolean | Prisma.QuestionChoiceDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["userAnswer"]>
 
+export type UserAnswerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  session_id?: boolean
+  question_id?: boolean
+  choice_id?: boolean
+  created_at?: boolean
+  updated_at?: boolean
+  session?: boolean | Prisma.UserExamSessionDefaultArgs<ExtArgs>
+  question?: boolean | Prisma.QuestionDefaultArgs<ExtArgs>
+  choice?: boolean | Prisma.QuestionChoiceDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["userAnswer"]>
 
 export type UserAnswerSelectScalar = {
   id?: boolean
@@ -783,6 +805,16 @@ export type UserAnswerSelectScalar = {
 
 export type UserAnswerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "session_id" | "question_id" | "choice_id" | "created_at" | "updated_at", ExtArgs["result"]["userAnswer"]>
 export type UserAnswerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  session?: boolean | Prisma.UserExamSessionDefaultArgs<ExtArgs>
+  question?: boolean | Prisma.QuestionDefaultArgs<ExtArgs>
+  choice?: boolean | Prisma.QuestionChoiceDefaultArgs<ExtArgs>
+}
+export type UserAnswerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  session?: boolean | Prisma.UserExamSessionDefaultArgs<ExtArgs>
+  question?: boolean | Prisma.QuestionDefaultArgs<ExtArgs>
+  choice?: boolean | Prisma.QuestionChoiceDefaultArgs<ExtArgs>
+}
+export type UserAnswerIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   session?: boolean | Prisma.UserExamSessionDefaultArgs<ExtArgs>
   question?: boolean | Prisma.QuestionDefaultArgs<ExtArgs>
   choice?: boolean | Prisma.QuestionChoiceDefaultArgs<ExtArgs>
@@ -920,6 +952,30 @@ export interface UserAnswerDelegate<ExtArgs extends runtime.Types.Extensions.Int
   createMany<T extends UserAnswerCreateManyArgs>(args?: Prisma.SelectSubset<T, UserAnswerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many UserAnswers and returns the data saved in the database.
+   * @param {UserAnswerCreateManyAndReturnArgs} args - Arguments to create many UserAnswers.
+   * @example
+   * // Create many UserAnswers
+   * const userAnswer = await prisma.userAnswer.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many UserAnswers and only return the `id`
+   * const userAnswerWithIdOnly = await prisma.userAnswer.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends UserAnswerCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, UserAnswerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserAnswerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a UserAnswer.
    * @param {UserAnswerDeleteArgs} args - Arguments to delete one UserAnswer.
    * @example
@@ -982,6 +1038,36 @@ export interface UserAnswerDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * 
    */
   updateMany<T extends UserAnswerUpdateManyArgs>(args: Prisma.SelectSubset<T, UserAnswerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more UserAnswers and returns the data updated in the database.
+   * @param {UserAnswerUpdateManyAndReturnArgs} args - Arguments to update many UserAnswers.
+   * @example
+   * // Update many UserAnswers
+   * const userAnswer = await prisma.userAnswer.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more UserAnswers and only return the `id`
+   * const userAnswerWithIdOnly = await prisma.userAnswer.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends UserAnswerUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, UserAnswerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserAnswerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one UserAnswer.
@@ -1413,6 +1499,29 @@ export type UserAnswerCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
+ * UserAnswer createManyAndReturn
+ */
+export type UserAnswerCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserAnswer
+   */
+  select?: Prisma.UserAnswerSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserAnswer
+   */
+  omit?: Prisma.UserAnswerOmit<ExtArgs> | null
+  /**
+   * The data used to create many UserAnswers.
+   */
+  data: Prisma.UserAnswerCreateManyInput | Prisma.UserAnswerCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserAnswerIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * UserAnswer update
  */
 export type UserAnswerUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1454,6 +1563,36 @@ export type UserAnswerUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many UserAnswers to update.
    */
   limit?: number
+}
+
+/**
+ * UserAnswer updateManyAndReturn
+ */
+export type UserAnswerUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserAnswer
+   */
+  select?: Prisma.UserAnswerSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserAnswer
+   */
+  omit?: Prisma.UserAnswerOmit<ExtArgs> | null
+  /**
+   * The data used to update UserAnswers.
+   */
+  data: Prisma.XOR<Prisma.UserAnswerUpdateManyMutationInput, Prisma.UserAnswerUncheckedUpdateManyInput>
+  /**
+   * Filter which UserAnswers to update
+   */
+  where?: Prisma.UserAnswerWhereInput
+  /**
+   * Limit how many UserAnswers to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserAnswerIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

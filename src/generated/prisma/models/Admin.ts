@@ -41,7 +41,11 @@ export type AdminMinAggregateOutputType = {
   password_hash: string | null
   role_id: number | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
+  updated_by: string | null
+  deleted_at: Date | null
+  deleted_by: string | null
 }
 
 export type AdminMaxAggregateOutputType = {
@@ -51,7 +55,11 @@ export type AdminMaxAggregateOutputType = {
   password_hash: string | null
   role_id: number | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
+  updated_by: string | null
+  deleted_at: Date | null
+  deleted_by: string | null
 }
 
 export type AdminCountAggregateOutputType = {
@@ -61,7 +69,11 @@ export type AdminCountAggregateOutputType = {
   password_hash: number
   role_id: number
   created_at: number
+  created_by: number
   updated_at: number
+  updated_by: number
+  deleted_at: number
+  deleted_by: number
   _all: number
 }
 
@@ -81,7 +93,11 @@ export type AdminMinAggregateInputType = {
   password_hash?: true
   role_id?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
 }
 
 export type AdminMaxAggregateInputType = {
@@ -91,7 +107,11 @@ export type AdminMaxAggregateInputType = {
   password_hash?: true
   role_id?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
 }
 
 export type AdminCountAggregateInputType = {
@@ -101,7 +121,11 @@ export type AdminCountAggregateInputType = {
   password_hash?: true
   role_id?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -198,7 +222,11 @@ export type AdminGroupByOutputType = {
   password_hash: string
   role_id: number
   created_at: Date
+  created_by: string | null
   updated_at: Date
+  updated_by: string | null
+  deleted_at: Date
+  deleted_by: string | null
   _count: AdminCountAggregateOutputType | null
   _avg: AdminAvgAggregateOutputType | null
   _sum: AdminSumAggregateOutputType | null
@@ -231,7 +259,11 @@ export type AdminWhereInput = {
   password_hash?: Prisma.StringFilter<"Admin"> | string
   role_id?: Prisma.IntFilter<"Admin"> | number
   created_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"Admin"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"Admin"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"Admin"> | string | null
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
 }
 
@@ -242,24 +274,31 @@ export type AdminOrderByWithRelationInput = {
   password_hash?: Prisma.SortOrder
   role_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.RoleOrderByWithRelationInput
-  _relevance?: Prisma.AdminOrderByRelevanceInput
 }
 
 export type AdminWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   username?: string
   email?: string
-  role_id?: number
   AND?: Prisma.AdminWhereInput | Prisma.AdminWhereInput[]
   OR?: Prisma.AdminWhereInput[]
   NOT?: Prisma.AdminWhereInput | Prisma.AdminWhereInput[]
   password_hash?: Prisma.StringFilter<"Admin"> | string
+  role_id?: Prisma.IntFilter<"Admin"> | number
   created_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"Admin"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"Admin"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"Admin"> | string | null
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
-}, "id" | "username" | "email" | "role_id">
+}, "id" | "username" | "email">
 
 export type AdminOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -268,7 +307,11 @@ export type AdminOrderByWithAggregationInput = {
   password_hash?: Prisma.SortOrder
   role_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AdminCountOrderByAggregateInput
   _avg?: Prisma.AdminAvgOrderByAggregateInput
   _max?: Prisma.AdminMaxOrderByAggregateInput
@@ -286,7 +329,11 @@ export type AdminScalarWhereWithAggregatesInput = {
   password_hash?: Prisma.StringWithAggregatesFilter<"Admin"> | string
   role_id?: Prisma.IntWithAggregatesFilter<"Admin"> | number
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Admin"> | Date | string
+  created_by?: Prisma.StringNullableWithAggregatesFilter<"Admin"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Admin"> | Date | string
+  updated_by?: Prisma.StringNullableWithAggregatesFilter<"Admin"> | string | null
+  deleted_at?: Prisma.DateTimeWithAggregatesFilter<"Admin"> | Date | string
+  deleted_by?: Prisma.StringNullableWithAggregatesFilter<"Admin"> | string | null
 }
 
 export type AdminCreateInput = {
@@ -295,7 +342,11 @@ export type AdminCreateInput = {
   email: string
   password_hash: string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   role: Prisma.RoleCreateNestedOneWithoutAdminInput
 }
 
@@ -306,7 +357,11 @@ export type AdminUncheckedCreateInput = {
   password_hash: string
   role_id: number
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
 }
 
 export type AdminUpdateInput = {
@@ -315,7 +370,11 @@ export type AdminUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.RoleUpdateOneRequiredWithoutAdminNestedInput
 }
 
@@ -326,7 +385,11 @@ export type AdminUncheckedUpdateInput = {
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   role_id?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AdminCreateManyInput = {
@@ -336,7 +399,11 @@ export type AdminCreateManyInput = {
   password_hash: string
   role_id: number
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
 }
 
 export type AdminUpdateManyMutationInput = {
@@ -345,7 +412,11 @@ export type AdminUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AdminUncheckedUpdateManyInput = {
@@ -355,13 +426,11 @@ export type AdminUncheckedUpdateManyInput = {
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   role_id?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type AdminOrderByRelevanceInput = {
-  fields: Prisma.AdminOrderByRelevanceFieldEnum | Prisma.AdminOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AdminCountOrderByAggregateInput = {
@@ -371,7 +440,11 @@ export type AdminCountOrderByAggregateInput = {
   password_hash?: Prisma.SortOrder
   role_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type AdminAvgOrderByAggregateInput = {
@@ -385,7 +458,11 @@ export type AdminMaxOrderByAggregateInput = {
   password_hash?: Prisma.SortOrder
   role_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type AdminMinOrderByAggregateInput = {
@@ -395,7 +472,11 @@ export type AdminMinOrderByAggregateInput = {
   password_hash?: Prisma.SortOrder
   role_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type AdminSumOrderByAggregateInput = {
@@ -418,6 +499,10 @@ export type StringFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -476,7 +561,11 @@ export type AdminCreateWithoutRoleInput = {
   email: string
   password_hash: string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
 }
 
 export type AdminUncheckedCreateWithoutRoleInput = {
@@ -485,7 +574,11 @@ export type AdminUncheckedCreateWithoutRoleInput = {
   email: string
   password_hash: string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
 }
 
 export type AdminCreateOrConnectWithoutRoleInput = {
@@ -524,7 +617,11 @@ export type AdminScalarWhereInput = {
   password_hash?: Prisma.StringFilter<"Admin"> | string
   role_id?: Prisma.IntFilter<"Admin"> | number
   created_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"Admin"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"Admin"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"Admin"> | string | null
 }
 
 export type AdminCreateManyRoleInput = {
@@ -533,7 +630,11 @@ export type AdminCreateManyRoleInput = {
   email: string
   password_hash: string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
 }
 
 export type AdminUpdateWithoutRoleInput = {
@@ -542,7 +643,11 @@ export type AdminUpdateWithoutRoleInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AdminUncheckedUpdateWithoutRoleInput = {
@@ -551,7 +656,11 @@ export type AdminUncheckedUpdateWithoutRoleInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AdminUncheckedUpdateManyWithoutRoleInput = {
@@ -560,7 +669,11 @@ export type AdminUncheckedUpdateManyWithoutRoleInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -572,11 +685,43 @@ export type AdminSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   password_hash?: boolean
   role_id?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["admin"]>
 
+export type AdminSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  username?: boolean
+  email?: boolean
+  password_hash?: boolean
+  role_id?: boolean
+  created_at?: boolean
+  created_by?: boolean
+  updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
+  role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["admin"]>
 
+export type AdminSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  username?: boolean
+  email?: boolean
+  password_hash?: boolean
+  role_id?: boolean
+  created_at?: boolean
+  created_by?: boolean
+  updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
+  role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["admin"]>
 
 export type AdminSelectScalar = {
   id?: boolean
@@ -585,11 +730,21 @@ export type AdminSelectScalar = {
   password_hash?: boolean
   role_id?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
 }
 
-export type AdminOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "password_hash" | "role_id" | "created_at" | "updated_at", ExtArgs["result"]["admin"]>
+export type AdminOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "password_hash" | "role_id" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["admin"]>
 export type AdminInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+}
+export type AdminIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+}
+export type AdminIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
 }
 
@@ -605,7 +760,11 @@ export type $AdminPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     password_hash: string
     role_id: number
     created_at: Date
+    created_by: string | null
     updated_at: Date
+    updated_by: string | null
+    deleted_at: Date
+    deleted_by: string | null
   }, ExtArgs["result"]["admin"]>
   composites: {}
 }
@@ -724,6 +883,30 @@ export interface AdminDelegate<ExtArgs extends runtime.Types.Extensions.Internal
   createMany<T extends AdminCreateManyArgs>(args?: Prisma.SelectSubset<T, AdminCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many Admins and returns the data saved in the database.
+   * @param {AdminCreateManyAndReturnArgs} args - Arguments to create many Admins.
+   * @example
+   * // Create many Admins
+   * const admin = await prisma.admin.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many Admins and only return the `id`
+   * const adminWithIdOnly = await prisma.admin.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends AdminCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, AdminCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a Admin.
    * @param {AdminDeleteArgs} args - Arguments to delete one Admin.
    * @example
@@ -786,6 +969,36 @@ export interface AdminDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    * 
    */
   updateMany<T extends AdminUpdateManyArgs>(args: Prisma.SelectSubset<T, AdminUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more Admins and returns the data updated in the database.
+   * @param {AdminUpdateManyAndReturnArgs} args - Arguments to update many Admins.
+   * @example
+   * // Update many Admins
+   * const admin = await prisma.admin.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more Admins and only return the `id`
+   * const adminWithIdOnly = await prisma.admin.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends AdminUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, AdminUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Admin.
@@ -982,7 +1195,11 @@ export interface AdminFieldRefs {
   readonly password_hash: Prisma.FieldRef<"Admin", 'String'>
   readonly role_id: Prisma.FieldRef<"Admin", 'Int'>
   readonly created_at: Prisma.FieldRef<"Admin", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"Admin", 'String'>
   readonly updated_at: Prisma.FieldRef<"Admin", 'DateTime'>
+  readonly updated_by: Prisma.FieldRef<"Admin", 'String'>
+  readonly deleted_at: Prisma.FieldRef<"Admin", 'DateTime'>
+  readonly deleted_by: Prisma.FieldRef<"Admin", 'String'>
 }
     
 
@@ -1216,6 +1433,29 @@ export type AdminCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
+ * Admin createManyAndReturn
+ */
+export type AdminCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Admin
+   */
+  select?: Prisma.AdminSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Admin
+   */
+  omit?: Prisma.AdminOmit<ExtArgs> | null
+  /**
+   * The data used to create many Admins.
+   */
+  data: Prisma.AdminCreateManyInput | Prisma.AdminCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * Admin update
  */
 export type AdminUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1257,6 +1497,36 @@ export type AdminUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Admins to update.
    */
   limit?: number
+}
+
+/**
+ * Admin updateManyAndReturn
+ */
+export type AdminUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Admin
+   */
+  select?: Prisma.AdminSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Admin
+   */
+  omit?: Prisma.AdminOmit<ExtArgs> | null
+  /**
+   * The data used to update Admins.
+   */
+  data: Prisma.XOR<Prisma.AdminUpdateManyMutationInput, Prisma.AdminUncheckedUpdateManyInput>
+  /**
+   * Filter which Admins to update
+   */
+  where?: Prisma.AdminWhereInput
+  /**
+   * Limit how many Admins to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

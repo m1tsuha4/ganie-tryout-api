@@ -17,35 +17,31 @@ export class PackageService {
     return this.prismaService.package.create({
       data: {
         ...createPackageDto,
+        type: 'SARJANA', // Set type di Package
+        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
       },
     });
   }
 
-  // Get all packages untuk Sarjana & Vokasi (filter by PackageExam type = SARJANA)
-  // Include packages yang belum punya exam (new packages) atau yang punya SARJANA exam
+  // Create package untuk Pascasarjana
+  async createPascasarjana(createPackageDto: CreatePackageDto) {
+    return this.prismaService.package.create({
+      data: {
+        ...createPackageDto,
+        type: 'PASCASARJANA', // Set type di Package
+        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
+      },
+    });
+  }
+
+  // Get all packages untuk Sarjana & Vokasi (filter by Package type = SARJANA)
   async findAllSarjana() {
-    const packages = await this.prismaService.package.findMany({
+    return this.prismaService.package.findMany({
       where: {
-        OR: [
-          {
-            package_exams: {
-              none: {},
-            },
-          },
-          {
-            package_exams: {
-              some: {
-                type: 'SARJANA',
-              },
-            },
-          },
-        ],
+        type: 'SARJANA', // Filter berdasarkan type di Package
       },
       include: {
         package_exams: {
-          where: {
-            type: 'SARJANA',
-          },
           include: {
             exam: {
               include: {
@@ -59,47 +55,17 @@ export class PackageService {
         created_at: 'desc',
       },
     });
-
-    // Filter out packages yang punya PASCASARJANA exams (exclude yang bukan SARJANA)
-    const sarjanaPackages = packages.filter((pkg) => {
-      if (pkg.package_exams.length === 0) {
-        return true; // New package, belum punya exam
-      }
-      // Hanya return yang punya SARJANA exam atau tidak punya PASCASARJANA
-      const hasPascasarjana = pkg.package_exams.some(
-        (pe) => pe.type === 'PASCASARJANA',
-      );
-      return !hasPascasarjana;
-    });
-
-    return sarjanaPackages;
   }
 
   // Get packages by published status untuk Sarjana & Vokasi
   async findByStatus(published: boolean) {
-    const packages = await this.prismaService.package.findMany({
+    return this.prismaService.package.findMany({
       where: {
         published,
-        OR: [
-          {
-            package_exams: {
-              none: {},
-            },
-          },
-          {
-            package_exams: {
-              some: {
-                type: 'SARJANA',
-              },
-            },
-          },
-        ],
+        type: 'SARJANA', // Filter berdasarkan type di Package
       },
       include: {
         package_exams: {
-          where: {
-            type: 'SARJANA',
-          },
           include: {
             exam: {
               include: {
@@ -113,19 +79,6 @@ export class PackageService {
         created_at: 'desc',
       },
     });
-
-    // Filter out packages yang punya PASCASARJANA exams
-    const sarjanaPackages = packages.filter((pkg) => {
-      if (pkg.package_exams.length === 0) {
-        return true; // New package
-      }
-      const hasPascasarjana = pkg.package_exams.some(
-        (pe) => pe.type === 'PASCASARJANA',
-      );
-      return !hasPascasarjana;
-    });
-
-    return sarjanaPackages;
   }
 
   // Get package by ID untuk Sarjana & Vokasi
@@ -134,9 +87,6 @@ export class PackageService {
       where: { id },
       include: {
         package_exams: {
-          where: {
-            type: 'SARJANA',
-          },
           include: {
             exam: {
               include: {
@@ -157,14 +107,8 @@ export class PackageService {
     }
 
     // Verify ini package Sarjana & Vokasi
-    // Package baru (belum punya exam) atau package dengan SARJANA exam
-    if (packageData.package_exams.length > 0) {
-      const hasPascasarjana = packageData.package_exams.some(
-        (pe) => pe.type === 'PASCASARJANA',
-      );
-      if (hasPascasarjana) {
-        throw new NotFoundException('Package not found for Sarjana & Vokasi');
-      }
+    if (packageData.type !== 'SARJANA') {
+      throw new NotFoundException('Package not found for Sarjana & Vokasi');
     }
 
     return packageData;
@@ -200,33 +144,13 @@ export class PackageService {
     };
   }
 
-  // Update package untuk Sarjana & Vokasi
+  // Update package untuk Sarjana & Vokasi (termasuk publish/unpublish via published field)
   async update(id: number, updatePackageDto: UpdatePackageDto) {
     const existingPackage = await this.findOne(id);
 
     return this.prismaService.package.update({
       where: { id },
       data: updatePackageDto,
-    });
-  }
-
-  // Publish package untuk Sarjana & Vokasi
-  async publish(id: number) {
-    const packageData = await this.findOne(id);
-
-    return this.prismaService.package.update({
-      where: { id },
-      data: { published: true },
-    });
-  }
-
-  // Unpublish package untuk Sarjana & Vokasi
-  async unpublish(id: number) {
-    const packageData = await this.findOne(id);
-
-    return this.prismaService.package.update({
-      where: { id },
-      data: { published: false },
     });
   }
 
@@ -252,15 +176,15 @@ export class PackageService {
         duration: createSubtestDto.duration,
         total_questions: 0, // Default, akan di-update saat ada soal
         type_exam: createSubtestDto.type_exam as 'TKA' | 'TBI' | 'TKD',
+        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
       },
     });
 
-    // Link Exam ke Package via PackageExam dengan type SARJANA
+    // Link Exam ke Package via PackageExam (tidak perlu set type lagi)
     const packageExam = await this.prismaService.packageExam.create({
       data: {
         package_id: createSubtestDto.package_id,
         exam_id: exam.id,
-        type: 'SARJANA',
       },
       include: {
         exam: true,
@@ -288,7 +212,6 @@ export class PackageService {
       where: {
         package_id: packageId,
         exam_id: examId,
-        type: 'SARJANA',
       },
     });
 
@@ -311,30 +234,14 @@ export class PackageService {
 
   // ========== METHODS UNTUK PASCASARJANA ==========
 
-  // Get all packages untuk Pascasarjana (filter by PackageExam type = PASCASARJANA)
+  // Get all packages untuk Pascasarjana (filter by Package type = PASCASARJANA)
   async findAllPascasarjana() {
-    const packages = await this.prismaService.package.findMany({
+    return this.prismaService.package.findMany({
       where: {
-        OR: [
-          {
-            package_exams: {
-              none: {},
-            },
-          },
-          {
-            package_exams: {
-              some: {
-                type: 'PASCASARJANA',
-              },
-            },
-          },
-        ],
+        type: 'PASCASARJANA', // Filter berdasarkan type di Package
       },
       include: {
         package_exams: {
-          where: {
-            type: 'PASCASARJANA',
-          },
           include: {
             exam: {
               include: {
@@ -348,46 +255,17 @@ export class PackageService {
         created_at: 'desc',
       },
     });
-
-    // Filter out packages yang punya SARJANA exams
-    const pascasarjanaPackages = packages.filter((pkg) => {
-      if (pkg.package_exams.length === 0) {
-        return true; // New package, belum punya exam
-      }
-      const hasSarjana = pkg.package_exams.some(
-        (pe) => pe.type === 'SARJANA',
-      );
-      return !hasSarjana;
-    });
-
-    return pascasarjanaPackages;
   }
 
   // Get packages by published status untuk Pascasarjana
   async findByStatusPascasarjana(published: boolean) {
-    const packages = await this.prismaService.package.findMany({
+    return this.prismaService.package.findMany({
       where: {
         published,
-        OR: [
-          {
-            package_exams: {
-              none: {},
-            },
-          },
-          {
-            package_exams: {
-              some: {
-                type: 'PASCASARJANA',
-              },
-            },
-          },
-        ],
+        type: 'PASCASARJANA', // Filter berdasarkan type di Package
       },
       include: {
         package_exams: {
-          where: {
-            type: 'PASCASARJANA',
-          },
           include: {
             exam: {
               include: {
@@ -401,18 +279,6 @@ export class PackageService {
         created_at: 'desc',
       },
     });
-
-    const pascasarjanaPackages = packages.filter((pkg) => {
-      if (pkg.package_exams.length === 0) {
-        return true;
-      }
-      const hasSarjana = pkg.package_exams.some(
-        (pe) => pe.type === 'SARJANA',
-      );
-      return !hasSarjana;
-    });
-
-    return pascasarjanaPackages;
   }
 
   // Get package by ID untuk Pascasarjana
@@ -421,9 +287,6 @@ export class PackageService {
       where: { id },
       include: {
         package_exams: {
-          where: {
-            type: 'PASCASARJANA',
-          },
           include: {
             exam: {
               include: {
@@ -444,13 +307,8 @@ export class PackageService {
     }
 
     // Verify ini package Pascasarjana
-    if (packageData.package_exams.length > 0) {
-      const hasSarjana = packageData.package_exams.some(
-        (pe) => pe.type === 'SARJANA',
-      );
-      if (hasSarjana) {
-        throw new NotFoundException('Package not found for Pascasarjana');
-      }
+    if (packageData.type !== 'PASCASARJANA') {
+      throw new NotFoundException('Package not found for Pascasarjana');
     }
 
     return packageData;
@@ -481,33 +339,13 @@ export class PackageService {
     };
   }
 
-  // Update package untuk Pascasarjana
+  // Update package untuk Pascasarjana (termasuk publish/unpublish via published field)
   async updatePascasarjana(id: number, updatePackageDto: UpdatePackageDto) {
     const existingPackage = await this.findOnePascasarjana(id);
 
     return this.prismaService.package.update({
       where: { id },
       data: updatePackageDto,
-    });
-  }
-
-  // Publish package untuk Pascasarjana
-  async publishPascasarjana(id: number) {
-    const packageData = await this.findOnePascasarjana(id);
-
-    return this.prismaService.package.update({
-      where: { id },
-      data: { published: true },
-    });
-  }
-
-  // Unpublish package untuk Pascasarjana
-  async unpublishPascasarjana(id: number) {
-    const packageData = await this.findOnePascasarjana(id);
-
-    return this.prismaService.package.update({
-      where: { id },
-      data: { published: false },
     });
   }
 
@@ -539,6 +377,7 @@ export class PackageService {
         duration: createSubtestDto.duration,
         total_questions: 0,
         type_exam: createSubtestDto.type_exam as 'TKA' | 'TBI',
+        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
       },
     });
 
@@ -546,7 +385,6 @@ export class PackageService {
       data: {
         package_id: createSubtestDto.package_id,
         exam_id: exam.id,
-        type: 'PASCASARJANA',
       },
       include: {
         exam: true,
@@ -572,7 +410,6 @@ export class PackageService {
       where: {
         package_id: packageId,
         exam_id: examId,
-        type: 'PASCASARJANA',
       },
     });
 

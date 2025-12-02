@@ -11,7 +11,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+    provider  = "postgresql"
 }
 
 model Admin {
@@ -20,9 +20,13 @@ model Admin {
   email         String   @unique
   password_hash String   @db.Text
   role          Role     @relation(fields: [role_id], references: [id])
-  role_id       Int      @unique
+  role_id       Int      
   created_at    DateTime @default(now())
+  created_by    String?
   updated_at    DateTime @updatedAt
+  updated_by    String?
+  deleted_at    DateTime
+  deleted_by    String?
 }
 
 model User {
@@ -32,8 +36,11 @@ model User {
   email         String   @unique
   password_hash String   @db.Text
   created_at    DateTime @default(now())
+  created_by    String?
   updated_at    DateTime @updatedAt
-
+  updated_by    String?
+  deleted_at    DateTime
+  deleted_by    String?
   transactions Transaction[]
   user_packages UserPackage[]
   user_exam_sessions UserExamSession[]
@@ -44,7 +51,11 @@ model Role {
   name             String   @unique
   permissions_mask Int      @default(0)
   created_at       DateTime @default(now())
+  created_by       String?
   updated_at       DateTime @updatedAt
+  updated_by       String?
+  deleted_at       DateTime
+  deleted_by       String?
 
   admin            Admin[]
 }
@@ -55,7 +66,11 @@ model Permission {
   bit_value   Int      @default(0)
   description String?  @db.Text
   created_at  DateTime @default(now())
+  created_by  String?
   updated_at  DateTime @updatedAt
+  updated_by  String?
+  deleted_at  DateTime
+  deleted_by  String?
 }
 
 model Exam {
@@ -66,7 +81,11 @@ model Exam {
   total_questions Int      @default(0)
   type_exam       TypeExam @default(TKA)
   created_at      DateTime @default(now())
+  created_by      String?
   updated_at      DateTime @updatedAt
+  updated_by      String?
+  deleted_at      DateTime
+  deleted_by      String?
 
   questions       Question[]
   package_exams   PackageExam[]
@@ -90,7 +109,11 @@ model Question {
   video_discussion String?   @db.Text
   difficulty      String?   
   created_at      DateTime @default(now())
+  created_by      String?
   updated_at      DateTime @updatedAt
+  updated_by      String?
+  deleted_at      DateTime
+  deleted_by      String?
 
   question_choices QuestionChoice[]
   user_answers UserAnswer[]
@@ -105,7 +128,11 @@ model QuestionChoice {
   choice_audio_url String   @db.Text
   is_correct      Boolean  @default(false)
   created_at      DateTime @default(now())
+  created_by      String?
   updated_at      DateTime @updatedAt
+  updated_by      String?
+  deleted_at      DateTime
+  deleted_by      String?
 
   user_answers UserAnswer[]
 }
@@ -116,8 +143,13 @@ model Package {
   description     String?  @db.Text
   price           Float
   published       Boolean @default(false)
+  type            PackageType @default(SARJANA)
   created_at      DateTime @default(now())
+  created_by      String?
   updated_at      DateTime @updatedAt
+  updated_by      String?
+  deleted_at      DateTime
+  deleted_by      String?
 
   package_exams PackageExam[]
   transactions Transaction[]
@@ -135,8 +167,8 @@ model PackageExam {
   package_id      Int
   exam            Exam  @relation(fields: [exam_id], references: [id])
   exam_id         Int
-  type            PackageType @default(SARJANA)
   created_at      DateTime @default(now())
+  created_by      String?
   updated_at      DateTime @updatedAt
 }
 
@@ -151,7 +183,11 @@ model Transaction {
   status          String
   transaction_date DateTime @default(now())
   created_at      DateTime @default(now())
+  created_by      String?
   updated_at      DateTime @updatedAt
+  updated_by      String?
+  deleted_at      DateTime
+  deleted_by      String?
 }
 
 model UserPackage {
@@ -162,6 +198,7 @@ model UserPackage {
   package_id      Int
   purchase_at     DateTime @default(now())
   created_at      DateTime @default(now())
+  created_by      String?
   updated_at      DateTime @updatedAt
 }
 

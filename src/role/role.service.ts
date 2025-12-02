@@ -8,7 +8,10 @@ export class RoleService {
   constructor(private prismaService: PrismaService) {}
   async create(createRoleDto: CreateRoleDto) {
     return this.prismaService.role.create({
-      data: createRoleDto,
+      data: {
+        ...createRoleDto,
+        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
+      },
     });
   }
 

@@ -42,6 +42,7 @@ export type UserPackageMinAggregateOutputType = {
   package_id: number | null
   purchase_at: Date | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
 }
 
@@ -51,6 +52,7 @@ export type UserPackageMaxAggregateOutputType = {
   package_id: number | null
   purchase_at: Date | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
 }
 
@@ -60,6 +62,7 @@ export type UserPackageCountAggregateOutputType = {
   package_id: number
   purchase_at: number
   created_at: number
+  created_by: number
   updated_at: number
   _all: number
 }
@@ -81,6 +84,7 @@ export type UserPackageMinAggregateInputType = {
   package_id?: true
   purchase_at?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
 }
 
@@ -90,6 +94,7 @@ export type UserPackageMaxAggregateInputType = {
   package_id?: true
   purchase_at?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
 }
 
@@ -99,6 +104,7 @@ export type UserPackageCountAggregateInputType = {
   package_id?: true
   purchase_at?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
   _all?: true
 }
@@ -195,6 +201,7 @@ export type UserPackageGroupByOutputType = {
   package_id: number
   purchase_at: Date
   created_at: Date
+  created_by: string | null
   updated_at: Date
   _count: UserPackageCountAggregateOutputType | null
   _avg: UserPackageAvgAggregateOutputType | null
@@ -227,6 +234,7 @@ export type UserPackageWhereInput = {
   package_id?: Prisma.IntFilter<"UserPackage"> | number
   purchase_at?: Prisma.DateTimeFilter<"UserPackage"> | Date | string
   created_at?: Prisma.DateTimeFilter<"UserPackage"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"UserPackage"> | string | null
   updated_at?: Prisma.DateTimeFilter<"UserPackage"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   package?: Prisma.XOR<Prisma.PackageScalarRelationFilter, Prisma.PackageWhereInput>
@@ -238,10 +246,10 @@ export type UserPackageOrderByWithRelationInput = {
   package_id?: Prisma.SortOrder
   purchase_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   package?: Prisma.PackageOrderByWithRelationInput
-  _relevance?: Prisma.UserPackageOrderByRelevanceInput
 }
 
 export type UserPackageWhereUniqueInput = Prisma.AtLeast<{
@@ -253,6 +261,7 @@ export type UserPackageWhereUniqueInput = Prisma.AtLeast<{
   package_id?: Prisma.IntFilter<"UserPackage"> | number
   purchase_at?: Prisma.DateTimeFilter<"UserPackage"> | Date | string
   created_at?: Prisma.DateTimeFilter<"UserPackage"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"UserPackage"> | string | null
   updated_at?: Prisma.DateTimeFilter<"UserPackage"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   package?: Prisma.XOR<Prisma.PackageScalarRelationFilter, Prisma.PackageWhereInput>
@@ -264,6 +273,7 @@ export type UserPackageOrderByWithAggregationInput = {
   package_id?: Prisma.SortOrder
   purchase_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   _count?: Prisma.UserPackageCountOrderByAggregateInput
   _avg?: Prisma.UserPackageAvgOrderByAggregateInput
@@ -281,12 +291,14 @@ export type UserPackageScalarWhereWithAggregatesInput = {
   package_id?: Prisma.IntWithAggregatesFilter<"UserPackage"> | number
   purchase_at?: Prisma.DateTimeWithAggregatesFilter<"UserPackage"> | Date | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"UserPackage"> | Date | string
+  created_by?: Prisma.StringNullableWithAggregatesFilter<"UserPackage"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"UserPackage"> | Date | string
 }
 
 export type UserPackageCreateInput = {
   purchase_at?: Date | string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutUser_packagesInput
   package: Prisma.PackageCreateNestedOneWithoutUser_packagesInput
@@ -298,12 +310,14 @@ export type UserPackageUncheckedCreateInput = {
   package_id: number
   purchase_at?: Date | string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
 }
 
 export type UserPackageUpdateInput = {
   purchase_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutUser_packagesNestedInput
   package?: Prisma.PackageUpdateOneRequiredWithoutUser_packagesNestedInput
@@ -315,6 +329,7 @@ export type UserPackageUncheckedUpdateInput = {
   package_id?: Prisma.IntFieldUpdateOperationsInput | number
   purchase_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -324,12 +339,14 @@ export type UserPackageCreateManyInput = {
   package_id: number
   purchase_at?: Date | string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
 }
 
 export type UserPackageUpdateManyMutationInput = {
   purchase_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -339,6 +356,7 @@ export type UserPackageUncheckedUpdateManyInput = {
   package_id?: Prisma.IntFieldUpdateOperationsInput | number
   purchase_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -352,18 +370,13 @@ export type UserPackageOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type UserPackageOrderByRelevanceInput = {
-  fields: Prisma.UserPackageOrderByRelevanceFieldEnum | Prisma.UserPackageOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
-}
-
 export type UserPackageCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   package_id?: Prisma.SortOrder
   purchase_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
 
@@ -378,6 +391,7 @@ export type UserPackageMaxOrderByAggregateInput = {
   package_id?: Prisma.SortOrder
   purchase_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
 
@@ -387,6 +401,7 @@ export type UserPackageMinOrderByAggregateInput = {
   package_id?: Prisma.SortOrder
   purchase_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
 
@@ -482,6 +497,7 @@ export type UserPackageUncheckedUpdateManyWithoutPackageNestedInput = {
 export type UserPackageCreateWithoutUserInput = {
   purchase_at?: Date | string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
   package: Prisma.PackageCreateNestedOneWithoutUser_packagesInput
 }
@@ -491,6 +507,7 @@ export type UserPackageUncheckedCreateWithoutUserInput = {
   package_id: number
   purchase_at?: Date | string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
 }
 
@@ -529,12 +546,14 @@ export type UserPackageScalarWhereInput = {
   package_id?: Prisma.IntFilter<"UserPackage"> | number
   purchase_at?: Prisma.DateTimeFilter<"UserPackage"> | Date | string
   created_at?: Prisma.DateTimeFilter<"UserPackage"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"UserPackage"> | string | null
   updated_at?: Prisma.DateTimeFilter<"UserPackage"> | Date | string
 }
 
 export type UserPackageCreateWithoutPackageInput = {
   purchase_at?: Date | string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutUser_packagesInput
 }
@@ -544,6 +563,7 @@ export type UserPackageUncheckedCreateWithoutPackageInput = {
   user_id: string
   purchase_at?: Date | string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
 }
 
@@ -578,12 +598,14 @@ export type UserPackageCreateManyUserInput = {
   package_id: number
   purchase_at?: Date | string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
 }
 
 export type UserPackageUpdateWithoutUserInput = {
   purchase_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   package?: Prisma.PackageUpdateOneRequiredWithoutUser_packagesNestedInput
 }
@@ -593,6 +615,7 @@ export type UserPackageUncheckedUpdateWithoutUserInput = {
   package_id?: Prisma.IntFieldUpdateOperationsInput | number
   purchase_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -601,6 +624,7 @@ export type UserPackageUncheckedUpdateManyWithoutUserInput = {
   package_id?: Prisma.IntFieldUpdateOperationsInput | number
   purchase_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -609,12 +633,14 @@ export type UserPackageCreateManyPackageInput = {
   user_id: string
   purchase_at?: Date | string
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
 }
 
 export type UserPackageUpdateWithoutPackageInput = {
   purchase_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutUser_packagesNestedInput
 }
@@ -624,6 +650,7 @@ export type UserPackageUncheckedUpdateWithoutPackageInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   purchase_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -632,6 +659,7 @@ export type UserPackageUncheckedUpdateManyWithoutPackageInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   purchase_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -643,12 +671,35 @@ export type UserPackageSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   package_id?: boolean
   purchase_at?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userPackage"]>
 
+export type UserPackageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  user_id?: boolean
+  package_id?: boolean
+  purchase_at?: boolean
+  created_at?: boolean
+  created_by?: boolean
+  updated_at?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["userPackage"]>
 
+export type UserPackageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  user_id?: boolean
+  package_id?: boolean
+  purchase_at?: boolean
+  created_at?: boolean
+  created_by?: boolean
+  updated_at?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["userPackage"]>
 
 export type UserPackageSelectScalar = {
   id?: boolean
@@ -656,11 +707,20 @@ export type UserPackageSelectScalar = {
   package_id?: boolean
   purchase_at?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
 }
 
-export type UserPackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "package_id" | "purchase_at" | "created_at" | "updated_at", ExtArgs["result"]["userPackage"]>
+export type UserPackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "package_id" | "purchase_at" | "created_at" | "created_by" | "updated_at", ExtArgs["result"]["userPackage"]>
 export type UserPackageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
+}
+export type UserPackageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
+}
+export type UserPackageIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
 }
@@ -677,6 +737,7 @@ export type $UserPackagePayload<ExtArgs extends runtime.Types.Extensions.Interna
     package_id: number
     purchase_at: Date
     created_at: Date
+    created_by: string | null
     updated_at: Date
   }, ExtArgs["result"]["userPackage"]>
   composites: {}
@@ -796,6 +857,30 @@ export interface UserPackageDelegate<ExtArgs extends runtime.Types.Extensions.In
   createMany<T extends UserPackageCreateManyArgs>(args?: Prisma.SelectSubset<T, UserPackageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many UserPackages and returns the data saved in the database.
+   * @param {UserPackageCreateManyAndReturnArgs} args - Arguments to create many UserPackages.
+   * @example
+   * // Create many UserPackages
+   * const userPackage = await prisma.userPackage.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many UserPackages and only return the `id`
+   * const userPackageWithIdOnly = await prisma.userPackage.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends UserPackageCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, UserPackageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPackagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a UserPackage.
    * @param {UserPackageDeleteArgs} args - Arguments to delete one UserPackage.
    * @example
@@ -858,6 +943,36 @@ export interface UserPackageDelegate<ExtArgs extends runtime.Types.Extensions.In
    * 
    */
   updateMany<T extends UserPackageUpdateManyArgs>(args: Prisma.SelectSubset<T, UserPackageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more UserPackages and returns the data updated in the database.
+   * @param {UserPackageUpdateManyAndReturnArgs} args - Arguments to update many UserPackages.
+   * @example
+   * // Update many UserPackages
+   * const userPackage = await prisma.userPackage.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more UserPackages and only return the `id`
+   * const userPackageWithIdOnly = await prisma.userPackage.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends UserPackageUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, UserPackageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPackagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one UserPackage.
@@ -1054,6 +1169,7 @@ export interface UserPackageFieldRefs {
   readonly package_id: Prisma.FieldRef<"UserPackage", 'Int'>
   readonly purchase_at: Prisma.FieldRef<"UserPackage", 'DateTime'>
   readonly created_at: Prisma.FieldRef<"UserPackage", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"UserPackage", 'String'>
   readonly updated_at: Prisma.FieldRef<"UserPackage", 'DateTime'>
 }
     
@@ -1288,6 +1404,29 @@ export type UserPackageCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
+ * UserPackage createManyAndReturn
+ */
+export type UserPackageCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserPackage
+   */
+  select?: Prisma.UserPackageSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserPackage
+   */
+  omit?: Prisma.UserPackageOmit<ExtArgs> | null
+  /**
+   * The data used to create many UserPackages.
+   */
+  data: Prisma.UserPackageCreateManyInput | Prisma.UserPackageCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPackageIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * UserPackage update
  */
 export type UserPackageUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1329,6 +1468,36 @@ export type UserPackageUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many UserPackages to update.
    */
   limit?: number
+}
+
+/**
+ * UserPackage updateManyAndReturn
+ */
+export type UserPackageUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserPackage
+   */
+  select?: Prisma.UserPackageSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserPackage
+   */
+  omit?: Prisma.UserPackageOmit<ExtArgs> | null
+  /**
+   * The data used to update UserPackages.
+   */
+  data: Prisma.XOR<Prisma.UserPackageUpdateManyMutationInput, Prisma.UserPackageUncheckedUpdateManyInput>
+  /**
+   * Filter which UserPackages to update
+   */
+  where?: Prisma.UserPackageWhereInput
+  /**
+   * Limit how many UserPackages to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPackageIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
