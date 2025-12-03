@@ -25,7 +25,7 @@ model Admin {
   created_by    String?
   updated_at    DateTime @updatedAt
   updated_by    String?
-  deleted_at    DateTime
+  deleted_at    DateTime?
   deleted_by    String?
 }
 
@@ -39,7 +39,7 @@ model User {
   created_by    String?
   updated_at    DateTime @updatedAt
   updated_by    String?
-  deleted_at    DateTime
+  deleted_at    DateTime?
   deleted_by    String?
   transactions Transaction[]
   user_packages UserPackage[]
@@ -54,7 +54,7 @@ model Role {
   created_by       String?
   updated_at       DateTime @updatedAt
   updated_by       String?
-  deleted_at       DateTime
+  deleted_at       DateTime?
   deleted_by       String?
 
   admin            Admin[]
@@ -69,7 +69,7 @@ model Permission {
   created_by  String?
   updated_at  DateTime @updatedAt
   updated_by  String?
-  deleted_at  DateTime
+  deleted_at  DateTime?
   deleted_by  String?
 }
 
@@ -84,7 +84,7 @@ model Exam {
   created_by      String?
   updated_at      DateTime @updatedAt
   updated_by      String?
-  deleted_at      DateTime
+  deleted_at      DateTime?
   deleted_by      String?
 
   questions       Question[]
@@ -112,7 +112,7 @@ model Question {
   created_by      String?
   updated_at      DateTime @updatedAt
   updated_by      String?
-  deleted_at      DateTime
+  deleted_at      DateTime?
   deleted_by      String?
 
   question_choices QuestionChoice[]
@@ -131,7 +131,7 @@ model QuestionChoice {
   created_by      String?
   updated_at      DateTime @updatedAt
   updated_by      String?
-  deleted_at      DateTime
+  deleted_at      DateTime?
   deleted_by      String?
 
   user_answers UserAnswer[]
@@ -148,7 +148,7 @@ model Package {
   created_by      String?
   updated_at      DateTime @updatedAt
   updated_by      String?
-  deleted_at      DateTime
+  deleted_at      DateTime?
   deleted_by      String?
 
   package_exams PackageExam[]
@@ -186,7 +186,7 @@ model Transaction {
   created_by      String?
   updated_at      DateTime @updatedAt
   updated_by      String?
-  deleted_at      DateTime
+  deleted_at      DateTime?
   deleted_by      String?
 }
 
@@ -216,7 +216,7 @@ model UserExamSession {
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 
-  user_answers UserAnswer[]
+user_answers UserAnswer[]
 }
 
 model UserAnswer {

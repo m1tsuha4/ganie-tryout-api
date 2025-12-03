@@ -11,12 +11,6 @@ export class PrismaService
     const adapter = new PrismaPg({
       connectionString: process.env.DATABASE_URL!,
     });
-    
-    pool.on('error', (err) => {
-      console.error('Unexpected error on idle client', err);
-    });
-    
-    const adapter = new PrismaPg(pool);
     super({ adapter });
   }
 
@@ -24,6 +18,7 @@ export class PrismaService
     try {
       console.log('Trying to connect Prisma to DB...');
       await this.$connect();
+      await this.$queryRawUnsafe('SELECT 1');
       console.log('Prisma connected to DB successfully');
     } catch (err) {
       console.error('Prisma failed to connect to DB');
