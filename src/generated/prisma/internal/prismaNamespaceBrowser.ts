@@ -89,7 +89,11 @@ export const AdminScalarFieldEnum = {
   password_hash: 'password_hash',
   role_id: 'role_id',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  created_by: 'created_by',
+  updated_at: 'updated_at',
+  updated_by: 'updated_by',
+  deleted_at: 'deleted_at',
+  deleted_by: 'deleted_by'
 } as const
 
 export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
@@ -102,7 +106,11 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password_hash: 'password_hash',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  created_by: 'created_by',
+  updated_at: 'updated_at',
+  updated_by: 'updated_by',
+  deleted_at: 'deleted_at',
+  deleted_by: 'deleted_by'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -113,7 +121,11 @@ export const RoleScalarFieldEnum = {
   name: 'name',
   permissions_mask: 'permissions_mask',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  created_by: 'created_by',
+  updated_at: 'updated_at',
+  updated_by: 'updated_by',
+  deleted_at: 'deleted_at',
+  deleted_by: 'deleted_by'
 } as const
 
 export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
@@ -125,7 +137,11 @@ export const PermissionScalarFieldEnum = {
   bit_value: 'bit_value',
   description: 'description',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  created_by: 'created_by',
+  updated_at: 'updated_at',
+  updated_by: 'updated_by',
+  deleted_at: 'deleted_at',
+  deleted_by: 'deleted_by'
 } as const
 
 export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
@@ -139,7 +155,11 @@ export const ExamScalarFieldEnum = {
   total_questions: 'total_questions',
   type_exam: 'type_exam',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  created_by: 'created_by',
+  updated_at: 'updated_at',
+  updated_by: 'updated_by',
+  deleted_at: 'deleted_at',
+  deleted_by: 'deleted_by'
 } as const
 
 export type ExamScalarFieldEnum = (typeof ExamScalarFieldEnum)[keyof typeof ExamScalarFieldEnum]
@@ -155,7 +175,11 @@ export const QuestionScalarFieldEnum = {
   video_discussion: 'video_discussion',
   difficulty: 'difficulty',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  created_by: 'created_by',
+  updated_at: 'updated_at',
+  updated_by: 'updated_by',
+  deleted_at: 'deleted_at',
+  deleted_by: 'deleted_by'
 } as const
 
 export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
@@ -169,7 +193,11 @@ export const QuestionChoiceScalarFieldEnum = {
   choice_audio_url: 'choice_audio_url',
   is_correct: 'is_correct',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  created_by: 'created_by',
+  updated_at: 'updated_at',
+  updated_by: 'updated_by',
+  deleted_at: 'deleted_at',
+  deleted_by: 'deleted_by'
 } as const
 
 export type QuestionChoiceScalarFieldEnum = (typeof QuestionChoiceScalarFieldEnum)[keyof typeof QuestionChoiceScalarFieldEnum]
@@ -181,8 +209,13 @@ export const PackageScalarFieldEnum = {
   description: 'description',
   price: 'price',
   published: 'published',
+  type: 'type',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  created_by: 'created_by',
+  updated_at: 'updated_at',
+  updated_by: 'updated_by',
+  deleted_at: 'deleted_at',
+  deleted_by: 'deleted_by'
 } as const
 
 export type PackageScalarFieldEnum = (typeof PackageScalarFieldEnum)[keyof typeof PackageScalarFieldEnum]
@@ -192,8 +225,8 @@ export const PackageExamScalarFieldEnum = {
   id: 'id',
   package_id: 'package_id',
   exam_id: 'exam_id',
-  type: 'type',
   created_at: 'created_at',
+  created_by: 'created_by',
   updated_at: 'updated_at'
 } as const
 
@@ -209,7 +242,11 @@ export const TransactionScalarFieldEnum = {
   status: 'status',
   transaction_date: 'transaction_date',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  created_by: 'created_by',
+  updated_at: 'updated_at',
+  updated_by: 'updated_by',
+  deleted_at: 'deleted_at',
+  deleted_by: 'deleted_by'
 } as const
 
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
@@ -221,6 +258,7 @@ export const UserPackageScalarFieldEnum = {
   package_id: 'package_id',
   purchase_at: 'purchase_at',
   created_at: 'created_at',
+  created_by: 'created_by',
   updated_at: 'updated_at'
 } as const
 

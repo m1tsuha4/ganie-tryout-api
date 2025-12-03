@@ -42,8 +42,13 @@ export type PackageMinAggregateOutputType = {
   description: string | null
   price: number | null
   published: boolean | null
+  type: $Enums.PackageType | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
+  updated_by: string | null
+  deleted_at: Date | null
+  deleted_by: string | null
 }
 
 export type PackageMaxAggregateOutputType = {
@@ -52,8 +57,13 @@ export type PackageMaxAggregateOutputType = {
   description: string | null
   price: number | null
   published: boolean | null
+  type: $Enums.PackageType | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
+  updated_by: string | null
+  deleted_at: Date | null
+  deleted_by: string | null
 }
 
 export type PackageCountAggregateOutputType = {
@@ -62,8 +72,13 @@ export type PackageCountAggregateOutputType = {
   description: number
   price: number
   published: number
+  type: number
   created_at: number
+  created_by: number
   updated_at: number
+  updated_by: number
+  deleted_at: number
+  deleted_by: number
   _all: number
 }
 
@@ -84,8 +99,13 @@ export type PackageMinAggregateInputType = {
   description?: true
   price?: true
   published?: true
+  type?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
 }
 
 export type PackageMaxAggregateInputType = {
@@ -94,8 +114,13 @@ export type PackageMaxAggregateInputType = {
   description?: true
   price?: true
   published?: true
+  type?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
 }
 
 export type PackageCountAggregateInputType = {
@@ -104,8 +129,13 @@ export type PackageCountAggregateInputType = {
   description?: true
   price?: true
   published?: true
+  type?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -201,8 +231,13 @@ export type PackageGroupByOutputType = {
   description: string | null
   price: number
   published: boolean
+  type: $Enums.PackageType
   created_at: Date
+  created_by: string | null
   updated_at: Date
+  updated_by: string | null
+  deleted_at: Date
+  deleted_by: string | null
   _count: PackageCountAggregateOutputType | null
   _avg: PackageAvgAggregateOutputType | null
   _sum: PackageSumAggregateOutputType | null
@@ -234,8 +269,13 @@ export type PackageWhereInput = {
   description?: Prisma.StringNullableFilter<"Package"> | string | null
   price?: Prisma.FloatFilter<"Package"> | number
   published?: Prisma.BoolFilter<"Package"> | boolean
+  type?: Prisma.EnumPackageTypeFilter<"Package"> | $Enums.PackageType
   created_at?: Prisma.DateTimeFilter<"Package"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"Package"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Package"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"Package"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"Package"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"Package"> | string | null
   package_exams?: Prisma.PackageExamListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
   user_packages?: Prisma.UserPackageListRelationFilter
@@ -247,8 +287,13 @@ export type PackageOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   package_exams?: Prisma.PackageExamOrderByRelationAggregateInput
   transactions?: Prisma.TransactionOrderByRelationAggregateInput
   user_packages?: Prisma.UserPackageOrderByRelationAggregateInput
@@ -263,8 +308,13 @@ export type PackageWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Package"> | string | null
   price?: Prisma.FloatFilter<"Package"> | number
   published?: Prisma.BoolFilter<"Package"> | boolean
+  type?: Prisma.EnumPackageTypeFilter<"Package"> | $Enums.PackageType
   created_at?: Prisma.DateTimeFilter<"Package"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"Package"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Package"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"Package"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"Package"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"Package"> | string | null
   package_exams?: Prisma.PackageExamListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
   user_packages?: Prisma.UserPackageListRelationFilter
@@ -276,8 +326,13 @@ export type PackageOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PackageCountOrderByAggregateInput
   _avg?: Prisma.PackageAvgOrderByAggregateInput
   _max?: Prisma.PackageMaxOrderByAggregateInput
@@ -294,8 +349,13 @@ export type PackageScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
   price?: Prisma.FloatWithAggregatesFilter<"Package"> | number
   published?: Prisma.BoolWithAggregatesFilter<"Package"> | boolean
+  type?: Prisma.EnumPackageTypeWithAggregatesFilter<"Package"> | $Enums.PackageType
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Package"> | Date | string
+  created_by?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Package"> | Date | string
+  updated_by?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
+  deleted_at?: Prisma.DateTimeWithAggregatesFilter<"Package"> | Date | string
+  deleted_by?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
 }
 
 export type PackageCreateInput = {
@@ -303,8 +363,13 @@ export type PackageCreateInput = {
   description?: string | null
   price: number
   published?: boolean
+  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutPackageInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageCreateNestedManyWithoutPackageInput
@@ -316,8 +381,13 @@ export type PackageUncheckedCreateInput = {
   description?: string | null
   price: number
   published?: boolean
+  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutPackageInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageUncheckedCreateNestedManyWithoutPackageInput
@@ -328,8 +398,13 @@ export type PackageUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUpdateManyWithoutPackageNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUpdateManyWithoutPackageNestedInput
@@ -341,8 +416,13 @@ export type PackageUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutPackageNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUncheckedUpdateManyWithoutPackageNestedInput
@@ -354,8 +434,13 @@ export type PackageCreateManyInput = {
   description?: string | null
   price: number
   published?: boolean
+  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
 }
 
 export type PackageUpdateManyMutationInput = {
@@ -363,8 +448,13 @@ export type PackageUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PackageUncheckedUpdateManyInput = {
@@ -373,8 +463,13 @@ export type PackageUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PackageCountOrderByAggregateInput = {
@@ -383,8 +478,13 @@ export type PackageCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type PackageAvgOrderByAggregateInput = {
@@ -398,8 +498,13 @@ export type PackageMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type PackageMinOrderByAggregateInput = {
@@ -408,8 +513,13 @@ export type PackageMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type PackageSumOrderByAggregateInput = {
@@ -428,6 +538,10 @@ export type FloatFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type EnumPackageTypeFieldUpdateOperationsInput = {
+  set?: $Enums.PackageType
 }
 
 export type PackageCreateNestedOneWithoutPackage_examsInput = {
@@ -477,8 +591,13 @@ export type PackageCreateWithoutPackage_examsInput = {
   description?: string | null
   price: number
   published?: boolean
+  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   transactions?: Prisma.TransactionCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageCreateNestedManyWithoutPackageInput
 }
@@ -489,8 +608,13 @@ export type PackageUncheckedCreateWithoutPackage_examsInput = {
   description?: string | null
   price: number
   published?: boolean
+  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageUncheckedCreateNestedManyWithoutPackageInput
 }
@@ -516,8 +640,13 @@ export type PackageUpdateWithoutPackage_examsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUpdateManyWithoutPackageNestedInput
 }
@@ -528,8 +657,13 @@ export type PackageUncheckedUpdateWithoutPackage_examsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUncheckedUpdateManyWithoutPackageNestedInput
 }
@@ -539,8 +673,13 @@ export type PackageCreateWithoutTransactionsInput = {
   description?: string | null
   price: number
   published?: boolean
+  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageCreateNestedManyWithoutPackageInput
 }
@@ -551,8 +690,13 @@ export type PackageUncheckedCreateWithoutTransactionsInput = {
   description?: string | null
   price: number
   published?: boolean
+  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageUncheckedCreateNestedManyWithoutPackageInput
 }
@@ -578,8 +722,13 @@ export type PackageUpdateWithoutTransactionsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUpdateManyWithoutPackageNestedInput
 }
@@ -590,8 +739,13 @@ export type PackageUncheckedUpdateWithoutTransactionsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUncheckedUpdateManyWithoutPackageNestedInput
 }
@@ -601,8 +755,13 @@ export type PackageCreateWithoutUser_packagesInput = {
   description?: string | null
   price: number
   published?: boolean
+  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutPackageInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutPackageInput
 }
@@ -613,8 +772,13 @@ export type PackageUncheckedCreateWithoutUser_packagesInput = {
   description?: string | null
   price: number
   published?: boolean
+  type?: $Enums.PackageType
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutPackageInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPackageInput
 }
@@ -640,8 +804,13 @@ export type PackageUpdateWithoutUser_packagesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUpdateManyWithoutPackageNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutPackageNestedInput
 }
@@ -652,8 +821,13 @@ export type PackageUncheckedUpdateWithoutUser_packagesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutPackageNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPackageNestedInput
 }
@@ -713,8 +887,13 @@ export type PackageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   description?: boolean
   price?: boolean
   published?: boolean
+  type?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
   package_exams?: boolean | Prisma.Package$package_examsArgs<ExtArgs>
   transactions?: boolean | Prisma.Package$transactionsArgs<ExtArgs>
   user_packages?: boolean | Prisma.Package$user_packagesArgs<ExtArgs>
@@ -727,8 +906,13 @@ export type PackageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   description?: boolean
   price?: boolean
   published?: boolean
+  type?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
 }, ExtArgs["result"]["package"]>
 
 export type PackageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -737,8 +921,13 @@ export type PackageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   description?: boolean
   price?: boolean
   published?: boolean
+  type?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
 }, ExtArgs["result"]["package"]>
 
 export type PackageSelectScalar = {
@@ -747,11 +936,16 @@ export type PackageSelectScalar = {
   description?: boolean
   price?: boolean
   published?: boolean
+  type?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
 }
 
-export type PackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "price" | "published" | "created_at" | "updated_at", ExtArgs["result"]["package"]>
+export type PackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "price" | "published" | "type" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["package"]>
 export type PackageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   package_exams?: boolean | Prisma.Package$package_examsArgs<ExtArgs>
   transactions?: boolean | Prisma.Package$transactionsArgs<ExtArgs>
@@ -774,8 +968,13 @@ export type $PackagePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     description: string | null
     price: number
     published: boolean
+    type: $Enums.PackageType
     created_at: Date
+    created_by: string | null
     updated_at: Date
+    updated_by: string | null
+    deleted_at: Date
+    deleted_by: string | null
   }, ExtArgs["result"]["package"]>
   composites: {}
 }
@@ -1207,8 +1406,13 @@ export interface PackageFieldRefs {
   readonly description: Prisma.FieldRef<"Package", 'String'>
   readonly price: Prisma.FieldRef<"Package", 'Float'>
   readonly published: Prisma.FieldRef<"Package", 'Boolean'>
+  readonly type: Prisma.FieldRef<"Package", 'PackageType'>
   readonly created_at: Prisma.FieldRef<"Package", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"Package", 'String'>
   readonly updated_at: Prisma.FieldRef<"Package", 'DateTime'>
+  readonly updated_by: Prisma.FieldRef<"Package", 'String'>
+  readonly deleted_at: Prisma.FieldRef<"Package", 'DateTime'>
+  readonly deleted_by: Prisma.FieldRef<"Package", 'String'>
 }
     
 

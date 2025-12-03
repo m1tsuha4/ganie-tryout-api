@@ -2,18 +2,17 @@ version: '3.9'
 
 services:
   db:
-    image: mysql:8.4
+    image: postgres:16
     container_name: ganie-tryout-db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ganie-tryout
-      MYSQL_USER: ganie-tryout
-      MYSQL_PASSWORD: ganie-tryout
+      POSTGRES_USER: ganie-tryout
+      POSTGRES_PASSWORD: ganie-tryout
+      POSTGRES_DB: ganie-tryout
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - ./mysql-data:/var/lib/mysql
+      - ./postgres-data:/var/lib/postgresql/data
 
 volumes:
-  mysql-data:
+  postgres-data:

@@ -35,6 +35,7 @@ export class UserService {
         name: createUserDto.name,
         email: createUserDto.email,
         password_hash: hashPassword,
+        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
       },
       select: {
         id: true,

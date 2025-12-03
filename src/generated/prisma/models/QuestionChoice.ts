@@ -44,7 +44,11 @@ export type QuestionChoiceMinAggregateOutputType = {
   choice_audio_url: string | null
   is_correct: boolean | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
+  updated_by: string | null
+  deleted_at: Date | null
+  deleted_by: string | null
 }
 
 export type QuestionChoiceMaxAggregateOutputType = {
@@ -55,7 +59,11 @@ export type QuestionChoiceMaxAggregateOutputType = {
   choice_audio_url: string | null
   is_correct: boolean | null
   created_at: Date | null
+  created_by: string | null
   updated_at: Date | null
+  updated_by: string | null
+  deleted_at: Date | null
+  deleted_by: string | null
 }
 
 export type QuestionChoiceCountAggregateOutputType = {
@@ -66,7 +74,11 @@ export type QuestionChoiceCountAggregateOutputType = {
   choice_audio_url: number
   is_correct: number
   created_at: number
+  created_by: number
   updated_at: number
+  updated_by: number
+  deleted_at: number
+  deleted_by: number
   _all: number
 }
 
@@ -89,7 +101,11 @@ export type QuestionChoiceMinAggregateInputType = {
   choice_audio_url?: true
   is_correct?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
 }
 
 export type QuestionChoiceMaxAggregateInputType = {
@@ -100,7 +116,11 @@ export type QuestionChoiceMaxAggregateInputType = {
   choice_audio_url?: true
   is_correct?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
 }
 
 export type QuestionChoiceCountAggregateInputType = {
@@ -111,7 +131,11 @@ export type QuestionChoiceCountAggregateInputType = {
   choice_audio_url?: true
   is_correct?: true
   created_at?: true
+  created_by?: true
   updated_at?: true
+  updated_by?: true
+  deleted_at?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -209,7 +233,11 @@ export type QuestionChoiceGroupByOutputType = {
   choice_audio_url: string
   is_correct: boolean
   created_at: Date
+  created_by: string | null
   updated_at: Date
+  updated_by: string | null
+  deleted_at: Date
+  deleted_by: string | null
   _count: QuestionChoiceCountAggregateOutputType | null
   _avg: QuestionChoiceAvgAggregateOutputType | null
   _sum: QuestionChoiceSumAggregateOutputType | null
@@ -243,7 +271,11 @@ export type QuestionChoiceWhereInput = {
   choice_audio_url?: Prisma.StringFilter<"QuestionChoice"> | string
   is_correct?: Prisma.BoolFilter<"QuestionChoice"> | boolean
   created_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
   updated_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
   question?: Prisma.XOR<Prisma.QuestionScalarRelationFilter, Prisma.QuestionWhereInput>
   user_answers?: Prisma.UserAnswerListRelationFilter
 }
@@ -256,7 +288,11 @@ export type QuestionChoiceOrderByWithRelationInput = {
   choice_audio_url?: Prisma.SortOrder
   is_correct?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   question?: Prisma.QuestionOrderByWithRelationInput
   user_answers?: Prisma.UserAnswerOrderByRelationAggregateInput
 }
@@ -272,7 +308,11 @@ export type QuestionChoiceWhereUniqueInput = Prisma.AtLeast<{
   choice_audio_url?: Prisma.StringFilter<"QuestionChoice"> | string
   is_correct?: Prisma.BoolFilter<"QuestionChoice"> | boolean
   created_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
   updated_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
   question?: Prisma.XOR<Prisma.QuestionScalarRelationFilter, Prisma.QuestionWhereInput>
   user_answers?: Prisma.UserAnswerListRelationFilter
 }, "id">
@@ -285,7 +325,11 @@ export type QuestionChoiceOrderByWithAggregationInput = {
   choice_audio_url?: Prisma.SortOrder
   is_correct?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.QuestionChoiceCountOrderByAggregateInput
   _avg?: Prisma.QuestionChoiceAvgOrderByAggregateInput
   _max?: Prisma.QuestionChoiceMaxOrderByAggregateInput
@@ -304,7 +348,11 @@ export type QuestionChoiceScalarWhereWithAggregatesInput = {
   choice_audio_url?: Prisma.StringWithAggregatesFilter<"QuestionChoice"> | string
   is_correct?: Prisma.BoolWithAggregatesFilter<"QuestionChoice"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"QuestionChoice"> | Date | string
+  created_by?: Prisma.StringNullableWithAggregatesFilter<"QuestionChoice"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"QuestionChoice"> | Date | string
+  updated_by?: Prisma.StringNullableWithAggregatesFilter<"QuestionChoice"> | string | null
+  deleted_at?: Prisma.DateTimeWithAggregatesFilter<"QuestionChoice"> | Date | string
+  deleted_by?: Prisma.StringNullableWithAggregatesFilter<"QuestionChoice"> | string | null
 }
 
 export type QuestionChoiceCreateInput = {
@@ -313,7 +361,11 @@ export type QuestionChoiceCreateInput = {
   choice_audio_url: string
   is_correct?: boolean
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   question: Prisma.QuestionCreateNestedOneWithoutQuestion_choicesInput
   user_answers?: Prisma.UserAnswerCreateNestedManyWithoutChoiceInput
 }
@@ -326,7 +378,11 @@ export type QuestionChoiceUncheckedCreateInput = {
   choice_audio_url: string
   is_correct?: boolean
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   user_answers?: Prisma.UserAnswerUncheckedCreateNestedManyWithoutChoiceInput
 }
 
@@ -336,7 +392,11 @@ export type QuestionChoiceUpdateInput = {
   choice_audio_url?: Prisma.StringFieldUpdateOperationsInput | string
   is_correct?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   question?: Prisma.QuestionUpdateOneRequiredWithoutQuestion_choicesNestedInput
   user_answers?: Prisma.UserAnswerUpdateManyWithoutChoiceNestedInput
 }
@@ -349,7 +409,11 @@ export type QuestionChoiceUncheckedUpdateInput = {
   choice_audio_url?: Prisma.StringFieldUpdateOperationsInput | string
   is_correct?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user_answers?: Prisma.UserAnswerUncheckedUpdateManyWithoutChoiceNestedInput
 }
 
@@ -361,7 +425,11 @@ export type QuestionChoiceCreateManyInput = {
   choice_audio_url: string
   is_correct?: boolean
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
 }
 
 export type QuestionChoiceUpdateManyMutationInput = {
@@ -370,7 +438,11 @@ export type QuestionChoiceUpdateManyMutationInput = {
   choice_audio_url?: Prisma.StringFieldUpdateOperationsInput | string
   is_correct?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type QuestionChoiceUncheckedUpdateManyInput = {
@@ -381,7 +453,11 @@ export type QuestionChoiceUncheckedUpdateManyInput = {
   choice_audio_url?: Prisma.StringFieldUpdateOperationsInput | string
   is_correct?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type QuestionChoiceListRelationFilter = {
@@ -402,7 +478,11 @@ export type QuestionChoiceCountOrderByAggregateInput = {
   choice_audio_url?: Prisma.SortOrder
   is_correct?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type QuestionChoiceAvgOrderByAggregateInput = {
@@ -418,7 +498,11 @@ export type QuestionChoiceMaxOrderByAggregateInput = {
   choice_audio_url?: Prisma.SortOrder
   is_correct?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type QuestionChoiceMinOrderByAggregateInput = {
@@ -429,7 +513,11 @@ export type QuestionChoiceMinOrderByAggregateInput = {
   choice_audio_url?: Prisma.SortOrder
   is_correct?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type QuestionChoiceSumOrderByAggregateInput = {
@@ -508,7 +596,11 @@ export type QuestionChoiceCreateWithoutQuestionInput = {
   choice_audio_url: string
   is_correct?: boolean
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   user_answers?: Prisma.UserAnswerCreateNestedManyWithoutChoiceInput
 }
 
@@ -519,7 +611,11 @@ export type QuestionChoiceUncheckedCreateWithoutQuestionInput = {
   choice_audio_url: string
   is_correct?: boolean
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   user_answers?: Prisma.UserAnswerUncheckedCreateNestedManyWithoutChoiceInput
 }
 
@@ -560,7 +656,11 @@ export type QuestionChoiceScalarWhereInput = {
   choice_audio_url?: Prisma.StringFilter<"QuestionChoice"> | string
   is_correct?: Prisma.BoolFilter<"QuestionChoice"> | boolean
   created_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
+  created_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
   updated_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
+  updated_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
+  deleted_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
+  deleted_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
 }
 
 export type QuestionChoiceCreateWithoutUser_answersInput = {
@@ -569,7 +669,11 @@ export type QuestionChoiceCreateWithoutUser_answersInput = {
   choice_audio_url: string
   is_correct?: boolean
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
   question: Prisma.QuestionCreateNestedOneWithoutQuestion_choicesInput
 }
 
@@ -581,7 +685,11 @@ export type QuestionChoiceUncheckedCreateWithoutUser_answersInput = {
   choice_audio_url: string
   is_correct?: boolean
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
 }
 
 export type QuestionChoiceCreateOrConnectWithoutUser_answersInput = {
@@ -606,7 +714,11 @@ export type QuestionChoiceUpdateWithoutUser_answersInput = {
   choice_audio_url?: Prisma.StringFieldUpdateOperationsInput | string
   is_correct?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   question?: Prisma.QuestionUpdateOneRequiredWithoutQuestion_choicesNestedInput
 }
 
@@ -618,7 +730,11 @@ export type QuestionChoiceUncheckedUpdateWithoutUser_answersInput = {
   choice_audio_url?: Prisma.StringFieldUpdateOperationsInput | string
   is_correct?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type QuestionChoiceCreateManyQuestionInput = {
@@ -628,7 +744,11 @@ export type QuestionChoiceCreateManyQuestionInput = {
   choice_audio_url: string
   is_correct?: boolean
   created_at?: Date | string
+  created_by?: string | null
   updated_at?: Date | string
+  updated_by?: string | null
+  deleted_at: Date | string
+  deleted_by?: string | null
 }
 
 export type QuestionChoiceUpdateWithoutQuestionInput = {
@@ -637,7 +757,11 @@ export type QuestionChoiceUpdateWithoutQuestionInput = {
   choice_audio_url?: Prisma.StringFieldUpdateOperationsInput | string
   is_correct?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user_answers?: Prisma.UserAnswerUpdateManyWithoutChoiceNestedInput
 }
 
@@ -648,7 +772,11 @@ export type QuestionChoiceUncheckedUpdateWithoutQuestionInput = {
   choice_audio_url?: Prisma.StringFieldUpdateOperationsInput | string
   is_correct?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user_answers?: Prisma.UserAnswerUncheckedUpdateManyWithoutChoiceNestedInput
 }
 
@@ -659,7 +787,11 @@ export type QuestionChoiceUncheckedUpdateManyWithoutQuestionInput = {
   choice_audio_url?: Prisma.StringFieldUpdateOperationsInput | string
   is_correct?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -701,7 +833,11 @@ export type QuestionChoiceSelect<ExtArgs extends runtime.Types.Extensions.Intern
   choice_audio_url?: boolean
   is_correct?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
   question?: boolean | Prisma.QuestionDefaultArgs<ExtArgs>
   user_answers?: boolean | Prisma.QuestionChoice$user_answersArgs<ExtArgs>
   _count?: boolean | Prisma.QuestionChoiceCountOutputTypeDefaultArgs<ExtArgs>
@@ -715,7 +851,11 @@ export type QuestionChoiceSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   choice_audio_url?: boolean
   is_correct?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
   question?: boolean | Prisma.QuestionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["questionChoice"]>
 
@@ -727,7 +867,11 @@ export type QuestionChoiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   choice_audio_url?: boolean
   is_correct?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
   question?: boolean | Prisma.QuestionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["questionChoice"]>
 
@@ -739,10 +883,14 @@ export type QuestionChoiceSelectScalar = {
   choice_audio_url?: boolean
   is_correct?: boolean
   created_at?: boolean
+  created_by?: boolean
   updated_at?: boolean
+  updated_by?: boolean
+  deleted_at?: boolean
+  deleted_by?: boolean
 }
 
-export type QuestionChoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "question_id" | "choice_text" | "choice_image_url" | "choice_audio_url" | "is_correct" | "created_at" | "updated_at", ExtArgs["result"]["questionChoice"]>
+export type QuestionChoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "question_id" | "choice_text" | "choice_image_url" | "choice_audio_url" | "is_correct" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["questionChoice"]>
 export type QuestionChoiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   question?: boolean | Prisma.QuestionDefaultArgs<ExtArgs>
   user_answers?: boolean | Prisma.QuestionChoice$user_answersArgs<ExtArgs>
@@ -769,7 +917,11 @@ export type $QuestionChoicePayload<ExtArgs extends runtime.Types.Extensions.Inte
     choice_audio_url: string
     is_correct: boolean
     created_at: Date
+    created_by: string | null
     updated_at: Date
+    updated_by: string | null
+    deleted_at: Date
+    deleted_by: string | null
   }, ExtArgs["result"]["questionChoice"]>
   composites: {}
 }
@@ -1202,7 +1354,11 @@ export interface QuestionChoiceFieldRefs {
   readonly choice_audio_url: Prisma.FieldRef<"QuestionChoice", 'String'>
   readonly is_correct: Prisma.FieldRef<"QuestionChoice", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"QuestionChoice", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"QuestionChoice", 'String'>
   readonly updated_at: Prisma.FieldRef<"QuestionChoice", 'DateTime'>
+  readonly updated_by: Prisma.FieldRef<"QuestionChoice", 'String'>
+  readonly deleted_at: Prisma.FieldRef<"QuestionChoice", 'DateTime'>
+  readonly deleted_by: Prisma.FieldRef<"QuestionChoice", 'String'>
 }
     
 

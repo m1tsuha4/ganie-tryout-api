@@ -61,3 +61,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 mysql-data
 ganie.sql
 prisma/migrations
+
+# PostgreSQL data
+postgres-data
