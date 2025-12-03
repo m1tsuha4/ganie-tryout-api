@@ -8,9 +8,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from 'src/user/user.module';
 import { UserService } from 'src/user/user.service';
 
+import { JwtStrategy } from './strategies/jwt.strategy';
+
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, UserService],
+  providers: [AuthService, UserService, JwtStrategy],
   imports: [
     UserModule,
     PrismaModule,

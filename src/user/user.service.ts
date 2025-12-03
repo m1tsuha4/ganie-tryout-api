@@ -28,18 +28,33 @@ export class UserService {
     if (existingUsernameUser) {
       throw new BadRequestException('Username already exists');
     }
-    const hashPassword = await bcrypt.hash(createUserDto.password_hash, 10);
+    const hashPassword = await bcrypt.hash(createUserDto.password, 10);
     return this.prismaService.user.create({
       data: {
-        ...createUserDto,
+        username: createUserDto.username,
+        name: createUserDto.name,
+        email: createUserDto.email,
         password_hash: hashPassword,
         deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
+      },
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        email: true,
       },
     });
   }
 
   async findAll() {
-    const existingUser = await this.prismaService.user.findMany();
+    const existingUser = await this.prismaService.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        email: true,
+      },
+    });
     if (existingUser.length === 0) {
       throw new NotFoundException('User Not Found');
     }
@@ -50,6 +65,12 @@ export class UserService {
     const existingUser = await this.prismaService.user.findUnique({
       where: {
         id,
+      },
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        email: true,
       },
     });
     if (!existingUser) {
@@ -87,8 +108,8 @@ export class UserService {
       email: updateUserDto.email,
       name: updateUserDto.name,
       username: updateUserDto.username,
-      ...(updateUserDto.password_hash && {
-        password_hash: await bcrypt.hash(updateUserDto.password_hash, 10),
+      ...(updateUserDto.password && {
+        password_hash: await bcrypt.hash(updateUserDto.password, 10),
       }),
     };
     return this.prismaService.user.update({
@@ -96,6 +117,12 @@ export class UserService {
         id,
       },
       data: updateData,
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        email: true,
+      },
     });
   }
 

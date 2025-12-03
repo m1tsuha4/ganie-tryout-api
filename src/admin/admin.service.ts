@@ -20,18 +20,33 @@ export class AdminService {
     if (exsitingAdmin) {
       throw new BadRequestException('Admin already exists');
     }
-    const hashPassword = await bcrypt.hash(createAdminDto.password_hash, 10);
+    const hashPassword = await bcrypt.hash(createAdminDto.password, 10);
     return this.prismaService.admin.create({
       data: {
-        ...createAdminDto,
+        username: createAdminDto.username,
+        email: createAdminDto.email,
+        role_id: createAdminDto.role_id,
         password_hash: hashPassword,
         deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role_id: true,
       },
     });
   }
 
   async findAll() {
-    const existingAdmin = await this.prismaService.admin.findMany();
+    const existingAdmin = await this.prismaService.admin.findMany({
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role_id: true,
+      },
+    });
     if (existingAdmin.length === 0) {
       throw new NotFoundException('Admin not found');
     }
@@ -42,6 +57,12 @@ export class AdminService {
     const existingAdmin = await this.prismaService.admin.findUnique({
       where: {
         id,
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role_id: true,
       },
     });
     if (!existingAdmin) {
@@ -71,8 +92,8 @@ export class AdminService {
       email: updateAdminDto.email,
       username: updateAdminDto.username,
       role_id: updateAdminDto.role_id,
-      ...(updateAdminDto.password_hash && {
-        password_hash: await bcrypt.hash(updateAdminDto.password_hash, 10),
+      ...(updateAdminDto.password && {
+        password_hash: await bcrypt.hash(updateAdminDto.password, 10),
       }),
     };
     return this.prismaService.admin.update({
@@ -80,6 +101,12 @@ export class AdminService {
         id,
       },
       data: updateData,
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role_id: true,
+      },
     });
   }
 
