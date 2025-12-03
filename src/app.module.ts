@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { PackageModule } from './sarjana-vokasi/package/package.module';
 import { QuestionModule } from './sarjana-vokasi/question/question.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { QuestionModule } from './sarjana-vokasi/question/question.module';
     AuthModule,
     PackageModule,
     QuestionModule,
+    TransactionModule,
   ],
   controllers: [AppController],
   providers: [AppService, WinstonLoggerService],

@@ -222,7 +222,7 @@ export type PermissionGroupByOutputType = {
   created_by: string | null
   updated_at: Date
   updated_by: string | null
-  deleted_at: Date
+  deleted_at: Date | null
   deleted_by: string | null
   _count: PermissionCountAggregateOutputType | null
   _avg: PermissionAvgAggregateOutputType | null
@@ -258,7 +258,7 @@ export type PermissionWhereInput = {
   created_by?: Prisma.StringNullableFilter<"Permission"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Permission"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"Permission"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"Permission"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"Permission"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"Permission"> | string | null
 }
 
@@ -271,7 +271,7 @@ export type PermissionOrderByWithRelationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
@@ -287,7 +287,7 @@ export type PermissionWhereUniqueInput = Prisma.AtLeast<{
   created_by?: Prisma.StringNullableFilter<"Permission"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Permission"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"Permission"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"Permission"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"Permission"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"Permission"> | string | null
 }, "id" | "name">
 
@@ -300,7 +300,7 @@ export type PermissionOrderByWithAggregationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PermissionCountOrderByAggregateInput
   _avg?: Prisma.PermissionAvgOrderByAggregateInput
@@ -321,7 +321,7 @@ export type PermissionScalarWhereWithAggregatesInput = {
   created_by?: Prisma.StringNullableWithAggregatesFilter<"Permission"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Permission"> | Date | string
   updated_by?: Prisma.StringNullableWithAggregatesFilter<"Permission"> | string | null
-  deleted_at?: Prisma.DateTimeWithAggregatesFilter<"Permission"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"Permission"> | Date | string | null
   deleted_by?: Prisma.StringNullableWithAggregatesFilter<"Permission"> | string | null
 }
 
@@ -333,7 +333,7 @@ export type PermissionCreateInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -346,7 +346,7 @@ export type PermissionUncheckedCreateInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -358,7 +358,7 @@ export type PermissionUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -371,7 +371,7 @@ export type PermissionUncheckedUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -384,7 +384,7 @@ export type PermissionCreateManyInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -396,7 +396,7 @@ export type PermissionUpdateManyMutationInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -409,7 +409,7 @@ export type PermissionUncheckedUpdateManyInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -530,7 +530,7 @@ export type $PermissionPayload<ExtArgs extends runtime.Types.Extensions.Internal
     created_by: string | null
     updated_at: Date
     updated_by: string | null
-    deleted_at: Date
+    deleted_at: Date | null
     deleted_by: string | null
   }, ExtArgs["result"]["permission"]>
   composites: {}

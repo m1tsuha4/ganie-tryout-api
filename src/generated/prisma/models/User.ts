@@ -193,7 +193,7 @@ export type UserGroupByOutputType = {
   created_by: string | null
   updated_at: Date
   updated_by: string | null
-  deleted_at: Date
+  deleted_at: Date | null
   deleted_by: string | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
@@ -228,7 +228,7 @@ export type UserWhereInput = {
   created_by?: Prisma.StringNullableFilter<"User"> | string | null
   updated_at?: Prisma.DateTimeFilter<"User"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"User"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"User"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"User"> | string | null
   transactions?: Prisma.TransactionListRelationFilter
   user_packages?: Prisma.UserPackageListRelationFilter
@@ -245,7 +245,7 @@ export type UserOrderByWithRelationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   transactions?: Prisma.TransactionOrderByRelationAggregateInput
   user_packages?: Prisma.UserPackageOrderByRelationAggregateInput
@@ -265,7 +265,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   created_by?: Prisma.StringNullableFilter<"User"> | string | null
   updated_at?: Prisma.DateTimeFilter<"User"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"User"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"User"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"User"> | string | null
   transactions?: Prisma.TransactionListRelationFilter
   user_packages?: Prisma.UserPackageListRelationFilter
@@ -282,7 +282,7 @@ export type UserOrderByWithAggregationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -302,7 +302,7 @@ export type UserScalarWhereWithAggregatesInput = {
   created_by?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updated_by?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  deleted_at?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   deleted_by?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
@@ -316,7 +316,7 @@ export type UserCreateInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   user_packages?: Prisma.UserPackageCreateNestedManyWithoutUserInput
@@ -333,7 +333,7 @@ export type UserUncheckedCreateInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   user_packages?: Prisma.UserPackageUncheckedCreateNestedManyWithoutUserInput
@@ -350,7 +350,7 @@ export type UserUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   user_packages?: Prisma.UserPackageUpdateManyWithoutUserNestedInput
@@ -367,7 +367,7 @@ export type UserUncheckedUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   user_packages?: Prisma.UserPackageUncheckedUpdateManyWithoutUserNestedInput
@@ -384,7 +384,7 @@ export type UserCreateManyInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -398,7 +398,7 @@ export type UserUpdateManyMutationInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -412,7 +412,7 @@ export type UserUncheckedUpdateManyInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -515,7 +515,7 @@ export type UserCreateWithoutTransactionsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   user_packages?: Prisma.UserPackageCreateNestedManyWithoutUserInput
   user_exam_sessions?: Prisma.UserExamSessionCreateNestedManyWithoutUserInput
@@ -531,7 +531,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   user_packages?: Prisma.UserPackageUncheckedCreateNestedManyWithoutUserInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedCreateNestedManyWithoutUserInput
@@ -563,7 +563,7 @@ export type UserUpdateWithoutTransactionsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user_packages?: Prisma.UserPackageUpdateManyWithoutUserNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUpdateManyWithoutUserNestedInput
@@ -579,7 +579,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user_packages?: Prisma.UserPackageUncheckedUpdateManyWithoutUserNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -595,7 +595,7 @@ export type UserCreateWithoutUser_packagesInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   user_exam_sessions?: Prisma.UserExamSessionCreateNestedManyWithoutUserInput
@@ -611,7 +611,7 @@ export type UserUncheckedCreateWithoutUser_packagesInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedCreateNestedManyWithoutUserInput
@@ -643,7 +643,7 @@ export type UserUpdateWithoutUser_packagesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUpdateManyWithoutUserNestedInput
@@ -659,7 +659,7 @@ export type UserUncheckedUpdateWithoutUser_packagesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -675,7 +675,7 @@ export type UserCreateWithoutUser_exam_sessionsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   user_packages?: Prisma.UserPackageCreateNestedManyWithoutUserInput
@@ -691,7 +691,7 @@ export type UserUncheckedCreateWithoutUser_exam_sessionsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   user_packages?: Prisma.UserPackageUncheckedCreateNestedManyWithoutUserInput
@@ -723,7 +723,7 @@ export type UserUpdateWithoutUser_exam_sessionsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   user_packages?: Prisma.UserPackageUpdateManyWithoutUserNestedInput
@@ -739,7 +739,7 @@ export type UserUncheckedUpdateWithoutUser_exam_sessionsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   user_packages?: Prisma.UserPackageUncheckedUpdateManyWithoutUserNestedInput
@@ -881,7 +881,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     created_by: string | null
     updated_at: Date
     updated_by: string | null
-    deleted_at: Date
+    deleted_at: Date | null
     deleted_by: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}

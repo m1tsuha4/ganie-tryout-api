@@ -240,7 +240,7 @@ export type ExamGroupByOutputType = {
   created_by: string | null
   updated_at: Date
   updated_by: string | null
-  deleted_at: Date
+  deleted_at: Date | null
   deleted_by: string | null
   _count: ExamCountAggregateOutputType | null
   _avg: ExamAvgAggregateOutputType | null
@@ -278,7 +278,7 @@ export type ExamWhereInput = {
   created_by?: Prisma.StringNullableFilter<"Exam"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Exam"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"Exam"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"Exam"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"Exam"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"Exam"> | string | null
   questions?: Prisma.QuestionListRelationFilter
   package_exams?: Prisma.PackageExamListRelationFilter
@@ -296,7 +296,7 @@ export type ExamOrderByWithRelationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   questions?: Prisma.QuestionOrderByRelationAggregateInput
   package_exams?: Prisma.PackageExamOrderByRelationAggregateInput
@@ -317,7 +317,7 @@ export type ExamWhereUniqueInput = Prisma.AtLeast<{
   created_by?: Prisma.StringNullableFilter<"Exam"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Exam"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"Exam"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"Exam"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"Exam"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"Exam"> | string | null
   questions?: Prisma.QuestionListRelationFilter
   package_exams?: Prisma.PackageExamListRelationFilter
@@ -335,7 +335,7 @@ export type ExamOrderByWithAggregationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ExamCountOrderByAggregateInput
   _avg?: Prisma.ExamAvgOrderByAggregateInput
@@ -358,7 +358,7 @@ export type ExamScalarWhereWithAggregatesInput = {
   created_by?: Prisma.StringNullableWithAggregatesFilter<"Exam"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
   updated_by?: Prisma.StringNullableWithAggregatesFilter<"Exam"> | string | null
-  deleted_at?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"Exam"> | Date | string | null
   deleted_by?: Prisma.StringNullableWithAggregatesFilter<"Exam"> | string | null
 }
 
@@ -372,7 +372,7 @@ export type ExamCreateInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   questions?: Prisma.QuestionCreateNestedManyWithoutExamInput
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutExamInput
@@ -390,7 +390,7 @@ export type ExamUncheckedCreateInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutExamInput
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutExamInput
@@ -407,7 +407,7 @@ export type ExamUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questions?: Prisma.QuestionUpdateManyWithoutExamNestedInput
   package_exams?: Prisma.PackageExamUpdateManyWithoutExamNestedInput
@@ -425,7 +425,7 @@ export type ExamUncheckedUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questions?: Prisma.QuestionUncheckedUpdateManyWithoutExamNestedInput
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutExamNestedInput
@@ -443,7 +443,7 @@ export type ExamCreateManyInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -457,7 +457,7 @@ export type ExamUpdateManyMutationInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -472,7 +472,7 @@ export type ExamUncheckedUpdateManyInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -594,7 +594,7 @@ export type ExamCreateWithoutQuestionsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutExamInput
   user_exam_sessions?: Prisma.UserExamSessionCreateNestedManyWithoutExamInput
@@ -611,7 +611,7 @@ export type ExamUncheckedCreateWithoutQuestionsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutExamInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedCreateNestedManyWithoutExamInput
@@ -643,7 +643,7 @@ export type ExamUpdateWithoutQuestionsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUpdateManyWithoutExamNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUpdateManyWithoutExamNestedInput
@@ -660,7 +660,7 @@ export type ExamUncheckedUpdateWithoutQuestionsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutExamNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedUpdateManyWithoutExamNestedInput
@@ -676,7 +676,7 @@ export type ExamCreateWithoutPackage_examsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   questions?: Prisma.QuestionCreateNestedManyWithoutExamInput
   user_exam_sessions?: Prisma.UserExamSessionCreateNestedManyWithoutExamInput
@@ -693,7 +693,7 @@ export type ExamUncheckedCreateWithoutPackage_examsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutExamInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedCreateNestedManyWithoutExamInput
@@ -725,7 +725,7 @@ export type ExamUpdateWithoutPackage_examsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questions?: Prisma.QuestionUpdateManyWithoutExamNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUpdateManyWithoutExamNestedInput
@@ -742,7 +742,7 @@ export type ExamUncheckedUpdateWithoutPackage_examsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questions?: Prisma.QuestionUncheckedUpdateManyWithoutExamNestedInput
   user_exam_sessions?: Prisma.UserExamSessionUncheckedUpdateManyWithoutExamNestedInput
@@ -758,7 +758,7 @@ export type ExamCreateWithoutUser_exam_sessionsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   questions?: Prisma.QuestionCreateNestedManyWithoutExamInput
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutExamInput
@@ -775,7 +775,7 @@ export type ExamUncheckedCreateWithoutUser_exam_sessionsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutExamInput
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutExamInput
@@ -807,7 +807,7 @@ export type ExamUpdateWithoutUser_exam_sessionsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questions?: Prisma.QuestionUpdateManyWithoutExamNestedInput
   package_exams?: Prisma.PackageExamUpdateManyWithoutExamNestedInput
@@ -824,7 +824,7 @@ export type ExamUncheckedUpdateWithoutUser_exam_sessionsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questions?: Prisma.QuestionUncheckedUpdateManyWithoutExamNestedInput
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutExamNestedInput
@@ -971,7 +971,7 @@ export type $ExamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     created_by: string | null
     updated_at: Date
     updated_by: string | null
-    deleted_at: Date
+    deleted_at: Date | null
     deleted_by: string | null
   }, ExtArgs["result"]["exam"]>
   composites: {}
