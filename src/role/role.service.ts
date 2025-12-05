@@ -9,14 +9,22 @@ export class RoleService {
   async create(createRoleDto: CreateRoleDto) {
     return this.prismaService.role.create({
       data: {
-        ...createRoleDto,
-        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
+        ...createRoleDto, 
       },
     });
   }
 
   async findAll() {
-    const role = await this.prismaService.role.findMany();
+    const role = await this.prismaService.role.findMany({
+      where: {
+        deleted_at: null,
+      },
+      select: {
+        id: true,
+        name: true,
+        permissions_mask: true,
+      },
+    });
     if (role.length === 0) {
       throw new NotFoundException("Role not found");
     }
@@ -27,6 +35,7 @@ export class RoleService {
     const role = await this.prismaService.role.findUnique({
       where: {
         id,
+        deleted_at: null,
       },
     });
     if (!role) {
@@ -61,9 +70,12 @@ export class RoleService {
     if (!existingRole) {
       throw new NotFoundException("Role not found");
     }
-    return this.prismaService.role.delete({
+    return this.prismaService.role.update({
       where: {
         id,
+      },
+      data: {
+        deleted_at: new Date(),
       },
     });
   }
