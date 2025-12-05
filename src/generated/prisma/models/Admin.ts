@@ -225,7 +225,7 @@ export type AdminGroupByOutputType = {
   created_by: string | null
   updated_at: Date
   updated_by: string | null
-  deleted_at: Date
+  deleted_at: Date | null
   deleted_by: string | null
   _count: AdminCountAggregateOutputType | null
   _avg: AdminAvgAggregateOutputType | null
@@ -262,7 +262,7 @@ export type AdminWhereInput = {
   created_by?: Prisma.StringNullableFilter<"Admin"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"Admin"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"Admin"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"Admin"> | string | null
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
 }
@@ -277,7 +277,7 @@ export type AdminOrderByWithRelationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.RoleOrderByWithRelationInput
 }
@@ -295,7 +295,7 @@ export type AdminWhereUniqueInput = Prisma.AtLeast<{
   created_by?: Prisma.StringNullableFilter<"Admin"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"Admin"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"Admin"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"Admin"> | string | null
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
 }, "id" | "username" | "email">
@@ -310,7 +310,7 @@ export type AdminOrderByWithAggregationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AdminCountOrderByAggregateInput
   _avg?: Prisma.AdminAvgOrderByAggregateInput
@@ -332,7 +332,7 @@ export type AdminScalarWhereWithAggregatesInput = {
   created_by?: Prisma.StringNullableWithAggregatesFilter<"Admin"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Admin"> | Date | string
   updated_by?: Prisma.StringNullableWithAggregatesFilter<"Admin"> | string | null
-  deleted_at?: Prisma.DateTimeWithAggregatesFilter<"Admin"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"Admin"> | Date | string | null
   deleted_by?: Prisma.StringNullableWithAggregatesFilter<"Admin"> | string | null
 }
 
@@ -345,7 +345,7 @@ export type AdminCreateInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   role: Prisma.RoleCreateNestedOneWithoutAdminInput
 }
@@ -360,7 +360,7 @@ export type AdminUncheckedCreateInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -373,7 +373,7 @@ export type AdminUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.RoleUpdateOneRequiredWithoutAdminNestedInput
 }
@@ -388,7 +388,7 @@ export type AdminUncheckedUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -402,7 +402,7 @@ export type AdminCreateManyInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -415,7 +415,7 @@ export type AdminUpdateManyMutationInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -429,7 +429,7 @@ export type AdminUncheckedUpdateManyInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -505,6 +505,10 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -564,7 +568,7 @@ export type AdminCreateWithoutRoleInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -577,7 +581,7 @@ export type AdminUncheckedCreateWithoutRoleInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -620,7 +624,7 @@ export type AdminScalarWhereInput = {
   created_by?: Prisma.StringNullableFilter<"Admin"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"Admin"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"Admin"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"Admin"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"Admin"> | string | null
 }
 
@@ -633,7 +637,7 @@ export type AdminCreateManyRoleInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -646,7 +650,7 @@ export type AdminUpdateWithoutRoleInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -659,7 +663,7 @@ export type AdminUncheckedUpdateWithoutRoleInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -672,7 +676,7 @@ export type AdminUncheckedUpdateManyWithoutRoleInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -763,7 +767,7 @@ export type $AdminPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     created_by: string | null
     updated_at: Date
     updated_by: string | null
-    deleted_at: Date
+    deleted_at: Date | null
     deleted_by: string | null
   }, ExtArgs["result"]["admin"]>
   composites: {}

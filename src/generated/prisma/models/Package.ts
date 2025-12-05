@@ -236,7 +236,7 @@ export type PackageGroupByOutputType = {
   created_by: string | null
   updated_at: Date
   updated_by: string | null
-  deleted_at: Date
+  deleted_at: Date | null
   deleted_by: string | null
   _count: PackageCountAggregateOutputType | null
   _avg: PackageAvgAggregateOutputType | null
@@ -274,7 +274,7 @@ export type PackageWhereInput = {
   created_by?: Prisma.StringNullableFilter<"Package"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Package"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"Package"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"Package"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"Package"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"Package"> | string | null
   package_exams?: Prisma.PackageExamListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
@@ -292,7 +292,7 @@ export type PackageOrderByWithRelationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   package_exams?: Prisma.PackageExamOrderByRelationAggregateInput
   transactions?: Prisma.TransactionOrderByRelationAggregateInput
@@ -313,7 +313,7 @@ export type PackageWhereUniqueInput = Prisma.AtLeast<{
   created_by?: Prisma.StringNullableFilter<"Package"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Package"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"Package"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"Package"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"Package"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"Package"> | string | null
   package_exams?: Prisma.PackageExamListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
@@ -331,7 +331,7 @@ export type PackageOrderByWithAggregationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PackageCountOrderByAggregateInput
   _avg?: Prisma.PackageAvgOrderByAggregateInput
@@ -354,7 +354,7 @@ export type PackageScalarWhereWithAggregatesInput = {
   created_by?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Package"> | Date | string
   updated_by?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
-  deleted_at?: Prisma.DateTimeWithAggregatesFilter<"Package"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"Package"> | Date | string | null
   deleted_by?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
 }
 
@@ -368,7 +368,7 @@ export type PackageCreateInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutPackageInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutPackageInput
@@ -386,7 +386,7 @@ export type PackageUncheckedCreateInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutPackageInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPackageInput
@@ -403,7 +403,7 @@ export type PackageUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUpdateManyWithoutPackageNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutPackageNestedInput
@@ -421,7 +421,7 @@ export type PackageUncheckedUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutPackageNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPackageNestedInput
@@ -439,7 +439,7 @@ export type PackageCreateManyInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -453,7 +453,7 @@ export type PackageUpdateManyMutationInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -468,7 +468,7 @@ export type PackageUncheckedUpdateManyInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -596,7 +596,7 @@ export type PackageCreateWithoutPackage_examsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   transactions?: Prisma.TransactionCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageCreateNestedManyWithoutPackageInput
@@ -613,7 +613,7 @@ export type PackageUncheckedCreateWithoutPackage_examsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageUncheckedCreateNestedManyWithoutPackageInput
@@ -645,7 +645,7 @@ export type PackageUpdateWithoutPackage_examsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUpdateManyWithoutPackageNestedInput
@@ -662,7 +662,7 @@ export type PackageUncheckedUpdateWithoutPackage_examsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUncheckedUpdateManyWithoutPackageNestedInput
@@ -678,7 +678,7 @@ export type PackageCreateWithoutTransactionsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageCreateNestedManyWithoutPackageInput
@@ -695,7 +695,7 @@ export type PackageUncheckedCreateWithoutTransactionsInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageUncheckedCreateNestedManyWithoutPackageInput
@@ -727,7 +727,7 @@ export type PackageUpdateWithoutTransactionsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUpdateManyWithoutPackageNestedInput
@@ -744,7 +744,7 @@ export type PackageUncheckedUpdateWithoutTransactionsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUncheckedUpdateManyWithoutPackageNestedInput
@@ -760,7 +760,7 @@ export type PackageCreateWithoutUser_packagesInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutPackageInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutPackageInput
@@ -777,7 +777,7 @@ export type PackageUncheckedCreateWithoutUser_packagesInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutPackageInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPackageInput
@@ -809,7 +809,7 @@ export type PackageUpdateWithoutUser_packagesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUpdateManyWithoutPackageNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutPackageNestedInput
@@ -826,7 +826,7 @@ export type PackageUncheckedUpdateWithoutUser_packagesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutPackageNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPackageNestedInput
@@ -973,7 +973,7 @@ export type $PackagePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     created_by: string | null
     updated_at: Date
     updated_by: string | null
-    deleted_at: Date
+    deleted_at: Date | null
     deleted_by: string | null
   }, ExtArgs["result"]["package"]>
   composites: {}

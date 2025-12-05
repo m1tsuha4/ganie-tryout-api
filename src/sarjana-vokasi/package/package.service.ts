@@ -108,7 +108,7 @@ export class PackageService {
 
     // Verify ini package Sarjana & Vokasi
     if (packageData.type !== 'SARJANA') {
-      throw new NotFoundException('Package not found for Sarjana & Vokasi');
+        throw new NotFoundException('Package not found for Sarjana & Vokasi');
     }
 
     return packageData;
@@ -308,7 +308,7 @@ export class PackageService {
 
     // Verify ini package Pascasarjana
     if (packageData.type !== 'PASCASARJANA') {
-      throw new NotFoundException('Package not found for Pascasarjana');
+        throw new NotFoundException('Package not found for Pascasarjana');
     }
 
     return packageData;

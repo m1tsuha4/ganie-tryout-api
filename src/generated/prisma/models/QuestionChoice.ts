@@ -236,7 +236,7 @@ export type QuestionChoiceGroupByOutputType = {
   created_by: string | null
   updated_at: Date
   updated_by: string | null
-  deleted_at: Date
+  deleted_at: Date | null
   deleted_by: string | null
   _count: QuestionChoiceCountAggregateOutputType | null
   _avg: QuestionChoiceAvgAggregateOutputType | null
@@ -274,7 +274,7 @@ export type QuestionChoiceWhereInput = {
   created_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
   updated_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"QuestionChoice"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
   question?: Prisma.XOR<Prisma.QuestionScalarRelationFilter, Prisma.QuestionWhereInput>
   user_answers?: Prisma.UserAnswerListRelationFilter
@@ -291,7 +291,7 @@ export type QuestionChoiceOrderByWithRelationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   question?: Prisma.QuestionOrderByWithRelationInput
   user_answers?: Prisma.UserAnswerOrderByRelationAggregateInput
@@ -311,7 +311,7 @@ export type QuestionChoiceWhereUniqueInput = Prisma.AtLeast<{
   created_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
   updated_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"QuestionChoice"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
   question?: Prisma.XOR<Prisma.QuestionScalarRelationFilter, Prisma.QuestionWhereInput>
   user_answers?: Prisma.UserAnswerListRelationFilter
@@ -328,7 +328,7 @@ export type QuestionChoiceOrderByWithAggregationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.QuestionChoiceCountOrderByAggregateInput
   _avg?: Prisma.QuestionChoiceAvgOrderByAggregateInput
@@ -351,7 +351,7 @@ export type QuestionChoiceScalarWhereWithAggregatesInput = {
   created_by?: Prisma.StringNullableWithAggregatesFilter<"QuestionChoice"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"QuestionChoice"> | Date | string
   updated_by?: Prisma.StringNullableWithAggregatesFilter<"QuestionChoice"> | string | null
-  deleted_at?: Prisma.DateTimeWithAggregatesFilter<"QuestionChoice"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"QuestionChoice"> | Date | string | null
   deleted_by?: Prisma.StringNullableWithAggregatesFilter<"QuestionChoice"> | string | null
 }
 
@@ -364,7 +364,7 @@ export type QuestionChoiceCreateInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   question: Prisma.QuestionCreateNestedOneWithoutQuestion_choicesInput
   user_answers?: Prisma.UserAnswerCreateNestedManyWithoutChoiceInput
@@ -381,7 +381,7 @@ export type QuestionChoiceUncheckedCreateInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   user_answers?: Prisma.UserAnswerUncheckedCreateNestedManyWithoutChoiceInput
 }
@@ -395,7 +395,7 @@ export type QuestionChoiceUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   question?: Prisma.QuestionUpdateOneRequiredWithoutQuestion_choicesNestedInput
   user_answers?: Prisma.UserAnswerUpdateManyWithoutChoiceNestedInput
@@ -412,7 +412,7 @@ export type QuestionChoiceUncheckedUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user_answers?: Prisma.UserAnswerUncheckedUpdateManyWithoutChoiceNestedInput
 }
@@ -428,7 +428,7 @@ export type QuestionChoiceCreateManyInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -441,7 +441,7 @@ export type QuestionChoiceUpdateManyMutationInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -456,7 +456,7 @@ export type QuestionChoiceUncheckedUpdateManyInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -599,7 +599,7 @@ export type QuestionChoiceCreateWithoutQuestionInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   user_answers?: Prisma.UserAnswerCreateNestedManyWithoutChoiceInput
 }
@@ -614,7 +614,7 @@ export type QuestionChoiceUncheckedCreateWithoutQuestionInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   user_answers?: Prisma.UserAnswerUncheckedCreateNestedManyWithoutChoiceInput
 }
@@ -659,7 +659,7 @@ export type QuestionChoiceScalarWhereInput = {
   created_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
   updated_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
   updated_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
-  deleted_at?: Prisma.DateTimeFilter<"QuestionChoice"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"QuestionChoice"> | Date | string | null
   deleted_by?: Prisma.StringNullableFilter<"QuestionChoice"> | string | null
 }
 
@@ -672,7 +672,7 @@ export type QuestionChoiceCreateWithoutUser_answersInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
   question: Prisma.QuestionCreateNestedOneWithoutQuestion_choicesInput
 }
@@ -688,7 +688,7 @@ export type QuestionChoiceUncheckedCreateWithoutUser_answersInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -717,7 +717,7 @@ export type QuestionChoiceUpdateWithoutUser_answersInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   question?: Prisma.QuestionUpdateOneRequiredWithoutQuestion_choicesNestedInput
 }
@@ -733,7 +733,7 @@ export type QuestionChoiceUncheckedUpdateWithoutUser_answersInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -747,7 +747,7 @@ export type QuestionChoiceCreateManyQuestionInput = {
   created_by?: string | null
   updated_at?: Date | string
   updated_by?: string | null
-  deleted_at: Date | string
+  deleted_at?: Date | string | null
   deleted_by?: string | null
 }
 
@@ -760,7 +760,7 @@ export type QuestionChoiceUpdateWithoutQuestionInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user_answers?: Prisma.UserAnswerUpdateManyWithoutChoiceNestedInput
 }
@@ -775,7 +775,7 @@ export type QuestionChoiceUncheckedUpdateWithoutQuestionInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user_answers?: Prisma.UserAnswerUncheckedUpdateManyWithoutChoiceNestedInput
 }
@@ -790,7 +790,7 @@ export type QuestionChoiceUncheckedUpdateManyWithoutQuestionInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -920,7 +920,7 @@ export type $QuestionChoicePayload<ExtArgs extends runtime.Types.Extensions.Inte
     created_by: string | null
     updated_at: Date
     updated_by: string | null
-    deleted_at: Date
+    deleted_at: Date | null
     deleted_by: string | null
   }, ExtArgs["result"]["questionChoice"]>
   composites: {}
