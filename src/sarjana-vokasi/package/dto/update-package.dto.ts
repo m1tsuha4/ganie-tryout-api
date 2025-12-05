@@ -1,5 +1,5 @@
-import { createZodDto } from '@anatine/zod-nestjs';
-import z from 'zod';
+import { createZodDto } from "@anatine/zod-nestjs";
+import z from "zod";
 
 export const UpdatePackageSchema = z.object({
   title: z.string().min(3).max(255).optional(),
@@ -9,4 +9,3 @@ export const UpdatePackageSchema = z.object({
 });
 
 export class UpdatePackageDto extends createZodDto(UpdatePackageSchema) {}
-

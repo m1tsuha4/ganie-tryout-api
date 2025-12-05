@@ -2,10 +2,10 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionStatusDto } from './dto/update-transaction-status.dto';
+} from "@nestjs/common";
+import { PrismaService } from "src/prisma/prisma.service";
+import { CreateTransactionDto } from "./dto/create-transaction.dto";
+import { UpdateTransactionStatusDto } from "./dto/update-transaction-status.dto";
 
 @Injectable()
 export class TransactionService {
@@ -20,22 +20,21 @@ export class TransactionService {
     });
 
     if (!packageData) {
-      throw new NotFoundException('Package not found');
+      throw new NotFoundException("Package not found");
     }
 
     // Validasi package tidak soft deleted
     if (packageData.deleted_at && packageData.deleted_at.getTime() !== 0) {
-      throw new NotFoundException('Package not found');
+      throw new NotFoundException("Package not found");
     }
 
     // Validasi package sudah published
     if (!packageData.published) {
-      throw new BadRequestException('Package is not published yet');
+      throw new BadRequestException("Package is not published yet");
     }
 
     // Gunakan amount dari DTO atau ambil dari package price
-    const amount =
-      createTransactionDto.amount ?? packageData.price;
+    const amount = createTransactionDto.amount ?? packageData.price;
 
     // Buat transaction dengan status "unpaid" default
     return this.prismaService.transaction.create({
@@ -44,7 +43,7 @@ export class TransactionService {
         package_id: createTransactionDto.package_id,
         amount: amount,
         payment_method: createTransactionDto.payment_method,
-        status: 'unpaid',
+        status: "unpaid",
         deleted_at: new Date(0),
       },
       include: {
@@ -94,7 +93,7 @@ export class TransactionService {
         },
       },
       orderBy: {
-        created_at: 'desc',
+        created_at: "desc",
       },
     });
   }
@@ -126,11 +125,11 @@ export class TransactionService {
     });
 
     if (!transaction) {
-      throw new NotFoundException('Transaction not found');
+      throw new NotFoundException("Transaction not found");
     }
 
     if (transaction.deleted_at && transaction.deleted_at.getTime() !== 0) {
-      throw new NotFoundException('Transaction not found');
+      throw new NotFoundException("Transaction not found");
     }
 
     return transaction;
@@ -154,7 +153,7 @@ export class TransactionService {
         },
       },
       orderBy: {
-        created_at: 'desc',
+        created_at: "desc",
       },
     });
   }
@@ -170,15 +169,18 @@ export class TransactionService {
     });
 
     if (!transaction) {
-      throw new NotFoundException('Transaction not found');
+      throw new NotFoundException("Transaction not found");
     }
 
     if (transaction.deleted_at && transaction.deleted_at.getTime() !== 0) {
-      throw new NotFoundException('Transaction not found');
+      throw new NotFoundException("Transaction not found");
     }
 
     // Jika status diubah ke "paid", buat UserPackage juga
-    if (updateTransactionStatusDto.status === 'paid' && transaction.status === 'unpaid') {
+    if (
+      updateTransactionStatusDto.status === "paid" &&
+      transaction.status === "unpaid"
+    ) {
       // Cek apakah UserPackage sudah ada
       const existingUserPackage =
         await this.prismaService.userPackage.findFirst({
@@ -231,4 +233,3 @@ export class TransactionService {
     });
   }
 }
-

@@ -7,30 +7,35 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-} from '@nestjs/common';
-import { RoleService } from './role.service';
-import { CreateRoleDto, CreateRoleSchema } from './dto/create-role.dto';
-import { UpdateRoleDto, UpdateRoleSchema } from './dto/update-role.dto';
-import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
-import { ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
-import { ResponseRoleDto } from './dto/response-role.dto';
+} from "@nestjs/common";
+import { RoleService } from "./role.service";
+import { CreateRoleDto, CreateRoleSchema } from "./dto/create-role.dto";
+import { UpdateRoleDto, UpdateRoleSchema } from "./dto/update-role.dto";
+import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+} from "@nestjs/swagger";
+import { ResponseRoleDto } from "./dto/response-role.dto";
 
-@Controller('role')
+@Controller("role")
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @Post()
   @ApiBody({
-    description: 'Create role',
+    description: "Create role",
     schema: {
       example: {
-        name: 'admin',
+        name: "admin",
         permissions_mask: 1,
       },
     },
   })
   @ApiCreatedResponse({
-    description: 'Role created',
+    description: "Role created",
     type: ResponseRoleDto,
   })
   create(
@@ -41,51 +46,51 @@ export class RoleController {
 
   @Get()
   @ApiOkResponse({
-    description: 'List of roles',
+    description: "List of roles",
     type: ResponseRoleDto,
   })
   @ApiNotFoundResponse({
-    description: 'Roles not found',
+    description: "Roles not found",
   })
   findAll() {
     return this.roleService.findAll();
   }
 
-  @Get(':id')
+  @Get(":id")
   @ApiOkResponse({
-    description: 'Role detail',
+    description: "Role detail",
     type: ResponseRoleDto,
   })
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param("id", ParseIntPipe) id: number) {
     return this.roleService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   @ApiBody({
-    description: 'Update role',
+    description: "Update role",
     schema: {
       example: {
-        name: 'admin',
+        name: "admin",
         permissions_mask: 1,
       },
     },
   })
   @ApiOkResponse({
-    description: 'Role updated',
+    description: "Role updated",
     type: ResponseRoleDto,
   })
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param("id", ParseIntPipe) id: number,
     @Body(new ZodValidationPipe(UpdateRoleSchema)) updateRoleDto: UpdateRoleDto,
   ) {
     return this.roleService.update(id, updateRoleDto);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @ApiOkResponse({
-    description: 'Role deleted',
+    description: "Role deleted",
   })
-  remove(@Param('id', ParseIntPipe) id: number) {
+  remove(@Param("id", ParseIntPipe) id: number) {
     return this.roleService.remove(id);
   }
 }

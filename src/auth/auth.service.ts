@@ -3,11 +3,11 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { LoginDto } from './dto/login.dto';
-import * as bcrypt from 'bcryptjs';
-import { JwtService } from '@nestjs/jwt';
+} from "@nestjs/common";
+import { PrismaService } from "src/prisma/prisma.service";
+import { LoginDto } from "./dto/login.dto";
+import * as bcrypt from "bcryptjs";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class AuthService {
@@ -22,14 +22,14 @@ export class AuthService {
       },
     });
     if (!existingUser) {
-      throw new ConflictException('Invalid Credentials');
+      throw new ConflictException("Invalid Credentials");
     }
     const isPasswordMatch = await bcrypt.compare(
       loginDto.password,
       existingUser.password_hash,
     );
     if (!isPasswordMatch) {
-      throw new ConflictException('Invalid Credentials');
+      throw new ConflictException("Invalid Credentials");
     }
     const token = this.jwtService.sign({
       id: existingUser.id,
@@ -51,14 +51,14 @@ export class AuthService {
       },
     });
     if (!existingAdmin) {
-      throw new ConflictException('Invalid Credentials');
+      throw new ConflictException("Invalid Credentials");
     }
     const isPasswordMatch = await bcrypt.compare(
       loginDto.password,
       existingAdmin.password_hash,
     );
     if (!isPasswordMatch) {
-      throw new ConflictException('Invalid Credentials');
+      throw new ConflictException("Invalid Credentials");
     }
     const token = this.jwtService.sign({
       id: existingAdmin.id,
@@ -74,7 +74,7 @@ export class AuthService {
   }
   async logout(user: any) {
     return {
-      message: 'Logged out successfully',
+      message: "Logged out successfully",
     };
   }
 }

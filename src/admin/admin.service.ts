@@ -2,11 +2,11 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { CreateAdminDto } from './dto/create-admin.dto';
-import { UpdateAdminDto } from './dto/update-admin.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import * as bcrypt from 'bcryptjs';
+} from "@nestjs/common";
+import { CreateAdminDto } from "./dto/create-admin.dto";
+import { UpdateAdminDto } from "./dto/update-admin.dto";
+import { PrismaService } from "src/prisma/prisma.service";
+import * as bcrypt from "bcryptjs";
 
 @Injectable()
 export class AdminService {
@@ -18,7 +18,7 @@ export class AdminService {
       },
     });
     if (exsitingAdmin) {
-      throw new BadRequestException('Admin already exists');
+      throw new BadRequestException("Admin already exists");
     }
     const hashPassword = await bcrypt.hash(createAdminDto.password, 10);
     return this.prismaService.admin.create({
@@ -48,7 +48,7 @@ export class AdminService {
       },
     });
     if (existingAdmin.length === 0) {
-      throw new NotFoundException('Admin not found');
+      throw new NotFoundException("Admin not found");
     }
     return existingAdmin;
   }
@@ -66,7 +66,7 @@ export class AdminService {
       },
     });
     if (!existingAdmin) {
-      throw new NotFoundException('Admin not found');
+      throw new NotFoundException("Admin not found");
     }
     return existingAdmin;
   }
@@ -78,7 +78,7 @@ export class AdminService {
       },
     });
     if (!existingAdmin) {
-      throw new NotFoundException('Admin not found');
+      throw new NotFoundException("Admin not found");
     }
     const emailAdmin = await this.prismaService.admin.findUnique({
       where: {
@@ -86,7 +86,7 @@ export class AdminService {
       },
     });
     if (emailAdmin && emailAdmin.id !== id) {
-      throw new BadRequestException('Email Admin already exists');
+      throw new BadRequestException("Email Admin already exists");
     }
     const updateData = {
       email: updateAdminDto.email,
@@ -117,7 +117,7 @@ export class AdminService {
       },
     });
     if (!existingAdmin) {
-      throw new NotFoundException('Admin not found');
+      throw new NotFoundException("Admin not found");
     }
     return this.prismaService.admin.delete({
       where: {

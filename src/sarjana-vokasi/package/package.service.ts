@@ -2,11 +2,11 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePackageDto } from './dto/create-package.dto';
-import { UpdatePackageDto } from './dto/update-package.dto';
-import { CreateSubtestDto } from './dto/create-subtest.dto';
+} from "@nestjs/common";
+import { PrismaService } from "src/prisma/prisma.service";
+import { CreatePackageDto } from "./dto/create-package.dto";
+import { UpdatePackageDto } from "./dto/update-package.dto";
+import { CreateSubtestDto } from "./dto/create-subtest.dto";
 
 @Injectable()
 export class PackageService {
@@ -17,7 +17,7 @@ export class PackageService {
     return this.prismaService.package.create({
       data: {
         ...createPackageDto,
-        type: 'SARJANA', // Set type di Package
+        type: "SARJANA", // Set type di Package
         deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
       },
     });
@@ -28,7 +28,7 @@ export class PackageService {
     return this.prismaService.package.create({
       data: {
         ...createPackageDto,
-        type: 'PASCASARJANA', // Set type di Package
+        type: "PASCASARJANA", // Set type di Package
         deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
       },
     });
@@ -38,7 +38,7 @@ export class PackageService {
   async findAllSarjana() {
     return this.prismaService.package.findMany({
       where: {
-        type: 'SARJANA', // Filter berdasarkan type di Package
+        type: "SARJANA", // Filter berdasarkan type di Package
       },
       include: {
         package_exams: {
@@ -52,7 +52,7 @@ export class PackageService {
         },
       },
       orderBy: {
-        created_at: 'desc',
+        created_at: "desc",
       },
     });
   }
@@ -62,7 +62,7 @@ export class PackageService {
     return this.prismaService.package.findMany({
       where: {
         published,
-        type: 'SARJANA', // Filter berdasarkan type di Package
+        type: "SARJANA", // Filter berdasarkan type di Package
       },
       include: {
         package_exams: {
@@ -76,7 +76,7 @@ export class PackageService {
         },
       },
       orderBy: {
-        created_at: 'desc',
+        created_at: "desc",
       },
     });
   }
@@ -103,12 +103,12 @@ export class PackageService {
     });
 
     if (!packageData) {
-      throw new NotFoundException('Package not found');
+      throw new NotFoundException("Package not found");
     }
 
     // Verify ini package Sarjana & Vokasi
-    if (packageData.type !== 'SARJANA') {
-        throw new NotFoundException('Package not found for Sarjana & Vokasi');
+    if (packageData.type !== "SARJANA") {
+      throw new NotFoundException("Package not found for Sarjana & Vokasi");
     }
 
     return packageData;
@@ -175,7 +175,7 @@ export class PackageService {
         description: createSubtestDto.description,
         duration: createSubtestDto.duration,
         total_questions: 0, // Default, akan di-update saat ada soal
-        type_exam: createSubtestDto.type_exam as 'TKA' | 'TBI' | 'TKD',
+        type_exam: createSubtestDto.type_exam as "TKA" | "TBI" | "TKD",
         deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
       },
     });
@@ -216,7 +216,7 @@ export class PackageService {
     });
 
     if (!packageExam) {
-      throw new NotFoundException('Subtest not found in this package');
+      throw new NotFoundException("Subtest not found in this package");
     }
 
     // Delete PackageExam relation
@@ -229,7 +229,7 @@ export class PackageService {
       where: { id: examId },
     });
 
-    return { message: 'Subtest deleted successfully' };
+    return { message: "Subtest deleted successfully" };
   }
 
   // ========== METHODS UNTUK PASCASARJANA ==========
@@ -238,7 +238,7 @@ export class PackageService {
   async findAllPascasarjana() {
     return this.prismaService.package.findMany({
       where: {
-        type: 'PASCASARJANA', // Filter berdasarkan type di Package
+        type: "PASCASARJANA", // Filter berdasarkan type di Package
       },
       include: {
         package_exams: {
@@ -252,7 +252,7 @@ export class PackageService {
         },
       },
       orderBy: {
-        created_at: 'desc',
+        created_at: "desc",
       },
     });
   }
@@ -262,7 +262,7 @@ export class PackageService {
     return this.prismaService.package.findMany({
       where: {
         published,
-        type: 'PASCASARJANA', // Filter berdasarkan type di Package
+        type: "PASCASARJANA", // Filter berdasarkan type di Package
       },
       include: {
         package_exams: {
@@ -276,7 +276,7 @@ export class PackageService {
         },
       },
       orderBy: {
-        created_at: 'desc',
+        created_at: "desc",
       },
     });
   }
@@ -303,12 +303,12 @@ export class PackageService {
     });
 
     if (!packageData) {
-      throw new NotFoundException('Package not found');
+      throw new NotFoundException("Package not found");
     }
 
     // Verify ini package Pascasarjana
-    if (packageData.type !== 'PASCASARJANA') {
-        throw new NotFoundException('Package not found for Pascasarjana');
+    if (packageData.type !== "PASCASARJANA") {
+      throw new NotFoundException("Package not found for Pascasarjana");
     }
 
     return packageData;
@@ -364,7 +364,7 @@ export class PackageService {
     title: string;
     description?: string;
     duration: number;
-    type_exam: 'TKA' | 'TBI';
+    type_exam: "TKA" | "TBI";
   }) {
     const packageData = await this.findOnePascasarjana(
       createSubtestDto.package_id,
@@ -376,7 +376,7 @@ export class PackageService {
         description: createSubtestDto.description,
         duration: createSubtestDto.duration,
         total_questions: 0,
-        type_exam: createSubtestDto.type_exam as 'TKA' | 'TBI',
+        type_exam: createSubtestDto.type_exam as "TKA" | "TBI",
         deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
       },
     });
@@ -414,7 +414,7 @@ export class PackageService {
     });
 
     if (!packageExam) {
-      throw new NotFoundException('Subtest not found in this package');
+      throw new NotFoundException("Subtest not found in this package");
     }
 
     await this.prismaService.packageExam.delete({
@@ -425,7 +425,6 @@ export class PackageService {
       where: { id: examId },
     });
 
-    return { message: 'Subtest deleted successfully' };
+    return { message: "Subtest deleted successfully" };
   }
 }
-

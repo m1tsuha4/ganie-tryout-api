@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { createLogger, transports, format, Logger } from 'winston';
-import DailyRotateFile from 'winston-daily-rotate-file';
-import * as winston from 'winston';
+import { Injectable } from "@nestjs/common";
+import { createLogger, transports, format, Logger } from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
+import * as winston from "winston";
 
 @Injectable()
 export class WinstonLoggerService {
@@ -10,24 +10,22 @@ export class WinstonLoggerService {
   constructor() {
     const isVercel = !!process.env.VERCEL;
 
-    const loggerTransports: winston.transport[] = [
-      new transports.Console(),
-    ];
+    const loggerTransports: winston.transport[] = [new transports.Console()];
 
     if (!isVercel) {
       loggerTransports.push(
         new DailyRotateFile({
-          filename: 'logs/%DATE%-app.log',
-          datePattern: 'YYYY-MM-DD',
+          filename: "logs/%DATE%-app.log",
+          datePattern: "YYYY-MM-DD",
           zippedArchive: true,
-          maxSize: '20m',
-          maxFiles: '14d',
+          maxSize: "20m",
+          maxFiles: "14d",
         }),
       );
     }
 
     this.logger = createLogger({
-      level: 'info',
+      level: "info",
       format: format.combine(
         format.colorize(),
         format.timestamp(),

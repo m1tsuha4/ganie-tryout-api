@@ -1,67 +1,77 @@
-import { Body, Controller, Post, UseGuards, Request } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { ZodValidationPipe } from 'src/common/pipes/zod-validation.pipe';
-import { LoginDto, LoginSchema } from './dto/login.dto';
-import { CreateUserDto, CreateUserSchema } from 'src/user/dto/create-user.dto';
-import { UserService } from 'src/user/user.service';
-import { JwtAuthGuard } from './guard/jwt-guard.auth';
-import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { ResponseUserDto } from 'src/user/dto/response-user.dto';
-import { ResponseLoginUserDto } from './dto/response-login-user.dto';
+import { Body, Controller, Post, UseGuards, Request } from "@nestjs/common";
+import { AuthService } from "./auth.service";
+import { ZodValidationPipe } from "src/common/pipes/zod-validation.pipe";
+import { LoginDto, LoginSchema } from "./dto/login.dto";
+import { CreateUserDto, CreateUserSchema } from "src/user/dto/create-user.dto";
+import { UserService } from "src/user/user.service";
+import { JwtAuthGuard } from "./guard/jwt-guard.auth";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+} from "@nestjs/swagger";
+import { ResponseUserDto } from "src/user/dto/response-user.dto";
+import { ResponseLoginUserDto } from "./dto/response-login-user.dto";
 
-@Controller('auth')
+@Controller("auth")
 export class AuthController {
-  constructor(private readonly authService: AuthService,private readonly userService: UserService) {}
-  @Post('register')
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
+  @Post("register")
   @ApiBody({
-    description: 'Register user',
+    description: "Register user",
     schema: {
       example: {
-        username: 'user001',
-        name: 'User 001',
-        email: 'user001@example.com',
-        password: 'StrongPassword123!',
+        username: "user001",
+        name: "User 001",
+        email: "user001@example.com",
+        password: "StrongPassword123!",
       },
     },
   })
   @ApiCreatedResponse({
-    description: 'User registered successfully',
+    description: "User registered successfully",
     type: ResponseUserDto,
   })
-  registerUser(@Body(new ZodValidationPipe(CreateUserSchema)) createUserDto: CreateUserDto) {
+  registerUser(
+    @Body(new ZodValidationPipe(CreateUserSchema)) createUserDto: CreateUserDto,
+  ) {
     return this.userService.create(createUserDto);
   }
-  
-  @Post('login')
+
+  @Post("login")
   @ApiBody({
-    description: 'Login user',
+    description: "Login user",
     schema: {
       example: {
-        email: 'user001@example.com',
-        password: 'StrongPassword123!',
+        email: "user001@example.com",
+        password: "StrongPassword123!",
       },
     },
   })
   @ApiCreatedResponse({
-    description: 'User logged in successfully',
+    description: "User logged in successfully",
     type: ResponseLoginUserDto,
   })
   loginUser(@Body(new ZodValidationPipe(LoginSchema)) loginDto: LoginDto) {
     return this.authService.loginUser(loginDto);
   }
 
-  @Post('admin')
+  @Post("admin")
   @ApiBody({
-    description: 'Login admin',
+    description: "Login admin",
     schema: {
       example: {
-        email: 'admin001@example.com',
-        password: 'StrongPassword123!',
+        email: "admin001@example.com",
+        password: "StrongPassword123!",
       },
     },
   })
   @ApiCreatedResponse({
-    description: 'Admin logged in successfully',
+    description: "Admin logged in successfully",
     type: ResponseLoginUserDto,
   })
   loginAdmin(@Body(new ZodValidationPipe(LoginSchema)) loginDto: LoginDto) {
@@ -71,9 +81,9 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'User logged out successfully',
+    description: "User logged out successfully",
   })
-  @Post('logout')
+  @Post("logout")
   logout(@Request() req) {
     return this.authService.logout(req.user);
   }

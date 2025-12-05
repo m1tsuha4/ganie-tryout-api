@@ -1,13 +1,13 @@
 /**
  * Scoring Constants untuk Tryout
- * 
+ *
  * Sistem Penilaian:
- * 
+ *
  * TKA atau TKD (baik Pascasarjana maupun Sarjana & Vokasi):
  * - Benar: +4 poin
  * - Salah: -1 poin
  * - Tidak diisi: 0 poin
- * 
+ *
  * Khusus Pascasarjana TBI:
  * - Benar: +4 poin
  * - Salah: 0 poin (tidak ada minus)
@@ -28,11 +28,11 @@ export const SCORING_PASCASARJANA_TBI = {
 
 // Helper function untuk get scoring berdasarkan type
 export function getScoringConstants(
-  packageType: 'SARJANA' | 'PASCASARJANA',
-  examType?: 'TKA' | 'TBI' | 'TKD',
+  packageType: "SARJANA" | "PASCASARJANA",
+  examType?: "TKA" | "TBI" | "TKD",
 ) {
   // Khusus Pascasarjana TBI menggunakan aturan berbeda
-  if (packageType === 'PASCASARJANA' && examType === 'TBI') {
+  if (packageType === "PASCASARJANA" && examType === "TBI") {
     return SCORING_PASCASARJANA_TBI;
   }
 
@@ -43,4 +43,3 @@ export function getScoringConstants(
 // Export untuk backward compatibility
 export const SCORING_SARJANA = SCORING_DEFAULT;
 export const SCORING_PASCASARJANA_TKA = SCORING_DEFAULT;
-

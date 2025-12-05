@@ -1,5 +1,5 @@
-import { CreateRoleSchema } from './create-role.dto';
-import { createZodDto } from '@anatine/zod-nestjs';
+import { CreateRoleSchema } from "./create-role.dto";
+import { createZodDto } from "@anatine/zod-nestjs";
 
 export const UpdateRoleSchema = CreateRoleSchema.partial();
 

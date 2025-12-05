@@ -1,8 +1,8 @@
-import { BadRequestException, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
-import { existsSync, mkdirSync } from 'fs';
+import { BadRequestException, UseInterceptors } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
+import { extname } from "path";
+import { existsSync, mkdirSync } from "fs";
 
 const ensureDirExists = (folder: string) => {
   if (!existsSync(folder)) {
@@ -10,28 +10,28 @@ const ensureDirExists = (folder: string) => {
   }
 };
 
-export function UploadImageInterceptor(folderName: string = '') {
+export function UploadImageInterceptor(folderName: string = "") {
   const folderPath = `./uploads/${folderName}`;
 
   ensureDirExists(folderPath);
 
   return UseInterceptors(
-    FileInterceptor('file', {
+    FileInterceptor("file", {
       storage: diskStorage({
         destination: (_req, _file, cb) => {
           cb(null, folderPath);
         },
         filename: (_req, file, cb) => {
           const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
+            Date.now() + "-" + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
           cb(null, `${uniqueSuffix}${ext}`);
         },
       }),
       fileFilter: (_req, file, cb) => {
-        if (!file.mimetype.startsWith('image/')) {
+        if (!file.mimetype.startsWith("image/")) {
           return cb(
-            new BadRequestException('Only image files are allowed!'),
+            new BadRequestException("Only image files are allowed!"),
             false,
           );
         }

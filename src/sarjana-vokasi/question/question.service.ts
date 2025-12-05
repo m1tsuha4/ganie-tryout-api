@@ -2,10 +2,10 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateQuestionDto } from './dto/create-question.dto';
-import { UpdateQuestionDto } from './dto/update-question.dto';
+} from "@nestjs/common";
+import { PrismaService } from "src/prisma/prisma.service";
+import { CreateQuestionDto } from "./dto/create-question.dto";
+import { UpdateQuestionDto } from "./dto/update-question.dto";
 
 @Injectable()
 export class QuestionService {
@@ -22,11 +22,11 @@ export class QuestionService {
     });
 
     if (!exam) {
-      throw new NotFoundException('Exam not found');
+      throw new NotFoundException("Exam not found");
     }
 
     if (exam.package_exams.length === 0) {
-      throw new NotFoundException('Exam not found');
+      throw new NotFoundException("Exam not found");
     }
 
     // Create question dengan choices
@@ -43,8 +43,8 @@ export class QuestionService {
         question_choices: {
           create: createQuestionDto.choices.map((choice) => ({
             choice_text: choice.choice_text,
-            choice_image_url: choice.choice_image_url || '',
-            choice_audio_url: choice.choice_audio_url || '',
+            choice_image_url: choice.choice_image_url || "",
+            choice_audio_url: choice.choice_audio_url || "",
             is_correct: choice.is_correct,
             deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
           })),
@@ -79,11 +79,11 @@ export class QuestionService {
     });
 
     if (!exam) {
-      throw new NotFoundException('Exam not found');
+      throw new NotFoundException("Exam not found");
     }
 
     if (exam.package_exams.length === 0) {
-      throw new NotFoundException('Exam not found');
+      throw new NotFoundException("Exam not found");
     }
 
     const questions = await this.prismaService.question.findMany({
@@ -91,12 +91,12 @@ export class QuestionService {
       include: {
         question_choices: {
           orderBy: {
-            id: 'asc', // Order by ID untuk konsistensi (A, B, C, D)
+            id: "asc", // Order by ID untuk konsistensi (A, B, C, D)
           },
         },
       },
       orderBy: {
-        id: 'asc',
+        id: "asc",
       },
     });
 
@@ -110,7 +110,7 @@ export class QuestionService {
       include: {
         question_choices: {
           orderBy: {
-            id: 'asc',
+            id: "asc",
           },
         },
         exam: {
@@ -126,12 +126,12 @@ export class QuestionService {
     });
 
     if (!question) {
-      throw new NotFoundException('Question not found');
+      throw new NotFoundException("Question not found");
     }
 
     // Verify question exists (bisa untuk Sarjana atau Pascasarjana)
     if (question.exam.package_exams.length === 0) {
-      throw new NotFoundException('Question not found');
+      throw new NotFoundException("Question not found");
     }
 
     return question;
@@ -182,8 +182,8 @@ export class QuestionService {
         data: updateQuestionDto.choices.map((choice) => ({
           question_id: id,
           choice_text: choice.choice_text,
-          choice_image_url: choice.choice_image_url || '',
-          choice_audio_url: choice.choice_audio_url || '',
+          choice_image_url: choice.choice_image_url || "",
+          choice_audio_url: choice.choice_audio_url || "",
           is_correct: choice.is_correct,
           deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
         })),
@@ -215,7 +215,6 @@ export class QuestionService {
       data: { total_questions: totalQuestions },
     });
 
-    return { message: 'Question deleted successfully' };
+    return { message: "Question deleted successfully" };
   }
 }
-

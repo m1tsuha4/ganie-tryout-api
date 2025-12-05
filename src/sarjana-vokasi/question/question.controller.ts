@@ -7,19 +7,19 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-} from '@nestjs/common';
-import { QuestionService } from './question.service';
+} from "@nestjs/common";
+import { QuestionService } from "./question.service";
 import {
   CreateQuestionDto,
   CreateQuestionSchema,
-} from './dto/create-question.dto';
+} from "./dto/create-question.dto";
 import {
   UpdateQuestionDto,
   UpdateQuestionSchema,
-} from './dto/update-question.dto';
-import { ZodValidationPipe } from 'src/common/pipes/zod-validation.pipe';
+} from "./dto/update-question.dto";
+import { ZodValidationPipe } from "src/common/pipes/zod-validation.pipe";
 
-@Controller('question')
+@Controller("question")
 export class QuestionController {
   constructor(private readonly questionService: QuestionService) {}
 
@@ -33,21 +33,21 @@ export class QuestionController {
   }
 
   // Get all questions untuk exam tertentu
-  @Get('exam/:examId')
-  findByExam(@Param('examId', ParseIntPipe) examId: number) {
+  @Get("exam/:examId")
+  findByExam(@Param("examId", ParseIntPipe) examId: number) {
     return this.questionService.findByExam(examId);
   }
 
   // Get question by ID
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  @Get(":id")
+  findOne(@Param("id", ParseIntPipe) id: number) {
     return this.questionService.findOne(id);
   }
 
   // Update question
-  @Patch(':id')
+  @Patch(":id")
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param("id", ParseIntPipe) id: number,
     @Body(new ZodValidationPipe(UpdateQuestionSchema))
     updateQuestionDto: UpdateQuestionDto,
   ) {
@@ -55,9 +55,8 @@ export class QuestionController {
   }
 
   // Delete question
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  @Delete(":id")
+  remove(@Param("id", ParseIntPipe) id: number) {
     return this.questionService.remove(id);
   }
 }
-

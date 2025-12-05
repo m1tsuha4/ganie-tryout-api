@@ -1,5 +1,5 @@
-import { createZodDto } from '@anatine/zod-nestjs';
-import z from 'zod';
+import { createZodDto } from "@anatine/zod-nestjs";
+import z from "zod";
 
 export const LoginSchema = z.object({
   email: z.string().email(),

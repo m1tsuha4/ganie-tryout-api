@@ -1,8 +1,8 @@
-import { ApiSuccessResponse, ApiErrorResponse } from '../types/api-response';
+import { ApiSuccessResponse, ApiErrorResponse } from "../types/api-response";
 
 export function ok<T = any>(
   data: T,
-  message = 'OK',
+  message = "OK",
   meta?: Record<string, any>,
 ): ApiSuccessResponse<T> {
   return {
@@ -15,7 +15,7 @@ export function ok<T = any>(
 
 export function fail(
   message: string,
-  code = 'ERROR',
+  code = "ERROR",
   details?: any,
 ): ApiErrorResponse {
   return {

@@ -3,11 +3,11 @@ import {
   ExecutionContext,
   Injectable,
   NestInterceptor,
-} from '@nestjs/common';
-import { Observable, map } from 'rxjs';
-import { ok } from '../utils/response.util';
-import { Reflector } from '@nestjs/core';
-import { SUCCESS_MESSAGE_KEY } from '../decorators/success-message.decorator';
+} from "@nestjs/common";
+import { Observable, map } from "rxjs";
+import { ok } from "../utils/response.util";
+import { Reflector } from "@nestjs/core";
+import { SUCCESS_MESSAGE_KEY } from "../decorators/success-message.decorator";
 
 @Injectable()
 export class TransformResponseInterceptor implements NestInterceptor {
@@ -16,7 +16,7 @@ export class TransformResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest<Request>();
-    const method = request?.method || 'GET';
+    const method = request?.method || "GET";
 
     const customMessage =
       this.reflector.get<string>(SUCCESS_MESSAGE_KEY, context.getHandler()) ??
@@ -27,7 +27,7 @@ export class TransformResponseInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       map((data) => {
-        if (data && typeof data === 'object' && 'success' in data) {
+        if (data && typeof data === "object" && "success" in data) {
           return data;
         }
 
@@ -38,17 +38,17 @@ export class TransformResponseInterceptor implements NestInterceptor {
 
   private getDefaultMessage(method: string): string {
     switch (method.toUpperCase()) {
-      case 'POST':
-        return 'Created successfully';
-      case 'PUT':
-      case 'PATCH':
-        return 'Updated successfully';
-      case 'DELETE':
-        return 'Deleted successfully';
-      case 'GET':
-        return 'Fetched successfully';
+      case "POST":
+        return "Created successfully";
+      case "PUT":
+      case "PATCH":
+        return "Updated successfully";
+      case "DELETE":
+        return "Deleted successfully";
+      case "GET":
+        return "Fetched successfully";
       default:
-        return 'OK';
+        return "OK";
     }
   }
 }
