@@ -11,6 +11,7 @@ import { AuthModule } from "./auth/auth.module";
 import { PackageModule } from "./sarjana-vokasi/package/package.module";
 import { QuestionModule } from "./sarjana-vokasi/question/question.module";
 import { TransactionModule } from "./transaction/transaction.module";
+import { SubtestModule } from "./subtest/subtest.module";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { TransformResponseInterceptor } from "./common/interceptors/transform-response.interceptor";
 
@@ -28,6 +29,7 @@ import { TransformResponseInterceptor } from "./common/interceptors/transform-re
     PackageModule,
     QuestionModule,
     TransactionModule,
+    SubtestModule,
   ],
   controllers: [AppController],
   providers: [
