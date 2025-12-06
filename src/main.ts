@@ -6,9 +6,11 @@ import {
   SwaggerCustomOptions,
 } from "@nestjs/swagger";
 import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
+import { join } from "path";
+import { NestExpressApplication } from "@nestjs/platform-express";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: ["log", "error", "warn", "fatal"],
   });
   app.enableCors({
@@ -19,6 +21,9 @@ async function bootstrap() {
   });
 
   app.useGlobalFilters(new AllExceptionsFilter());
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads/',
+  });
 
   const config = new DocumentBuilder()
     .setTitle("Ganie Tryout API")

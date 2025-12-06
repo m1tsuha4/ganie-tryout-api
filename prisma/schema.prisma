@@ -140,6 +140,7 @@ model QuestionChoice {
 model Package {
   id              Int   @id @default(autoincrement())
   title           String
+  thumbnail_url   String? @db.Text
   description     String?  @db.Text
   price           Float
   published       Boolean @default(false)
@@ -216,7 +217,7 @@ model UserExamSession {
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 
-user_answers UserAnswer[]
+  user_answers UserAnswer[]
 }
 
 model UserAnswer {
