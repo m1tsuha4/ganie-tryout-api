@@ -12,34 +12,25 @@ import { CreateSubtestDto } from "./dto/create-subtest.dto";
 export class PackageService {
   constructor(private prismaService: PrismaService) {}
 
-  // Create package untuk Sarjana & Vokasi
+  // Create package (untuk Sarjana & Vokasi atau Pascasarjana)
   async create(createPackageDto: CreatePackageDto) {
     return this.prismaService.package.create({
       data: {
         ...createPackageDto,
-        type: "SARJANA", // Set type di Package
         deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
       },
     });
   }
 
-  // Create package untuk Pascasarjana
-  async createPascasarjana(createPackageDto: CreatePackageDto) {
-    return this.prismaService.package.create({
-      data: {
-        ...createPackageDto,
-        type: "PASCASARJANA", // Set type di Package
-        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
-      },
-    });
-  }
-
-  // Get all packages untuk Sarjana & Vokasi (filter by Package type = SARJANA)
-  async findAllSarjana() {
+  // Get all packages (filter by type jika diberikan)
+  async findAll(type?: "SARJANA" | "PASCASARJANA") {
+    const where: any = {};
+    if (type) {
+      where.type = type;
+    }
+    
     return this.prismaService.package.findMany({
-      where: {
-        type: "SARJANA", // Filter berdasarkan type di Package
-      },
+      where,
       include: {
         package_exams: {
           include: {
@@ -57,13 +48,15 @@ export class PackageService {
     });
   }
 
-  // Get packages by published status untuk Sarjana & Vokasi
-  async findByStatus(published: boolean) {
+  // Get packages by published status (filter by type jika diberikan)
+  async findByStatus(published: boolean, type?: "SARJANA" | "PASCASARJANA") {
+    const where: any = { published };
+    if (type) {
+      where.type = type;
+    }
+    
     return this.prismaService.package.findMany({
-      where: {
-        published,
-        type: "SARJANA", // Filter berdasarkan type di Package
-      },
+      where,
       include: {
         package_exams: {
           include: {
@@ -81,7 +74,7 @@ export class PackageService {
     });
   }
 
-  // Get package by ID untuk Sarjana & Vokasi
+  // Get package by ID
   async findOne(id: number) {
     const packageData = await this.prismaService.package.findUnique({
       where: { id },
@@ -106,15 +99,10 @@ export class PackageService {
       throw new NotFoundException("Package not found");
     }
 
-    // Verify ini package Sarjana & Vokasi
-    if (packageData.type !== "SARJANA") {
-      throw new NotFoundException("Package not found for Sarjana & Vokasi");
-    }
-
     return packageData;
   }
 
-  // Get ringkasan paket (summary) untuk Sarjana & Vokasi
+  // Get ringkasan paket (summary)
   async getPackageSummary(id: number) {
     const packageData = await this.findOne(id);
 
@@ -144,7 +132,7 @@ export class PackageService {
     };
   }
 
-  // Update package untuk Sarjana & Vokasi (termasuk publish/unpublish via published field)
+  // Update package (termasuk publish/unpublish via published field)
   async update(id: number, updatePackageDto: UpdatePackageDto) {
     const existingPackage = await this.findOne(id);
 
@@ -202,9 +190,77 @@ export class PackageService {
     return packageData.package_exams.map((pe) => pe.exam);
   }
 
-  // Delete subtest (Exam) dari package
+  // Get available subtest (yang belum dipilih untuk paket ini)
+  async getAvailableSubtests(packageId: number) {
+    // Verify package exists
+    const packageData = await this.findOne(packageId);
+
+    // Get semua exam_id yang sudah dipilih untuk paket ini
+    const selectedExamIds = packageData.package_exams.map((pe) => pe.exam_id);
+
+    // Get semua subtest yang belum dipilih (dan belum dihapus)
+    return this.prismaService.exam.findMany({
+      where: {
+        deleted_at: null,
+        id: {
+          notIn: selectedExamIds.length > 0 ? selectedExamIds : undefined,
+        },
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+    });
+  }
+
+  // Link subtest yang sudah ada ke package
+  async linkSubtest(packageId: number, examId: number) {
+    // Verify package exists
+    const packageData = await this.findOne(packageId);
+
+    // Verify exam exists dan belum dihapus
+    const exam = await this.prismaService.exam.findFirst({
+      where: {
+        id: examId,
+        deleted_at: null,
+      },
+    });
+
+    if (!exam) {
+      throw new NotFoundException("Subtest not found");
+    }
+
+    // Check apakah sudah terlink ke package ini
+    const existingLink = await this.prismaService.packageExam.findFirst({
+      where: {
+        package_id: packageId,
+        exam_id: examId,
+      },
+    });
+
+    if (existingLink) {
+      throw new BadRequestException(
+        "Subtest sudah terpilih untuk paket ini",
+      );
+    }
+
+    // Create PackageExam relation
+    const packageExam = await this.prismaService.packageExam.create({
+      data: {
+        package_id: packageId,
+        exam_id: examId,
+      },
+      include: {
+        exam: true,
+        package: true,
+      },
+    });
+
+    return packageExam;
+  }
+
+  // Delete subtest (Exam) dari package (hanya hapus link, tidak hapus Exam)
   async deleteSubtest(packageId: number, examId: number) {
-    // Verify package exists dan untuk Sarjana & Vokasi
+    // Verify package exists
     const packageData = await this.findOne(packageId);
 
     // Verify exam belongs to this package
@@ -219,212 +275,11 @@ export class PackageService {
       throw new NotFoundException("Subtest not found in this package");
     }
 
-    // Delete PackageExam relation
+    // Delete PackageExam relation (hanya hapus link, Exam tetap ada)
     await this.prismaService.packageExam.delete({
       where: { id: packageExam.id },
     });
 
-    // Delete Exam (akan cascade delete questions dan choices)
-    await this.prismaService.exam.delete({
-      where: { id: examId },
-    });
-
-    return { message: "Subtest deleted successfully" };
-  }
-
-  // ========== METHODS UNTUK PASCASARJANA ==========
-
-  // Get all packages untuk Pascasarjana (filter by Package type = PASCASARJANA)
-  async findAllPascasarjana() {
-    return this.prismaService.package.findMany({
-      where: {
-        type: "PASCASARJANA", // Filter berdasarkan type di Package
-      },
-      include: {
-        package_exams: {
-          include: {
-            exam: {
-              include: {
-                questions: true,
-              },
-            },
-          },
-        },
-      },
-      orderBy: {
-        created_at: "desc",
-      },
-    });
-  }
-
-  // Get packages by published status untuk Pascasarjana
-  async findByStatusPascasarjana(published: boolean) {
-    return this.prismaService.package.findMany({
-      where: {
-        published,
-        type: "PASCASARJANA", // Filter berdasarkan type di Package
-      },
-      include: {
-        package_exams: {
-          include: {
-            exam: {
-              include: {
-                questions: true,
-              },
-            },
-          },
-        },
-      },
-      orderBy: {
-        created_at: "desc",
-      },
-    });
-  }
-
-  // Get package by ID untuk Pascasarjana
-  async findOnePascasarjana(id: number) {
-    const packageData = await this.prismaService.package.findUnique({
-      where: { id },
-      include: {
-        package_exams: {
-          include: {
-            exam: {
-              include: {
-                questions: {
-                  include: {
-                    question_choices: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!packageData) {
-      throw new NotFoundException("Package not found");
-    }
-
-    // Verify ini package Pascasarjana
-    if (packageData.type !== "PASCASARJANA") {
-      throw new NotFoundException("Package not found for Pascasarjana");
-    }
-
-    return packageData;
-  }
-
-  // Get ringkasan paket untuk Pascasarjana
-  async getPackageSummaryPascasarjana(id: number) {
-    const packageData = await this.findOnePascasarjana(id);
-
-    const totalDurasi = packageData.package_exams.reduce(
-      (sum, pe) => sum + pe.exam.duration,
-      0,
-    );
-
-    const totalSoal = packageData.package_exams.reduce(
-      (sum, pe) => sum + pe.exam.total_questions,
-      0,
-    );
-
-    const jumlahSubtest = packageData.package_exams.length;
-    const hargaPaket = packageData.price;
-
-    return {
-      total_durasi: totalDurasi,
-      total_soal: totalSoal,
-      jumlah_subtest: jumlahSubtest,
-      harga_paket: hargaPaket,
-    };
-  }
-
-  // Update package untuk Pascasarjana (termasuk publish/unpublish via published field)
-  async updatePascasarjana(id: number, updatePackageDto: UpdatePackageDto) {
-    const existingPackage = await this.findOnePascasarjana(id);
-
-    return this.prismaService.package.update({
-      where: { id },
-      data: updatePackageDto,
-    });
-  }
-
-  // Delete package untuk Pascasarjana
-  async removePascasarjana(id: number) {
-    const packageData = await this.findOnePascasarjana(id);
-
-    return this.prismaService.package.delete({
-      where: { id },
-    });
-  }
-
-  // Tambah subtest untuk Pascasarjana (TKA atau TBI)
-  async createSubtestPascasarjana(createSubtestDto: {
-    package_id: number;
-    title: string;
-    description?: string;
-    duration: number;
-    type_exam: "TKA" | "TBI";
-  }) {
-    const packageData = await this.findOnePascasarjana(
-      createSubtestDto.package_id,
-    );
-
-    const exam = await this.prismaService.exam.create({
-      data: {
-        title: createSubtestDto.title,
-        description: createSubtestDto.description,
-        duration: createSubtestDto.duration,
-        total_questions: 0,
-        type_exam: createSubtestDto.type_exam as "TKA" | "TBI",
-        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
-      },
-    });
-
-    const packageExam = await this.prismaService.packageExam.create({
-      data: {
-        package_id: createSubtestDto.package_id,
-        exam_id: exam.id,
-      },
-      include: {
-        exam: true,
-        package: true,
-      },
-    });
-
-    return packageExam;
-  }
-
-  // Get list subtest untuk Pascasarjana
-  async getSubtestsPascasarjana(packageId: number) {
-    const packageData = await this.findOnePascasarjana(packageId);
-
-    return packageData.package_exams.map((pe) => pe.exam);
-  }
-
-  // Delete subtest untuk Pascasarjana
-  async deleteSubtestPascasarjana(packageId: number, examId: number) {
-    const packageData = await this.findOnePascasarjana(packageId);
-
-    const packageExam = await this.prismaService.packageExam.findFirst({
-      where: {
-        package_id: packageId,
-        exam_id: examId,
-      },
-    });
-
-    if (!packageExam) {
-      throw new NotFoundException("Subtest not found in this package");
-    }
-
-    await this.prismaService.packageExam.delete({
-      where: { id: packageExam.id },
-    });
-
-    await this.prismaService.exam.delete({
-      where: { id: examId },
-    });
-
-    return { message: "Subtest deleted successfully" };
+    return { message: "Subtest berhasil dihapus dari paket" };
   }
 }

@@ -8,6 +8,8 @@ import {
   Delete,
   ParseIntPipe,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -16,6 +18,10 @@ import {
   ApiBody,
   ApiParam,
   ApiQuery,
+  ApiOkResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiConsumes,
 } from "@nestjs/swagger";
 import { PackageService } from "./package.service";
 import {
@@ -26,65 +32,59 @@ import {
   UpdatePackageDto,
   UpdatePackageSchema,
 } from "./dto/update-package.dto";
-import {
-  CreateSubtestDto,
-  CreateSubtestSchema,
-  CreateSubtestSarjanaSchema,
-} from "./dto/create-subtest.dto";
 import { ZodValidationPipe } from "src/common/pipes/zod-validation.pipe";
+import { ResponsePackageDto } from "./dto/response-package.dto";
+import { ResponseSubtestDto } from "src/subtest/dto/response-subtest.dto";
+import { CloudinaryService } from "src/common/services/cloudinary.service";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { memoryStorage } from "multer";
 
 @ApiTags("Package")
-@Controller("package/sarjana")
+@Controller("package")
 export class PackageController {
-  constructor(private readonly packageService: PackageService) {}
+  constructor(
+    private readonly packageService: PackageService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   @Post()
   @ApiOperation({
-    summary: "Create paket baru untuk Sarjana & Vokasi",
-    description: `Membuat paket tryout baru untuk Sarjana & Vokasi.
-    
-**Type:** Otomatis diset ke SARJANA
+    summary: "Create paket baru",
+    description: `Membuat paket tryout baru.
+
+**Type:** Harus diisi SARJANA atau PASCASARJANA
 
 **Flow:**
 1. Buat paket → dapat package_id
-2. Tambah subtest (TKA/TKD) → dapat exam_id
+2. Pilih subtest yang sudah ada → link ke package
 3. Buat soal untuk subtest tersebut`,
   })
   @ApiBody({
     description: "Data paket baru",
     examples: {
-      basic: {
-        summary: "Contoh paket dasar",
+      sarjana: {
+        summary: "Contoh paket Sarjana & Vokasi",
         value: {
           title: "Tryout SBMPTN 2025 - Paket A",
           description: "Paket tryout lengkap untuk persiapan SBMPTN 2025",
           price: 50000,
+          type: "SARJANA",
         },
       },
-      minimal: {
-        summary: "Contoh minimal",
+      pascasarjana: {
+        summary: "Contoh paket Pascasarjana",
         value: {
-          title: "Tryout UTBK 2025",
-          price: 30000,
+          title: "Tryout S2 2025 - Paket A",
+          description: "Paket tryout lengkap untuk persiapan S2",
+          price: 75000,
+          type: "PASCASARJANA",
         },
       },
     },
   })
-  @ApiResponse({
-    status: 201,
+  @ApiCreatedResponse({
     description: "Paket berhasil dibuat",
-    schema: {
-      example: {
-        id: 1,
-        title: "Tryout SBMPTN 2025 - Paket A",
-        description: "Paket tryout lengkap untuk persiapan SBMPTN 2025",
-        price: 50000,
-        published: false,
-        type: "SARJANA",
-        created_at: "2025-12-02T10:00:00.000Z",
-        updated_at: "2025-12-02T10:00:00.000Z",
-      },
-    },
+    type: ResponsePackageDto,
   })
   create(
     @Body(new ZodValidationPipe(CreatePackageSchema))
@@ -95,13 +95,22 @@ export class PackageController {
 
   @Get()
   @ApiOperation({
-    summary: "Get semua paket Sarjana & Vokasi",
-    description: `Mengambil daftar semua paket untuk Sarjana & Vokasi.
+    summary: "Get semua paket",
+    description: `Mengambil daftar semua paket.
     
 **Filter:**
-- Tanpa query: Ambil semua paket
+- ?type=SARJANA: Hanya paket Sarjana & Vokasi
+- ?type=PASCASARJANA: Hanya paket Pascasarjana
 - ?published=true: Hanya paket yang sudah dipublish
-- ?published=false: Hanya paket yang belum dipublish`,
+- ?published=false: Hanya paket yang belum dipublish
+- Bisa combine: ?type=SARJANA&published=true`,
+  })
+  @ApiQuery({
+    name: "type",
+    required: false,
+    description: "Filter berdasarkan tipe paket",
+    enum: ["SARJANA", "PASCASARJANA"],
+    example: "SARJANA",
   })
   @ApiQuery({
     name: "published",
@@ -110,31 +119,20 @@ export class PackageController {
     type: String,
     example: "true",
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: "Daftar paket berhasil diambil",
-    schema: {
-      example: [
-        {
-          id: 1,
-          title: "Tryout SBMPTN 2025 - Paket A",
-          description: "Paket tryout lengkap",
-          price: 50000,
-          published: true,
-          type: "SARJANA",
-          created_at: "2025-12-02T10:00:00.000Z",
-          updated_at: "2025-12-02T10:00:00.000Z",
-          package_exams: [],
-        },
-      ],
-    },
+    type: ResponsePackageDto,
+    isArray: true,
   })
-  findAll(@Query("published") published?: string) {
+  findAll(
+    @Query("type") type?: "SARJANA" | "PASCASARJANA",
+    @Query("published") published?: string,
+  ) {
     if (published !== undefined) {
       const isPublished = published === "true";
-      return this.packageService.findByStatus(isPublished);
+      return this.packageService.findByStatus(isPublished, type);
     }
-    return this.packageService.findAllSarjana();
+    return this.packageService.findAll(type);
   }
 
   @Get(":id/summary")
@@ -154,21 +152,11 @@ export class PackageController {
     type: Number,
     example: 1,
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: "Ringkasan paket berhasil diambil",
-    schema: {
-      example: {
-        total_durasi: 120,
-        total_soal: 50,
-        jumlah_subtest: 2,
-        harga_paket: 50000,
-      },
-    },
   })
-  @ApiResponse({
-    status: 404,
-    description: "Paket tidak ditemukan atau bukan untuk Sarjana & Vokasi",
+  @ApiNotFoundResponse({
+    description: "Paket tidak ditemukan",
   })
   getSummary(@Param("id", ParseIntPipe) id: number) {
     return this.packageService.getPackageSummary(id);
@@ -177,7 +165,9 @@ export class PackageController {
   @Get(":id")
   @ApiOperation({
     summary: "Get detail paket berdasarkan ID",
-    description: `Mengambil detail lengkap paket termasuk semua subtest dan soal.`,
+    description: `Mengambil detail lengkap paket termasuk semua subtest dan soal.
+
+Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
   })
   @ApiParam({
     name: "id",
@@ -185,13 +175,12 @@ export class PackageController {
     type: Number,
     example: 1,
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: "Detail paket berhasil diambil",
+    type: ResponsePackageDto,
   })
-  @ApiResponse({
-    status: 404,
-    description: "Paket tidak ditemukan atau bukan untuk Sarjana & Vokasi",
+  @ApiNotFoundResponse({
+    description: "Paket tidak ditemukan",
   })
   findOne(@Param("id", ParseIntPipe) id: number) {
     return this.packageService.findOne(id);
@@ -245,13 +234,12 @@ export class PackageController {
       },
     },
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: "Paket berhasil di-update",
+    type: ResponsePackageDto,
   })
-  @ApiResponse({
-    status: 404,
-    description: "Paket tidak ditemukan atau bukan untuk Sarjana & Vokasi",
+  @ApiNotFoundResponse({
+    description: "Paket tidak ditemukan",
   })
   update(
     @Param("id", ParseIntPipe) id: number,
@@ -264,9 +252,11 @@ export class PackageController {
   @Delete(":id")
   @ApiOperation({
     summary: "Delete paket",
-    description: `Menghapus paket beserta semua subtest dan soal yang terkait.
+    description: `Menghapus paket.
     
-**Catatan:** Operasi ini tidak bisa dibatalkan.`,
+**Catatan:** 
+- Operasi ini tidak bisa dibatalkan
+- Subtest yang terlink tidak akan terhapus (hanya link yang dihapus)`,
   })
   @ApiParam({
     name: "id",
@@ -274,31 +264,29 @@ export class PackageController {
     type: Number,
     example: 1,
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: "Paket berhasil dihapus",
   })
-  @ApiResponse({
-    status: 404,
-    description: "Paket tidak ditemukan atau bukan untuk Sarjana & Vokasi",
+  @ApiNotFoundResponse({
+    description: "Paket tidak ditemukan",
   })
   remove(@Param("id", ParseIntPipe) id: number) {
     return this.packageService.remove(id);
   }
 
-  @Post(":id/subtest")
+  @Post(":id/subtest/:examId")
   @ApiOperation({
-    summary: "Tambah subtest ke paket",
-    description: `Menambahkan subtest (ujian) ke paket yang sudah ada.
-    
-**Untuk Sarjana & Vokasi:**
-- Type exam: **TKA** atau **TKD**
-- Setelah subtest dibuat, bisa tambah soal menggunakan exam_id
+    summary: "Pilih subtest untuk paket",
+    description: `Menambahkan subtest yang sudah ada ke paket.
 
-**Flow:**
-1. Buat paket → dapat package_id
-2. Tambah subtest → dapat exam_id
-3. Buat soal untuk subtest tersebut`,
+**Flow baru:**
+1. Buat subtest terlebih dahulu di Manajemen Subtest
+2. Pilih subtest yang sudah ada untuk paket ini
+3. Subtest bisa digunakan untuk berbagai paket
+
+**Catatan:**
+- Subtest harus sudah dibuat sebelumnya
+- Subtest yang sudah terpilih tidak akan muncul di daftar tersedia`,
   })
   @ApiParam({
     name: "id",
@@ -306,68 +294,58 @@ export class PackageController {
     type: Number,
     example: 1,
   })
-  @ApiBody({
-    description: "Data subtest baru",
-    examples: {
-      tka: {
-        summary: "Contoh subtest TKA",
-        value: {
-          title: "Tes Kemampuan Akademik",
-          description: "Subtest untuk mengukur kemampuan akademik",
-          duration: 90,
-          type_exam: "TKA",
-        },
-      },
-      tkd: {
-        summary: "Contoh subtest TKD",
-        value: {
-          title: "Tes Kemampuan Dasar",
-          description: "Subtest untuk mengukur kemampuan dasar",
-          duration: 60,
-          type_exam: "TKD",
-        },
-      },
-    },
+  @ApiParam({
+    name: "examId",
+    description: "ID subtest yang akan dipilih",
+    type: Number,
+    example: 1,
+  })
+  @ApiCreatedResponse({
+    description: "Subtest berhasil dipilih untuk paket",
+  })
+  @ApiNotFoundResponse({
+    description: "Paket atau subtest tidak ditemukan",
   })
   @ApiResponse({
-    status: 201,
-    description: "Subtest berhasil ditambahkan",
-    schema: {
-      example: {
-        id: 1,
-        package_id: 1,
-        exam_id: 1,
-        created_at: "2025-12-02T10:00:00.000Z",
-        exam: {
-          id: 1,
-          title: "Tes Kemampuan Akademik",
-          description: "Subtest untuk mengukur kemampuan akademik",
-          duration: 90,
-          total_questions: 0,
-          type_exam: "TKA",
-        },
-      },
-    },
+    status: 400,
+    description: "Subtest sudah terpilih untuk paket ini",
   })
-  @ApiResponse({
-    status: 404,
-    description: "Paket tidak ditemukan atau bukan untuk Sarjana & Vokasi",
-  })
-  createSubtest(
+  linkSubtest(
     @Param("id", ParseIntPipe) packageId: number,
-    @Body(new ZodValidationPipe(CreateSubtestSarjanaSchema))
-    createSubtestDto: Omit<CreateSubtestDto, "package_id">,
+    @Param("examId", ParseIntPipe) examId: number,
   ) {
-    return this.packageService.createSubtest({
-      ...createSubtestDto,
-      package_id: packageId,
-    });
+    return this.packageService.linkSubtest(packageId, examId);
+  }
+
+  @Get(":id/subtest/available")
+  @ApiOperation({
+    summary: "Get daftar subtest tersedia",
+    description: `Mengambil daftar semua subtest yang tersedia (belum dipilih untuk paket ini).
+
+Digunakan untuk menampilkan subtest yang bisa dipilih saat mengelola paket.`,
+  })
+  @ApiParam({
+    name: "id",
+    description: "ID paket",
+    type: Number,
+    example: 1,
+  })
+  @ApiOkResponse({
+    description: "Daftar subtest tersedia berhasil diambil",
+    type: ResponseSubtestDto,
+    isArray: true,
+  })
+  @ApiNotFoundResponse({
+    description: "Paket tidak ditemukan",
+  })
+  getAvailableSubtests(@Param("id", ParseIntPipe) packageId: number) {
+    return this.packageService.getAvailableSubtests(packageId);
   }
 
   @Get(":id/subtest")
   @ApiOperation({
     summary: "Get daftar subtest dalam paket",
-    description: `Mengambil daftar semua subtest yang ada dalam paket.`,
+    description: `Mengambil daftar semua subtest yang sudah terpilih untuk paket ini.`,
   })
   @ApiParam({
     name: "id",
@@ -375,33 +353,13 @@ export class PackageController {
     type: Number,
     example: 1,
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: "Daftar subtest berhasil diambil",
-    schema: {
-      example: [
-        {
-          id: 1,
-          title: "Tes Kemampuan Akademik",
-          description: "Subtest untuk mengukur kemampuan akademik",
-          duration: 90,
-          total_questions: 25,
-          type_exam: "TKA",
-        },
-        {
-          id: 2,
-          title: "Tes Kemampuan Dasar",
-          description: "Subtest untuk mengukur kemampuan dasar",
-          duration: 60,
-          total_questions: 25,
-          type_exam: "TKD",
-        },
-      ],
-    },
+    type: ResponseSubtestDto,
+    isArray: true,
   })
-  @ApiResponse({
-    status: 404,
-    description: "Paket tidak ditemukan atau bukan untuk Sarjana & Vokasi",
+  @ApiNotFoundResponse({
+    description: "Paket tidak ditemukan",
   })
   getSubtests(@Param("id", ParseIntPipe) packageId: number) {
     return this.packageService.getSubtests(packageId);
@@ -409,12 +367,13 @@ export class PackageController {
 
   @Delete(":packageId/subtest/:examId")
   @ApiOperation({
-    summary: "Delete subtest dari paket",
-    description: `Menghapus subtest dari paket beserta semua soal yang terkait.
+    summary: "Hapus subtest dari paket",
+    description: `Menghapus subtest dari paket (hanya menghapus link, subtest tetap ada).
     
 **Catatan:** 
-- Semua soal dalam subtest akan ikut terhapus
-- total_questions di paket akan otomatis ter-update`,
+- Subtest tidak akan dihapus, hanya dihapus dari paket ini
+- Subtest tetap bisa digunakan untuk paket lain
+- Soal dalam subtest tidak akan terhapus`,
   })
   @ApiParam({
     name: "packageId",
@@ -428,17 +387,10 @@ export class PackageController {
     type: Number,
     example: 1,
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: "Subtest berhasil dihapus",
-    schema: {
-      example: {
-        message: "Subtest deleted successfully",
-      },
-    },
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: "Paket atau subtest tidak ditemukan",
   })
   deleteSubtest(
@@ -446,5 +398,55 @@ export class PackageController {
     @Param("examId", ParseIntPipe) examId: number,
   ) {
     return this.packageService.deleteSubtest(packageId, examId);
+  }
+
+  @Post("upload-thumbnail")
+  @UseInterceptors(
+    FileInterceptor("file", {
+      storage: memoryStorage(),
+      fileFilter: (_req, file, cb) => {
+        if (!file.mimetype.startsWith("image/")) {
+          return cb(new Error("Only image files are allowed!"), false);
+        }
+        cb(null, true);
+      },
+      limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB
+      },
+    }),
+  )
+  @ApiOperation({
+    summary: "Upload thumbnail package",
+    description: `Upload thumbnail untuk package. File akan di-upload ke Cloudinary dan return URL.
+
+**Gunakan URL yang dikembalikan di field \`thumbnail_url\` saat create/update package.`,
+  })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        file: {
+          type: "string",
+          format: "binary",
+          description: "File gambar thumbnail (max 5MB)",
+        },
+      },
+    },
+  })
+  @ApiCreatedResponse({
+    description: "Thumbnail berhasil di-upload",
+    schema: {
+      example: {
+        url: "https://res.cloudinary.com/your-cloud/image/upload/v1234567890/package-thumbnails/abc123.jpg",
+      },
+    },
+  })
+  async uploadThumbnail(@UploadedFile() file: Express.Multer.File) {
+    const url = await this.cloudinaryService.uploadImage(
+      file,
+      "package-thumbnails",
+    );
+    return { url };
   }
 }
