@@ -14,6 +14,7 @@ import { TransactionModule } from "./transaction/transaction.module";
 import { SubtestModule } from "./subtest/subtest.module";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { TransformResponseInterceptor } from "./common/interceptors/transform-response.interceptor";
+import { ExamModule } from './exam/exam.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { TransformResponseInterceptor } from "./common/interceptors/transform-re
     QuestionModule,
     TransactionModule,
     SubtestModule,
+    ExamModule,
   ],
   controllers: [AppController],
   providers: [

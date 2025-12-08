@@ -216,8 +216,8 @@ export type UserExamSessionGroupByOutputType = {
   question_order: runtime.JsonValue
   choice_order: runtime.JsonValue
   current_position: number
-  started_at: Date
-  completed_at: Date
+  started_at: Date | null
+  completed_at: Date | null
   created_at: Date
   updated_at: Date
   _count: UserExamSessionCountAggregateOutputType | null
@@ -252,8 +252,8 @@ export type UserExamSessionWhereInput = {
   question_order?: Prisma.JsonFilter<"UserExamSession">
   choice_order?: Prisma.JsonFilter<"UserExamSession">
   current_position?: Prisma.IntFilter<"UserExamSession"> | number
-  started_at?: Prisma.DateTimeFilter<"UserExamSession"> | Date | string
-  completed_at?: Prisma.DateTimeFilter<"UserExamSession"> | Date | string
+  started_at?: Prisma.DateTimeNullableFilter<"UserExamSession"> | Date | string | null
+  completed_at?: Prisma.DateTimeNullableFilter<"UserExamSession"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"UserExamSession"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"UserExamSession"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -268,8 +268,8 @@ export type UserExamSessionOrderByWithRelationInput = {
   question_order?: Prisma.SortOrder
   choice_order?: Prisma.SortOrder
   current_position?: Prisma.SortOrder
-  started_at?: Prisma.SortOrder
-  completed_at?: Prisma.SortOrder
+  started_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  completed_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -287,8 +287,8 @@ export type UserExamSessionWhereUniqueInput = Prisma.AtLeast<{
   question_order?: Prisma.JsonFilter<"UserExamSession">
   choice_order?: Prisma.JsonFilter<"UserExamSession">
   current_position?: Prisma.IntFilter<"UserExamSession"> | number
-  started_at?: Prisma.DateTimeFilter<"UserExamSession"> | Date | string
-  completed_at?: Prisma.DateTimeFilter<"UserExamSession"> | Date | string
+  started_at?: Prisma.DateTimeNullableFilter<"UserExamSession"> | Date | string | null
+  completed_at?: Prisma.DateTimeNullableFilter<"UserExamSession"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"UserExamSession"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"UserExamSession"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -303,8 +303,8 @@ export type UserExamSessionOrderByWithAggregationInput = {
   question_order?: Prisma.SortOrder
   choice_order?: Prisma.SortOrder
   current_position?: Prisma.SortOrder
-  started_at?: Prisma.SortOrder
-  completed_at?: Prisma.SortOrder
+  started_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  completed_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   _count?: Prisma.UserExamSessionCountOrderByAggregateInput
@@ -324,8 +324,8 @@ export type UserExamSessionScalarWhereWithAggregatesInput = {
   question_order?: Prisma.JsonWithAggregatesFilter<"UserExamSession">
   choice_order?: Prisma.JsonWithAggregatesFilter<"UserExamSession">
   current_position?: Prisma.IntWithAggregatesFilter<"UserExamSession"> | number
-  started_at?: Prisma.DateTimeWithAggregatesFilter<"UserExamSession"> | Date | string
-  completed_at?: Prisma.DateTimeWithAggregatesFilter<"UserExamSession"> | Date | string
+  started_at?: Prisma.DateTimeNullableWithAggregatesFilter<"UserExamSession"> | Date | string | null
+  completed_at?: Prisma.DateTimeNullableWithAggregatesFilter<"UserExamSession"> | Date | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"UserExamSession"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"UserExamSession"> | Date | string
 }
@@ -334,8 +334,8 @@ export type UserExamSessionCreateInput = {
   question_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: number
-  started_at?: Date | string
-  completed_at?: Date | string
+  started_at?: Date | string | null
+  completed_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutUser_exam_sessionsInput
@@ -350,8 +350,8 @@ export type UserExamSessionUncheckedCreateInput = {
   question_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: number
-  started_at?: Date | string
-  completed_at?: Date | string
+  started_at?: Date | string | null
+  completed_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
   user_answers?: Prisma.UserAnswerUncheckedCreateNestedManyWithoutSessionInput
@@ -361,8 +361,8 @@ export type UserExamSessionUpdateInput = {
   question_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: Prisma.IntFieldUpdateOperationsInput | number
-  started_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  completed_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  started_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutUser_exam_sessionsNestedInput
@@ -377,8 +377,8 @@ export type UserExamSessionUncheckedUpdateInput = {
   question_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: Prisma.IntFieldUpdateOperationsInput | number
-  started_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  completed_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  started_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user_answers?: Prisma.UserAnswerUncheckedUpdateManyWithoutSessionNestedInput
@@ -391,8 +391,8 @@ export type UserExamSessionCreateManyInput = {
   question_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: number
-  started_at?: Date | string
-  completed_at?: Date | string
+  started_at?: Date | string | null
+  completed_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -401,8 +401,8 @@ export type UserExamSessionUpdateManyMutationInput = {
   question_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: Prisma.IntFieldUpdateOperationsInput | number
-  started_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  completed_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  started_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -414,8 +414,8 @@ export type UserExamSessionUncheckedUpdateManyInput = {
   question_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: Prisma.IntFieldUpdateOperationsInput | number
-  started_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  completed_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  started_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -584,8 +584,8 @@ export type UserExamSessionCreateWithoutUserInput = {
   question_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: number
-  started_at?: Date | string
-  completed_at?: Date | string
+  started_at?: Date | string | null
+  completed_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
   exam: Prisma.ExamCreateNestedOneWithoutUser_exam_sessionsInput
@@ -598,8 +598,8 @@ export type UserExamSessionUncheckedCreateWithoutUserInput = {
   question_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: number
-  started_at?: Date | string
-  completed_at?: Date | string
+  started_at?: Date | string | null
+  completed_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
   user_answers?: Prisma.UserAnswerUncheckedCreateNestedManyWithoutSessionInput
@@ -641,8 +641,8 @@ export type UserExamSessionScalarWhereInput = {
   question_order?: Prisma.JsonFilter<"UserExamSession">
   choice_order?: Prisma.JsonFilter<"UserExamSession">
   current_position?: Prisma.IntFilter<"UserExamSession"> | number
-  started_at?: Prisma.DateTimeFilter<"UserExamSession"> | Date | string
-  completed_at?: Prisma.DateTimeFilter<"UserExamSession"> | Date | string
+  started_at?: Prisma.DateTimeNullableFilter<"UserExamSession"> | Date | string | null
+  completed_at?: Prisma.DateTimeNullableFilter<"UserExamSession"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"UserExamSession"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"UserExamSession"> | Date | string
 }
@@ -651,8 +651,8 @@ export type UserExamSessionCreateWithoutExamInput = {
   question_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: number
-  started_at?: Date | string
-  completed_at?: Date | string
+  started_at?: Date | string | null
+  completed_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutUser_exam_sessionsInput
@@ -665,8 +665,8 @@ export type UserExamSessionUncheckedCreateWithoutExamInput = {
   question_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: number
-  started_at?: Date | string
-  completed_at?: Date | string
+  started_at?: Date | string | null
+  completed_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
   user_answers?: Prisma.UserAnswerUncheckedCreateNestedManyWithoutSessionInput
@@ -702,8 +702,8 @@ export type UserExamSessionCreateWithoutUser_answersInput = {
   question_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: number
-  started_at?: Date | string
-  completed_at?: Date | string
+  started_at?: Date | string | null
+  completed_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutUser_exam_sessionsInput
@@ -717,8 +717,8 @@ export type UserExamSessionUncheckedCreateWithoutUser_answersInput = {
   question_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: number
-  started_at?: Date | string
-  completed_at?: Date | string
+  started_at?: Date | string | null
+  completed_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -743,8 +743,8 @@ export type UserExamSessionUpdateWithoutUser_answersInput = {
   question_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: Prisma.IntFieldUpdateOperationsInput | number
-  started_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  completed_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  started_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutUser_exam_sessionsNestedInput
@@ -758,8 +758,8 @@ export type UserExamSessionUncheckedUpdateWithoutUser_answersInput = {
   question_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: Prisma.IntFieldUpdateOperationsInput | number
-  started_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  completed_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  started_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -770,8 +770,8 @@ export type UserExamSessionCreateManyUserInput = {
   question_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: number
-  started_at?: Date | string
-  completed_at?: Date | string
+  started_at?: Date | string | null
+  completed_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -780,8 +780,8 @@ export type UserExamSessionUpdateWithoutUserInput = {
   question_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: Prisma.IntFieldUpdateOperationsInput | number
-  started_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  completed_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  started_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exam?: Prisma.ExamUpdateOneRequiredWithoutUser_exam_sessionsNestedInput
@@ -794,8 +794,8 @@ export type UserExamSessionUncheckedUpdateWithoutUserInput = {
   question_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: Prisma.IntFieldUpdateOperationsInput | number
-  started_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  completed_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  started_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user_answers?: Prisma.UserAnswerUncheckedUpdateManyWithoutSessionNestedInput
@@ -807,8 +807,8 @@ export type UserExamSessionUncheckedUpdateManyWithoutUserInput = {
   question_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: Prisma.IntFieldUpdateOperationsInput | number
-  started_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  completed_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  started_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -819,8 +819,8 @@ export type UserExamSessionCreateManyExamInput = {
   question_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: number
-  started_at?: Date | string
-  completed_at?: Date | string
+  started_at?: Date | string | null
+  completed_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -829,8 +829,8 @@ export type UserExamSessionUpdateWithoutExamInput = {
   question_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: Prisma.IntFieldUpdateOperationsInput | number
-  started_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  completed_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  started_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutUser_exam_sessionsNestedInput
@@ -843,8 +843,8 @@ export type UserExamSessionUncheckedUpdateWithoutExamInput = {
   question_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: Prisma.IntFieldUpdateOperationsInput | number
-  started_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  completed_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  started_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user_answers?: Prisma.UserAnswerUncheckedUpdateManyWithoutSessionNestedInput
@@ -856,8 +856,8 @@ export type UserExamSessionUncheckedUpdateManyWithoutExamInput = {
   question_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   choice_order?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   current_position?: Prisma.IntFieldUpdateOperationsInput | number
-  started_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  completed_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  started_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -983,8 +983,8 @@ export type $UserExamSessionPayload<ExtArgs extends runtime.Types.Extensions.Int
     question_order: runtime.JsonValue
     choice_order: runtime.JsonValue
     current_position: number
-    started_at: Date
-    completed_at: Date
+    started_at: Date | null
+    completed_at: Date | null
     created_at: Date
     updated_at: Date
   }, ExtArgs["result"]["userExamSession"]>

@@ -27,7 +27,6 @@ export class AdminService {
         email: createAdminDto.email,
         role_id: createAdminDto.role_id,
         password_hash: hashPassword,
-        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
       },
       select: {
         id: true,

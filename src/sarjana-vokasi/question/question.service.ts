@@ -16,18 +16,18 @@ export class QuestionService {
     // Verify exam exists (bisa untuk Sarjana atau Pascasarjana)
     const exam = await this.prismaService.exam.findUnique({
       where: { id: createQuestionDto.exam_id },
-      include: {
-        package_exams: true, // Include semua type
-      },
+      // include: {
+      //   package_exams: true, // Include semua type
+      // },
     });
 
     if (!exam) {
       throw new NotFoundException("Exam not found");
     }
 
-    if (exam.package_exams.length === 0) {
-      throw new NotFoundException("Exam not found");
-    }
+    // if (exam.package_exams.length === 0) {
+    //   throw new NotFoundException("Exam not found");
+    // }
 
     // Create question dengan choices
     const question = await this.prismaService.question.create({

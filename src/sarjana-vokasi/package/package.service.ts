@@ -221,7 +221,7 @@ export class PackageService {
     const exam = await this.prismaService.exam.findFirst({
       where: {
         id: examId,
-        deleted_at: null,
+        deleted_at: new Date(0),
       },
     });
 
