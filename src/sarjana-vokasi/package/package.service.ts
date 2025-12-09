@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
@@ -7,29 +8,46 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { CreatePackageDto } from "./dto/create-package.dto";
 import { UpdatePackageDto } from "./dto/update-package.dto";
 import { CreateSubtestDto } from "./dto/create-subtest.dto";
+import { ResponsePackageDto } from "./dto/response-package.dto";
 
 @Injectable()
 export class PackageService {
   constructor(private prismaService: PrismaService) {}
 
+  // Helper method untuk map package ke DTO (exclude updated_at, created_at, deleted_at)
+  private mapToResponseDto(packageData: any): ResponsePackageDto {
+    return {
+      id: packageData.id,
+      title: packageData.title,
+      description: packageData.description,
+      price: packageData.price,
+      thumbnail_url: packageData.thumbnail_url,
+      published: packageData.published,
+      type: packageData.type as "SARJANA" | "PASCASARJANA",
+    };
+  }
+
   // Create package (untuk Sarjana & Vokasi atau Pascasarjana)
-  async create(createPackageDto: CreatePackageDto) {
-    return this.prismaService.package.create({
+  async create(createPackageDto: CreatePackageDto): Promise<ResponsePackageDto> {
+    const packageData = await this.prismaService.package.create({
       data: {
         ...createPackageDto,
-        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
+        // deleted_at default null (tidak dihapus)
       },
     });
+    return this.mapToResponseDto(packageData);
   }
 
   // Get all packages (filter by type jika diberikan)
-  async findAll(type?: "SARJANA" | "PASCASARJANA") {
-    const where: any = {};
+  async findAll(type?: "SARJANA" | "PASCASARJANA"): Promise<ResponsePackageDto[]> {
+    const where: any = {
+      deleted_at: null, // Hanya yang tidak dihapus
+    };
     if (type) {
       where.type = type;
     }
     
-    return this.prismaService.package.findMany({
+    const packages = await this.prismaService.package.findMany({
       where,
       include: {
         package_exams: {
@@ -46,16 +64,21 @@ export class PackageService {
         created_at: "desc",
       },
     });
+    
+    return packages.map((pkg) => this.mapToResponseDto(pkg));
   }
 
   // Get packages by published status (filter by type jika diberikan)
-  async findByStatus(published: boolean, type?: "SARJANA" | "PASCASARJANA") {
-    const where: any = { published };
+  async findByStatus(published: boolean, type?: "SARJANA" | "PASCASARJANA"): Promise<ResponsePackageDto[]> {
+    const where: any = {
+      published,
+      deleted_at: null, // Hanya yang tidak dihapus
+    };
     if (type) {
       where.type = type;
     }
     
-    return this.prismaService.package.findMany({
+    const packages = await this.prismaService.package.findMany({
       where,
       include: {
         package_exams: {
@@ -72,12 +95,17 @@ export class PackageService {
         created_at: "desc",
       },
     });
+    
+    return packages.map((pkg) => this.mapToResponseDto(pkg));
   }
 
-  // Get package by ID
-  async findOne(id: number) {
-    const packageData = await this.prismaService.package.findUnique({
-      where: { id },
+  // Get package by ID (return dengan nested data, tapi exclude updated_at dan created_at dari field utama)
+  async findOne(id: number, isAdmin: boolean = false) {
+    const packageData = await this.prismaService.package.findFirst({
+      where: {
+        id,
+        deleted_at: null, // Hanya yang tidak dihapus
+      },
       include: {
         package_exams: {
           include: {
@@ -99,12 +127,21 @@ export class PackageService {
       throw new NotFoundException("Package not found");
     }
 
-    return packageData;
+    // User biasa tidak bisa akses unpublished package
+    if (!isAdmin && !packageData.published) {
+      throw new ForbiddenException(
+        "User biasa tidak bisa mengakses paket yang belum dipublish",
+      );
+    }
+
+    // Return dengan exclude updated_at dan created_at dari field utama, tapi tetap include nested data
+    const { updated_at, created_at, deleted_at, created_by, updated_by, deleted_by, ...packageMain } = packageData;
+    return packageMain;
   }
 
   // Get ringkasan paket (summary)
-  async getPackageSummary(id: number) {
-    const packageData = await this.findOne(id);
+  async getPackageSummary(id: number, isAdmin: boolean = false) {
+    const packageData = await this.findOne(id, isAdmin);
 
     // Calculate total durasi dari semua subtest
     const totalDurasi = packageData.package_exams.reduce(
@@ -133,21 +170,41 @@ export class PackageService {
   }
 
   // Update package (termasuk publish/unpublish via published field)
-  async update(id: number, updatePackageDto: UpdatePackageDto) {
+  async update(id: number, updatePackageDto: UpdatePackageDto): Promise<ResponsePackageDto> {
     const existingPackage = await this.findOne(id);
 
-    return this.prismaService.package.update({
+    const updatedPackage = await this.prismaService.package.update({
       where: { id },
       data: updatePackageDto,
     });
+    
+    return this.mapToResponseDto(updatedPackage);
   }
 
-  // Delete package (optional, untuk future use)
+  // Delete package (soft delete)
   async remove(id: number) {
-    const packageData = await this.findOne(id);
+    const packageData = await this.findOne(id, true); // Admin bisa akses untuk delete
 
-    return this.prismaService.package.delete({
+    // Cek apakah package masih digunakan oleh transaction yang aktif
+    const activeTransactions = await this.prismaService.transaction.findFirst({
+      where: {
+        package_id: id,
+        deleted_at: null, // Hanya transaction yang tidak dihapus
+      },
+    });
+
+    if (activeTransactions) {
+      throw new BadRequestException(
+        "Package tidak bisa dihapus karena masih ada transaksi yang menggunakan package ini",
+      );
+    }
+
+    // Soft delete (update deleted_at)
+    return this.prismaService.package.update({
       where: { id },
+      data: {
+        deleted_at: new Date(),
+      },
     });
   }
 
@@ -164,7 +221,7 @@ export class PackageService {
         duration: createSubtestDto.duration,
         total_questions: 0, // Default, akan di-update saat ada soal
         type_exam: createSubtestDto.type_exam as "TKA" | "TBI" | "TKD",
-        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
+        // deleted_at default null (tidak dihapus)
       },
     });
 
@@ -184,8 +241,8 @@ export class PackageService {
   }
 
   // Get list subtest (Exam) untuk package tertentu
-  async getSubtests(packageId: number) {
-    const packageData = await this.findOne(packageId);
+  async getSubtests(packageId: number, isAdmin: boolean = false) {
+    const packageData = await this.findOne(packageId, isAdmin);
 
     return packageData.package_exams.map((pe) => pe.exam);
   }
@@ -221,7 +278,7 @@ export class PackageService {
     const exam = await this.prismaService.exam.findFirst({
       where: {
         id: examId,
-        deleted_at: new Date(0),
+        deleted_at: null, // Hanya yang tidak dihapus
       },
     });
 

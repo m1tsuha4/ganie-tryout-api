@@ -8,6 +8,7 @@ import {
   Delete,
   ParseIntPipe,
   Query,
+  UseGuards,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -18,6 +19,9 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiNotFoundResponse,
+  ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiResponse,
 } from "@nestjs/swagger";
 import { SubtestService } from "./subtest.service";
 import {
@@ -31,16 +35,21 @@ import {
 import { FilterSubtestDto, FilterSubtestSchema } from "./dto/filter-subtest.dto";
 import { ZodValidationPipe } from "src/common/pipes/zod-validation.pipe";
 import { ResponseSubtestDto } from "./dto/response-subtest.dto";
+import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
+import { AdminGuard } from "src/auth/guard/admin.guard";
 
 @ApiTags("Subtest")
 @Controller("subtest")
+@ApiBearerAuth()
 export class SubtestController {
   constructor(private readonly subtestService: SubtestService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
-    summary: "Tambah subtest baru",
+    summary: "Tambah subtest baru (Admin Only)",
     description: `Membuat subtest baru secara independen (tidak perlu paket).
+    **Hanya admin yang bisa akses endpoint ini.**
     
 **Jenis Subtest:**
 - **TKA**: Tes Kemampuan Akademik
@@ -85,6 +94,13 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
     description: "Subtest berhasil dibuat",
     type: ResponseSubtestDto,
   })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Token tidak valid",
+  })
+  @ApiForbiddenResponse({
+    description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
+  })
   create(
     @Body(new ZodValidationPipe(CreateSubtestSchema))
     createSubtestDto: CreateSubtestDto,
@@ -93,9 +109,11 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
-    summary: "Daftar semua subtest",
+    summary: "Daftar semua subtest (Admin Only)",
     description: `Mengambil daftar semua subtest yang tersedia.
+    **Hanya admin yang bisa akses endpoint ini.**
 
 **Filter yang tersedia:**
 - \`type_exam\`: Filter berdasarkan jenis subtest (TKA/TKD/TBI)
@@ -141,14 +159,56 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
     type: ResponseSubtestDto,
     isArray: true,
   })
-  findAll(@Query(new ZodValidationPipe(FilterSubtestSchema)) filter?: FilterSubtestDto) {
-    return this.subtestService.findAll(filter);
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Token tidak valid",
+  })
+  @ApiForbiddenResponse({
+    description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
+  })
+  findAll(@Query() query?: any) {
+    try {
+      // Parse query parameters dengan validasi
+      const filter: any = {};
+      
+      if (query?.type_exam) {
+        filter.type_exam = query.type_exam;
+      }
+      
+      if (query?.duration_min !== undefined && query.duration_min !== null && query.duration_min !== '') {
+        const durationMin = Number(query.duration_min);
+        if (!isNaN(durationMin) && durationMin > 0) {
+          filter.duration_min = durationMin;
+        }
+      }
+      
+      if (query?.duration_max !== undefined && query.duration_max !== null && query.duration_max !== '') {
+        const durationMax = Number(query.duration_max);
+        if (!isNaN(durationMax) && durationMax > 0) {
+          filter.duration_max = durationMax;
+        }
+      }
+      
+      if (query?.search && query.search.trim() !== '') {
+        filter.search = query.search.trim();
+      }
+      
+      // Validate dengan Zod
+      const validatedFilter = FilterSubtestSchema.parse(filter);
+      
+      return this.subtestService.findAll(validatedFilter);
+    } catch (error) {
+      console.error("Error parsing filter in findAll subtest:", error);
+      throw error;
+    }
   }
 
   @Get(":id")
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
-    summary: "Detail subtest",
-    description: `Mengambil detail subtest berdasarkan ID.`,
+    summary: "Detail subtest (Admin Only)",
+    description: `Mengambil detail subtest berdasarkan ID.
+    **Hanya admin yang bisa akses endpoint ini.**`,
   })
   @ApiParam({
     name: "id",
@@ -160,6 +220,13 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
     description: "Detail subtest berhasil diambil",
     type: ResponseSubtestDto,
   })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Token tidak valid",
+  })
+  @ApiForbiddenResponse({
+    description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
+  })
   @ApiNotFoundResponse({
     description: "Subtest tidak ditemukan",
   })
@@ -168,9 +235,11 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
   }
 
   @Patch(":id")
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
-    summary: "Edit subtest",
-    description: `Update informasi subtest. Bisa update sebagian atau semua field.`,
+    summary: "Edit subtest (Admin Only)",
+    description: `Update informasi subtest. Bisa update sebagian atau semua field.
+    **Hanya admin yang bisa akses endpoint ini.**`,
   })
   @ApiParam({
     name: "id",
@@ -202,6 +271,13 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
     description: "Subtest berhasil di-update",
     type: ResponseSubtestDto,
   })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Token tidak valid",
+  })
+  @ApiForbiddenResponse({
+    description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
+  })
   @ApiNotFoundResponse({
     description: "Subtest tidak ditemukan",
   })
@@ -214,9 +290,11 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
   }
 
   @Delete(":id")
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
-    summary: "Hapus subtest",
+    summary: "Hapus subtest (Admin Only)",
     description: `Menghapus subtest secara soft delete (tidak benar-benar dihapus dari database).
+    **Hanya admin yang bisa akses endpoint ini.**
 
 **Catatan:**
 - Subtest yang sudah digunakan di paket masih bisa dihapus
@@ -231,6 +309,13 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
   })
   @ApiOkResponse({
     description: "Subtest berhasil dihapus",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Token tidak valid",
+  })
+  @ApiForbiddenResponse({
+    description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
   })
   @ApiNotFoundResponse({
     description: "Subtest tidak ditemukan",

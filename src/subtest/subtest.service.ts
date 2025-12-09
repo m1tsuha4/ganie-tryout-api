@@ -7,62 +7,83 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { CreateSubtestDto } from "./dto/create-subtest.dto";
 import { UpdateSubtestDto } from "./dto/update-subtest.dto";
 import { FilterSubtestDto } from "./dto/filter-subtest.dto";
+import { ResponseSubtestDto } from "./dto/response-subtest.dto";
 
 @Injectable()
 export class SubtestService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(createSubtestDto: CreateSubtestDto) {
-    return this.prismaService.exam.create({
+  // Helper method untuk map subtest ke DTO (exclude updated_at, created_at, deleted_at)
+  private mapToResponseDto(exam: any): ResponseSubtestDto {
+    return {
+      id: exam.id,
+      title: exam.title,
+      description: exam.description,
+      duration: exam.duration,
+      total_questions: exam.total_questions,
+      type_exam: exam.type_exam as "TKA" | "TKD" | "TBI",
+    };
+  }
+
+  async create(createSubtestDto: CreateSubtestDto): Promise<ResponseSubtestDto> {
+    const exam = await this.prismaService.exam.create({
       data: {
         title: createSubtestDto.title,
         description: createSubtestDto.description,
         duration: createSubtestDto.duration,
         total_questions: 0, // Default, akan di-update saat ada soal
         type_exam: createSubtestDto.type_exam,
-        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
+        // deleted_at default null (tidak dihapus)
       },
     });
+    return this.mapToResponseDto(exam);
   }
 
-  async findAll(filter?: FilterSubtestDto) {
-    const where: any = {
-      deleted_at: null, // Hanya ambil yang belum dihapus
-    };
-
-    // Filter berdasarkan jenis subtest
-    if (filter?.type_exam) {
-      where.type_exam = filter.type_exam;
-    }
-
-    // Filter berdasarkan durasi (min dan max)
-    if (filter?.duration_min || filter?.duration_max) {
-      where.duration = {};
-      if (filter.duration_min) {
-        where.duration.gte = filter.duration_min;
-      }
-      if (filter.duration_max) {
-        where.duration.lte = filter.duration_max;
-      }
-    }
-
-    // Filter berdasarkan search (nama subtest)
-    if (filter?.search) {
-      where.title = {
-        contains: filter.search,
-        mode: "insensitive", // Case insensitive search
+  async findAll(filter?: FilterSubtestDto): Promise<ResponseSubtestDto[]> {
+    try {
+      const where: any = {
+        deleted_at: null, // Hanya ambil yang belum dihapus
       };
-    }
 
-    return this.prismaService.exam.findMany({
-      where,
-      orderBy: {
-        created_at: "desc",
-      },
-    });
+      // Filter berdasarkan jenis subtest
+      if (filter?.type_exam) {
+        where.type_exam = filter.type_exam;
+      }
+
+      // Filter berdasarkan durasi (min dan max)
+      if (filter?.duration_min !== undefined || filter?.duration_max !== undefined) {
+        where.duration = {};
+        if (filter.duration_min !== undefined && filter.duration_min !== null) {
+          where.duration.gte = Number(filter.duration_min);
+        }
+        if (filter.duration_max !== undefined && filter.duration_max !== null) {
+          where.duration.lte = Number(filter.duration_max);
+        }
+      }
+
+      // Filter berdasarkan search (nama subtest)
+      if (filter?.search && filter.search.trim() !== "") {
+        where.title = {
+          contains: filter.search.trim(),
+          mode: "insensitive" as const, // Case insensitive search
+        };
+      }
+
+      const exams = await this.prismaService.exam.findMany({
+        where,
+        orderBy: {
+          created_at: "desc",
+        },
+      });
+
+      return exams.map((exam) => this.mapToResponseDto(exam));
+    } catch (error) {
+      console.error("Error in findAll subtest:", error);
+      throw error;
+    }
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<ResponseSubtestDto> {
     const exam = await this.prismaService.exam.findFirst({
       where: {
         id,
@@ -74,17 +95,19 @@ export class SubtestService {
       throw new NotFoundException("Subtest not found");
     }
 
-    return exam;
+    return this.mapToResponseDto(exam);
   }
 
-  async update(id: number, updateSubtestDto: UpdateSubtestDto) {
+  async update(id: number, updateSubtestDto: UpdateSubtestDto): Promise<ResponseSubtestDto> {
     // Verify subtest exists
     const existingExam = await this.findOne(id);
 
-    return this.prismaService.exam.update({
+    const updatedExam = await this.prismaService.exam.update({
       where: { id },
       data: updateSubtestDto,
     });
+    
+    return this.mapToResponseDto(updatedExam);
   }
 
   async remove(id: number) {

@@ -35,6 +35,7 @@ export class AuthService {
       id: existingUser.id,
       email: existingUser.email,
       username: existingUser.username,
+      type: "user", // Tandai sebagai user biasa
     });
     return {
       id: existingUser.id,
@@ -64,6 +65,7 @@ export class AuthService {
       id: existingAdmin.id,
       email: existingAdmin.email,
       username: existingAdmin.username,
+      type: "admin", // Tandai sebagai admin
     });
     return {
       id: existingAdmin.id,

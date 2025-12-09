@@ -39,14 +39,14 @@ export class QuestionService {
         discussion: createQuestionDto.discussion,
         video_discussion: createQuestionDto.video_discussion,
         difficulty: createQuestionDto.difficulty,
-        deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
+        // deleted_at default null (tidak dihapus)
         question_choices: {
           create: createQuestionDto.choices.map((choice) => ({
             choice_text: choice.choice_text,
             choice_image_url: choice.choice_image_url || "",
             choice_audio_url: choice.choice_audio_url || "",
             is_correct: choice.is_correct,
-            deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
+            // deleted_at default null (tidak dihapus)
           })),
         },
       },
@@ -185,7 +185,7 @@ export class QuestionService {
           choice_image_url: choice.choice_image_url || "",
           choice_audio_url: choice.choice_audio_url || "",
           is_correct: choice.is_correct,
-          deleted_at: new Date(0), // Set default untuk soft delete (0 = not deleted)
+          // deleted_at default null (tidak dihapus)
         })),
       });
 
