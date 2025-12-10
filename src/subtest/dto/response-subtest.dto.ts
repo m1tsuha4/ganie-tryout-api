@@ -38,17 +38,5 @@ export class ResponseSubtestDto {
     enum: ["TKA", "TKD", "TBI"],
   })
   type_exam: "TKA" | "TKD" | "TBI";
-
-  @ApiProperty({
-    example: "2025-12-02T10:00:00.000Z",
-    description: "Tanggal dibuat",
-  })
-  created_at: Date;
-
-  @ApiProperty({
-    example: "2025-12-02T10:35:00.000Z",
-    description: "Tanggal terakhir update",
-  })
-  updated_at: Date;
 }
 

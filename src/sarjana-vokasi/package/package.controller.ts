@@ -10,6 +10,8 @@ import {
   Query,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
+  Request,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -22,6 +24,8 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiConsumes,
+  ApiBearerAuth,
+  ApiForbiddenResponse,
 } from "@nestjs/swagger";
 import { PackageService } from "./package.service";
 import {
@@ -38,6 +42,8 @@ import { ResponseSubtestDto } from "src/subtest/dto/response-subtest.dto";
 import { CloudinaryService } from "src/common/services/cloudinary.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { memoryStorage } from "multer";
+import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
+import { AdminGuard } from "src/auth/guard/admin.guard";
 
 @ApiTags("Package")
 @Controller("package")
@@ -48,9 +54,18 @@ export class PackageController {
   ) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
   @ApiOperation({
-    summary: "Create paket baru",
-    description: `Membuat paket tryout baru.
+    summary: "Create paket baru (Admin Only)",
+    description: `Membuat paket tryout baru. Hanya admin yang bisa membuat paket.
+
+**Cara menggunakan:**
+1. Login sebagai admin di endpoint \`POST /auth/admin\` untuk mendapatkan token
+2. Klik tombol "Authorize" (🔒) di pojok kanan atas Swagger UI
+3. Masukkan token (tanpa "Bearer ", Swagger akan otomatis menambahkannya)
+4. Klik "Authorize" dan "Close"
+5. Sekarang bisa execute endpoint ini
 
 **Type:** Harus diisi SARJANA atau PASCASARJANA
 
@@ -58,6 +73,9 @@ export class PackageController {
 1. Buat paket → dapat package_id
 2. Pilih subtest yang sudah ada → link ke package
 3. Buat soal untuk subtest tersebut`,
+  })
+  @ApiForbiddenResponse({
+    description: "Access denied. Admin privileges required.",
   })
   @ApiBody({
     description: "Data paket baru",
@@ -94,15 +112,21 @@ export class PackageController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Get semua paket",
     description: `Mengambil daftar semua paket.
     
+**Akses:**
+- User biasa: Hanya bisa melihat paket yang sudah dipublish (published=true)
+- Admin: Bisa melihat semua paket (published dan unpublished)
+
 **Filter:**
 - ?type=SARJANA: Hanya paket Sarjana & Vokasi
 - ?type=PASCASARJANA: Hanya paket Pascasarjana
 - ?published=true: Hanya paket yang sudah dipublish
-- ?published=false: Hanya paket yang belum dipublish
+- ?published=false: Hanya paket yang belum dipublish (Admin only)
 - Bisa combine: ?type=SARJANA&published=true`,
   })
   @ApiQuery({
@@ -125,17 +149,36 @@ export class PackageController {
     isArray: true,
   })
   findAll(
+    @Request() req: any,
     @Query("type") type?: "SARJANA" | "PASCASARJANA",
     @Query("published") published?: string,
   ) {
+    const isAdmin = req.user?.type === "admin";
+    
+    // Jika user biasa dan tidak ada filter published, default ke published=true
+    if (!isAdmin && published === undefined) {
+      return this.packageService.findByStatus(true, type);
+    }
+    
     if (published !== undefined) {
       const isPublished = published === "true";
+      // User biasa tidak bisa akses unpublished
+      if (!isAdmin && !isPublished) {
+        return this.packageService.findByStatus(true, type);
+      }
       return this.packageService.findByStatus(isPublished, type);
     }
-    return this.packageService.findAll(type);
+    
+    // Admin bisa lihat semua, user biasa hanya published
+    if (isAdmin) {
+      return this.packageService.findAll(type);
+    }
+    return this.packageService.findByStatus(true, type);
   }
 
   @Get(":id/summary")
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Get ringkasan paket untuk dashboard",
     description: `Mengambil ringkasan paket yang menampilkan:
@@ -143,6 +186,10 @@ export class PackageController {
 - Total soal
 - Jumlah subtest
 - Harga paket
+
+**Akses:**
+- User biasa: Hanya bisa melihat paket yang sudah dipublish
+- Admin: Bisa melihat semua paket
 
 **Digunakan untuk:** Menampilkan informasi di dashboard`,
   })
@@ -158,14 +205,24 @@ export class PackageController {
   @ApiNotFoundResponse({
     description: "Paket tidak ditemukan",
   })
-  getSummary(@Param("id", ParseIntPipe) id: number) {
-    return this.packageService.getPackageSummary(id);
+  @ApiForbiddenResponse({
+    description: "User biasa tidak bisa mengakses paket yang belum dipublish",
+  })
+  getSummary(@Request() req: any, @Param("id", ParseIntPipe) id: number) {
+    const isAdmin = req.user?.type === "admin";
+    return this.packageService.getPackageSummary(id, isAdmin);
   }
 
   @Get(":id")
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Get detail paket berdasarkan ID",
     description: `Mengambil detail lengkap paket termasuk semua subtest dan soal.
+
+**Akses:**
+- User biasa: Hanya bisa melihat paket yang sudah dipublish
+- Admin: Bisa melihat semua paket (published dan unpublished)
 
 Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
   })
@@ -182,19 +239,28 @@ Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
   @ApiNotFoundResponse({
     description: "Paket tidak ditemukan",
   })
-  findOne(@Param("id", ParseIntPipe) id: number) {
-    return this.packageService.findOne(id);
+  @ApiForbiddenResponse({
+    description: "User biasa tidak bisa mengakses paket yang belum dipublish",
+  })
+  findOne(@Request() req: any, @Param("id", ParseIntPipe) id: number) {
+    const isAdmin = req.user?.type === "admin";
+    return this.packageService.findOne(id, isAdmin);
   }
 
   @Patch(":id")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
   @ApiOperation({
-    summary: "Update paket (termasuk publish/unpublish)",
-    description: `Update paket yang sudah ada. Bisa update sebagian atau semua field.
+    summary: "Update paket (termasuk publish/unpublish) (Admin Only)",
+    description: `Update paket yang sudah ada. Hanya admin yang bisa update paket. Bisa update sebagian atau semua field.
     
 **Publish/Unpublish:**
 - Set \`published: true\` untuk publish
 - Set \`published: false\` untuk unpublish
 - Bisa combine dengan update field lain sekaligus`,
+  })
+  @ApiForbiddenResponse({
+    description: "Access denied. Admin privileges required.",
   })
   @ApiParam({
     name: "id",
@@ -250,13 +316,23 @@ Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
   }
 
   @Delete(":id")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
   @ApiOperation({
-    summary: "Delete paket",
-    description: `Menghapus paket.
+    summary: "Delete paket (Admin Only)",
+    description: `Menghapus paket secara soft delete. Hanya admin yang bisa menghapus paket.
     
 **Catatan:** 
-- Operasi ini tidak bisa dibatalkan
+- Operasi ini menggunakan soft delete (package tidak benar-benar dihapus dari database)
+- Package tidak bisa dihapus jika masih ada transaksi aktif yang menggunakan package ini
 - Subtest yang terlink tidak akan terhapus (hanya link yang dihapus)`,
+  })
+  @ApiResponse({
+    status: 400,
+    description: "Package tidak bisa dihapus karena masih ada transaksi yang menggunakan package ini",
+  })
+  @ApiForbiddenResponse({
+    description: "Access denied. Admin privileges required.",
   })
   @ApiParam({
     name: "id",
@@ -275,9 +351,11 @@ Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
   }
 
   @Post(":id/subtest/:examId")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
   @ApiOperation({
-    summary: "Pilih subtest untuk paket",
-    description: `Menambahkan subtest yang sudah ada ke paket.
+    summary: "Pilih subtest untuk paket (Admin Only)",
+    description: `Menambahkan subtest yang sudah ada ke paket. Hanya admin yang bisa menambahkan subtest ke paket.
 
 **Flow baru:**
 1. Buat subtest terlebih dahulu di Manajemen Subtest
@@ -287,6 +365,9 @@ Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
 **Catatan:**
 - Subtest harus sudah dibuat sebelumnya
 - Subtest yang sudah terpilih tidak akan muncul di daftar tersedia`,
+  })
+  @ApiForbiddenResponse({
+    description: "Access denied. Admin privileges required.",
   })
   @ApiParam({
     name: "id",
@@ -318,11 +399,16 @@ Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
   }
 
   @Get(":id/subtest/available")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
   @ApiOperation({
-    summary: "Get daftar subtest tersedia",
-    description: `Mengambil daftar semua subtest yang tersedia (belum dipilih untuk paket ini).
+    summary: "Get daftar subtest tersedia (Admin Only)",
+    description: `Mengambil daftar semua subtest yang tersedia (belum dipilih untuk paket ini). Hanya admin yang bisa mengakses.
 
 Digunakan untuk menampilkan subtest yang bisa dipilih saat mengelola paket.`,
+  })
+  @ApiForbiddenResponse({
+    description: "Access denied. Admin privileges required.",
   })
   @ApiParam({
     name: "id",
@@ -343,9 +429,18 @@ Digunakan untuk menampilkan subtest yang bisa dipilih saat mengelola paket.`,
   }
 
   @Get(":id/subtest")
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Get daftar subtest dalam paket",
-    description: `Mengambil daftar semua subtest yang sudah terpilih untuk paket ini.`,
+    description: `Mengambil daftar semua subtest yang sudah terpilih untuk paket ini.
+
+**Akses:**
+- User biasa: Hanya bisa melihat subtest dari paket yang sudah dipublish
+- Admin: Bisa melihat semua subtest`,
+  })
+  @ApiForbiddenResponse({
+    description: "User biasa tidak bisa mengakses paket yang belum dipublish",
   })
   @ApiParam({
     name: "id",
@@ -361,19 +456,25 @@ Digunakan untuk menampilkan subtest yang bisa dipilih saat mengelola paket.`,
   @ApiNotFoundResponse({
     description: "Paket tidak ditemukan",
   })
-  getSubtests(@Param("id", ParseIntPipe) packageId: number) {
-    return this.packageService.getSubtests(packageId);
+  getSubtests(@Request() req: any, @Param("id", ParseIntPipe) packageId: number) {
+    const isAdmin = req.user?.type === "admin";
+    return this.packageService.getSubtests(packageId, isAdmin);
   }
 
   @Delete(":packageId/subtest/:examId")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
   @ApiOperation({
-    summary: "Hapus subtest dari paket",
-    description: `Menghapus subtest dari paket (hanya menghapus link, subtest tetap ada).
+    summary: "Hapus subtest dari paket (Admin Only)",
+    description: `Menghapus subtest dari paket (hanya menghapus link, subtest tetap ada). Hanya admin yang bisa menghapus subtest dari paket.
     
 **Catatan:** 
 - Subtest tidak akan dihapus, hanya dihapus dari paket ini
 - Subtest tetap bisa digunakan untuk paket lain
 - Soal dalam subtest tidak akan terhapus`,
+  })
+  @ApiForbiddenResponse({
+    description: "Access denied. Admin privileges required.",
   })
   @ApiParam({
     name: "packageId",
@@ -401,6 +502,8 @@ Digunakan untuk menampilkan subtest yang bisa dipilih saat mengelola paket.`,
   }
 
   @Post("upload-thumbnail")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
   @UseInterceptors(
     FileInterceptor("file", {
       storage: memoryStorage(),
@@ -416,10 +519,13 @@ Digunakan untuk menampilkan subtest yang bisa dipilih saat mengelola paket.`,
     }),
   )
   @ApiOperation({
-    summary: "Upload thumbnail package",
-    description: `Upload thumbnail untuk package. File akan di-upload ke Cloudinary dan return URL.
+    summary: "Upload thumbnail package (Admin Only)",
+    description: `Upload thumbnail untuk package. Hanya admin yang bisa upload thumbnail. File akan di-upload ke Cloudinary dan return URL.
 
 **Gunakan URL yang dikembalikan di field \`thumbnail_url\` saat create/update package.`,
+  })
+  @ApiForbiddenResponse({
+    description: "Access denied. Admin privileges required.",
   })
   @ApiConsumes("multipart/form-data")
   @ApiBody({

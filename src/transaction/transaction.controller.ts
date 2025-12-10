@@ -20,13 +20,19 @@ import {
 } from "./dto/update-transaction-status.dto";
 import { ZodValidationPipe } from "src/common/pipes/zod-validation.pipe";
 import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
+import { AdminGuard } from "src/auth/guard/admin.guard";
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
   ApiBody,
+  ApiOkResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiForbiddenResponse,
 } from "@nestjs/swagger";
+import { ResponseTransactionDto } from "./dto/response-transaction.dto";
 
 @ApiTags("Transaction")
 @Controller("transaction")
@@ -65,34 +71,9 @@ export class TransactionController {
       },
     },
   })
-  @ApiResponse({
-    status: 201,
+  @ApiCreatedResponse({
     description: "Transaksi berhasil dibuat",
-    schema: {
-      example: {
-        id: 1,
-        user_id: "user-uuid",
-        package_id: 1,
-        amount: 50000,
-        payment_method: "Transfer Bank BCA",
-        status: "unpaid",
-        transaction_date: "2025-01-01T00:00:00.000Z",
-        created_at: "2025-01-01T00:00:00.000Z",
-        user: {
-          id: "user-uuid",
-          username: "johndoe",
-          name: "John Doe",
-          email: "john@example.com",
-        },
-        package: {
-          id: 1,
-          title: "Tryout SBMPTN 2025 - Paket A",
-          description: "Paket tryout lengkap",
-          price: 50000,
-          type: "SARJANA",
-        },
-      },
-    },
+    type: ResponseTransactionDto,
   })
   @ApiResponse({
     status: 401,
@@ -112,19 +93,23 @@ export class TransactionController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
-    summary: "Get semua transaksi (Admin)",
+    summary: "Get semua transaksi (Admin Only)",
     description:
-      "Mendapatkan semua transaksi. Untuk admin melihat semua transaksi.",
+      "Mendapatkan semua transaksi. **Hanya admin yang bisa akses endpoint ini.**",
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: "List semua transaksi",
+    type: ResponseTransactionDto,
+    isArray: true,
   })
   @ApiResponse({
     status: 401,
     description: "Unauthorized - Token tidak valid",
+  })
+  @ApiForbiddenResponse({
+    description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
   })
   findAll() {
     return this.transactionService.findAll();
@@ -136,9 +121,10 @@ export class TransactionController {
     summary: "Get transaksi user yang sedang login",
     description: "Mendapatkan semua transaksi milik user yang sedang login.",
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: "List transaksi user",
+    type: ResponseTransactionDto,
+    isArray: true,
   })
   @ApiResponse({
     status: 401,
@@ -152,29 +138,38 @@ export class TransactionController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: "Get detail transaksi",
-    description: "Mendapatkan detail transaksi berdasarkan ID.",
+    description: `Mendapatkan detail transaksi berdasarkan ID.
+
+**Akses:**
+- User biasa: Hanya bisa melihat transaksi milik sendiri
+- Admin: Bisa melihat semua transaksi`,
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: "Detail transaksi",
+    type: ResponseTransactionDto,
   })
   @ApiResponse({
     status: 401,
     description: "Unauthorized - Token tidak valid",
   })
-  @ApiResponse({
-    status: 404,
+  @ApiForbiddenResponse({
+    description: "Forbidden - User biasa tidak bisa mengakses transaksi milik user lain",
+  })
+  @ApiNotFoundResponse({
     description: "Transaction not found",
   })
-  findOne(@Param("id", ParseIntPipe) id: number) {
-    return this.transactionService.findOne(id);
+  findOne(@Request() req: any, @Param("id", ParseIntPipe) id: number) {
+    const userId = req.user.id;
+    const isAdmin = req.user.type === "admin";
+    return this.transactionService.findOne(id, userId, isAdmin);
   }
 
   @Patch(":id/status")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
-    summary: "Update status transaksi (Admin)",
+    summary: "Update status transaksi (Admin Only)",
     description: `Admin mengupdate status transaksi menjadi "unpaid" atau "paid".
+    **Hanya admin yang bisa akses endpoint ini.**
     **Note:** Ketika status diubah ke "paid", UserPackage akan otomatis dibuat.`,
   })
   @ApiBody({
@@ -194,28 +189,18 @@ export class TransactionController {
       },
     },
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: "Status transaksi berhasil diupdate",
-    schema: {
-      example: {
-        id: 1,
-        user_id: "user-uuid",
-        package_id: 1,
-        amount: 50000,
-        payment_method: "Transfer Bank BCA",
-        status: "paid",
-        transaction_date: "2025-01-01T00:00:00.000Z",
-        updated_at: "2025-01-01T00:00:00.000Z",
-      },
-    },
+    type: ResponseTransactionDto,
   })
   @ApiResponse({
     status: 401,
     description: "Unauthorized - Token tidak valid",
   })
-  @ApiResponse({
-    status: 404,
+  @ApiForbiddenResponse({
+    description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
+  })
+  @ApiNotFoundResponse({
     description: "Transaction not found",
   })
   updateStatus(

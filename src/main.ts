@@ -30,7 +30,17 @@ async function bootstrap() {
     .setTitle("Ganie Tryout API")
     .setDescription("Ganie Tryout API documentation")
     .setVersion("1.0")
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        name: "Authorization",
+        description: "Enter JWT token (dapatkan dari endpoint /auth/admin atau /auth/login)",
+        in: "header",
+      },
+      "bearer", // Default name untuk @ApiBearerAuth()
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
 

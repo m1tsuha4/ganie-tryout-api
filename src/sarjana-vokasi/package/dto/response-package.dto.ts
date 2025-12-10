@@ -45,17 +45,5 @@ export class ResponsePackageDto {
     enum: ["SARJANA", "PASCASARJANA"],
   })
   type: "SARJANA" | "PASCASARJANA";
-
-  @ApiProperty({
-    example: "2025-12-02T10:00:00.000Z",
-    description: "Tanggal dibuat",
-  })
-  created_at: Date;
-
-  @ApiProperty({
-    example: "2025-12-02T10:35:00.000Z",
-    description: "Tanggal terakhir update",
-  })
-  updated_at: Date;
 }
 

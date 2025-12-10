@@ -1,15 +1,47 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateTransactionDto } from "./dto/create-transaction.dto";
 import { UpdateTransactionStatusDto } from "./dto/update-transaction-status.dto";
+import { ResponseTransactionDto } from "./dto/response-transaction.dto";
 
 @Injectable()
 export class TransactionService {
   constructor(private prismaService: PrismaService) {}
+
+  // Helper method untuk map transaction ke DTO
+  private mapToResponseDto(transaction: any): ResponseTransactionDto {
+    return {
+      id: transaction.id,
+      user_id: transaction.user_id,
+      package_id: transaction.package_id,
+      amount: transaction.amount,
+      payment_method: transaction.payment_method,
+      status: transaction.status as "unpaid" | "paid",
+      transaction_date: transaction.transaction_date,
+      user: transaction.user
+        ? {
+            id: transaction.user.id,
+            username: transaction.user.username,
+            name: transaction.user.name,
+            email: transaction.user.email,
+          }
+        : undefined,
+      package: transaction.package
+        ? {
+            id: transaction.package.id,
+            title: transaction.package.title,
+            description: transaction.package.description,
+            price: transaction.package.price,
+            type: transaction.package.type as "SARJANA" | "PASCASARJANA",
+          }
+        : undefined,
+    };
+  }
 
   async create(userId: string, createTransactionDto: CreateTransactionDto) {
     // Validasi package exists
@@ -37,14 +69,14 @@ export class TransactionService {
     const amount = createTransactionDto.amount ?? packageData.price;
 
     // Buat transaction dengan status "unpaid" default
-    return this.prismaService.transaction.create({
+    const transaction = await this.prismaService.transaction.create({
       data: {
         user_id: userId,
         package_id: createTransactionDto.package_id,
         amount: amount,
         payment_method: createTransactionDto.payment_method,
         status: "unpaid",
-        deleted_at: new Date(0),
+        // deleted_at default null (tidak dihapus)
       },
       include: {
         user: {
@@ -66,12 +98,14 @@ export class TransactionService {
         },
       },
     });
+
+    return this.mapToResponseDto(transaction);
   }
 
-  async findAll() {
-    return this.prismaService.transaction.findMany({
+  async findAll(): Promise<ResponseTransactionDto[]> {
+    const transactions = await this.prismaService.transaction.findMany({
       where: {
-        deleted_at: new Date(0), // Hanya yang tidak dihapus
+        deleted_at: null, // Hanya yang tidak dihapus
       },
       include: {
         user: {
@@ -96,9 +130,15 @@ export class TransactionService {
         created_at: "desc",
       },
     });
+
+    return transactions.map((transaction) => this.mapToResponseDto(transaction));
   }
 
-  async findOne(id: number) {
+  async findOne(
+    id: number,
+    userId: string,
+    isAdmin: boolean = false,
+  ): Promise<ResponseTransactionDto> {
     const transaction = await this.prismaService.transaction.findUnique({
       where: {
         id,
@@ -132,14 +172,21 @@ export class TransactionService {
       throw new NotFoundException("Transaction not found");
     }
 
-    return transaction;
+    // User biasa hanya bisa akses transaksi milik sendiri
+    if (!isAdmin && transaction.user_id !== userId) {
+      throw new ForbiddenException(
+        "User biasa tidak bisa mengakses transaksi milik user lain",
+      );
+    }
+
+    return this.mapToResponseDto(transaction);
   }
 
-  async findByUser(userId: string) {
-    return this.prismaService.transaction.findMany({
+  async findByUser(userId: string): Promise<ResponseTransactionDto[]> {
+    const transactions = await this.prismaService.transaction.findMany({
       where: {
         user_id: userId,
-        deleted_at: new Date(0), // Hanya yang tidak dihapus
+        deleted_at: null, // Hanya yang tidak dihapus
       },
       include: {
         package: {
@@ -156,6 +203,8 @@ export class TransactionService {
         created_at: "desc",
       },
     });
+
+    return transactions.map((transaction) => this.mapToResponseDto(transaction));
   }
 
   async updateStatus(
@@ -203,7 +252,7 @@ export class TransactionService {
       }
     }
 
-    return this.prismaService.transaction.update({
+    const updatedTransaction = await this.prismaService.transaction.update({
       where: {
         id,
       },
@@ -231,5 +280,7 @@ export class TransactionService {
         },
       },
     });
+
+    return this.mapToResponseDto(updatedTransaction);
   }
 }
