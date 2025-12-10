@@ -48,7 +48,7 @@ export class ExamService {
         }
 
         const exam = await this.repo.findByExamId(session.exam_id);
-        const durationMin = exam?.duration;
+        const durationMin: number = exam?.duration ?? 0;
 
         if (!session.started_at) {
             const now = new Date();
@@ -82,6 +82,11 @@ export class ExamService {
             }
             return { id: c.id, choice_text: c.choice_text }
         })
+        
+        const expiresAt = session.started_at
+            ? new Date(session.started_at.getTime() + durationMin * 60 * 1000).toISOString()
+            : undefined;
+
         return {
             sessionId: session.id,
             examId: session.exam_id,
@@ -91,6 +96,7 @@ export class ExamService {
             position: pos,
             totalQuestions: qOrder.length,
             secondsLeft: remainingSeconds(session.started_at, durationMin),
+            expiresAt: expiresAt
         }
     }
 
@@ -107,7 +113,7 @@ export class ExamService {
         }
 
         const exam = await this.repo.findByExamId(session.exam_id);
-        const durationMin = exam?.duration;
+        const durationMin: number = exam?.duration ?? 0;
 
         if (!session.started_at) {
             const now = new Date();
@@ -155,7 +161,8 @@ export class ExamService {
         if (!updated) {
             throw new ForbiddenException('Session not found');
         }
-        return { finished: !!updated.completed_at, nextPosition: updated.current_position, secondsLeft: remainingSeconds(updated.started_at, durationMin) };
+        const expiresAt = updated.started_at ? new Date(updated.started_at.getTime() + durationMin * 60 * 1000).toISOString() : undefined;
+        return { finished: !!updated.completed_at, nextPosition: updated.current_position, secondsLeft: remainingSeconds(updated.started_at, durationMin), expiresAt };
     }
 
     async resumeSession(sessionId: number, userId: string) {
