@@ -257,7 +257,12 @@ Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
 **Publish/Unpublish:**
 - Set \`published: true\` untuk publish
 - Set \`published: false\` untuk unpublish
-- Bisa combine dengan update field lain sekaligus`,
+- Bisa combine dengan update field lain sekaligus
+
+**PENTING:**
+- **Type (SARJANA/PASCASARJANA) TIDAK BISA DIUBAH** setelah package dibuat
+- Type hanya bisa ditentukan saat create package
+- Ini untuk keamanan data dan konsistensi`,
   })
   @ApiForbiddenResponse({
     description: "Access denied. Admin privileges required.",
