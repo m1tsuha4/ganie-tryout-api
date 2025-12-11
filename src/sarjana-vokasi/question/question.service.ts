@@ -4,32 +4,29 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import { CreateQuestionDto } from "./dto/create-question.dto";
+import {
+  CreateQuestionDto,
+  CreateQuestionChoicesDto,
+} from "./dto/create-question.dto";
 import { UpdateQuestionDto } from "./dto/update-question.dto";
 
 @Injectable()
 export class QuestionService {
   constructor(private prismaService: PrismaService) {}
 
-  // Create question dengan choices (support Sarjana & Pascasarjana)
+  // Create question TANPA choices (choices dibuat terpisah via createChoices)
+  // Flow baru: Buat soal dulu dengan image dan pembahasan, baru tambah choices
   async create(createQuestionDto: CreateQuestionDto) {
     // Verify exam exists (bisa untuk Sarjana atau Pascasarjana)
     const exam = await this.prismaService.exam.findUnique({
       where: { id: createQuestionDto.exam_id },
-      // include: {
-      //   package_exams: true, // Include semua type
-      // },
     });
 
     if (!exam) {
       throw new NotFoundException("Exam not found");
     }
 
-    // if (exam.package_exams.length === 0) {
-    //   throw new NotFoundException("Exam not found");
-    // }
-
-    // Create question dengan choices
+    // Create question TANPA choices (choices dibuat terpisah)
     const question = await this.prismaService.question.create({
       data: {
         exam_id: createQuestionDto.exam_id,
@@ -40,18 +37,6 @@ export class QuestionService {
         video_discussion: createQuestionDto.video_discussion,
         difficulty: createQuestionDto.difficulty,
         // deleted_at default null (tidak dihapus)
-        question_choices: {
-          create: createQuestionDto.choices.map((choice) => ({
-            choice_text: choice.choice_text,
-            choice_image_url: choice.choice_image_url || "",
-            choice_audio_url: choice.choice_audio_url || "",
-            is_correct: choice.is_correct,
-            // deleted_at default null (tidak dihapus)
-          })),
-        },
-      },
-      include: {
-        question_choices: true,
       },
     });
 
@@ -66,6 +51,47 @@ export class QuestionService {
     });
 
     return question;
+  }
+
+  // Create choices untuk question yang sudah ada
+  // Validasi: Question harus sudah ada dan belum punya choices
+  async createChoices(
+    questionId: number,
+    createChoicesDto: CreateQuestionChoicesDto,
+  ) {
+    // Verify question exists
+    const question = await this.prismaService.question.findUnique({
+      where: { id: questionId },
+      include: {
+        question_choices: true,
+      },
+    });
+
+    if (!question) {
+      throw new NotFoundException("Question not found");
+    }
+
+    // Validasi: Question tidak boleh sudah punya choices
+    if (question.question_choices.length > 0) {
+      throw new BadRequestException(
+        "Question already has choices. Use update endpoint to modify choices.",
+      );
+    }
+
+    // Create choices
+    await this.prismaService.questionChoice.createMany({
+      data: createChoicesDto.choices.map((choice) => ({
+        question_id: questionId,
+        choice_text: choice.choice_text,
+        choice_image_url: choice.choice_image_url || "",
+        choice_audio_url: choice.choice_audio_url || "",
+        is_correct: choice.is_correct,
+        // deleted_at default null (tidak dihapus)
+      })),
+    });
+
+    // Return question with choices
+    return this.findOne(questionId);
   }
 
   // Get all questions untuk exam tertentu (support Sarjana & Pascasarjana)

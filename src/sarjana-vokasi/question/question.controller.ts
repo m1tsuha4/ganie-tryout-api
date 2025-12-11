@@ -28,6 +28,8 @@ import { QuestionService } from "./question.service";
 import {
   CreateQuestionDto,
   CreateQuestionSchema,
+  CreateQuestionChoicesDto,
+  CreateQuestionChoicesSchema,
 } from "./dto/create-question.dto";
 import {
   UpdateQuestionDto,
@@ -49,39 +51,107 @@ export class QuestionController {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  // Create question untuk subtest (exam)
+  // Create question TANPA choices (flow baru: buat soal dulu, baru tambah choices)
   @Post()
   @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
-    summary: "Tambah soal baru untuk subtest (Admin Only)",
-    description: `Membuat soal baru untuk subtest tertentu.
-    **Hanya admin yang bisa akses endpoint ini.**
+    summary: "Tambah soal baru (TANPA pilihan jawaban) - Admin Only",
+    description: `Membuat soal baru untuk subtest tertentu. **Flow baru untuk keamanan:**
     
 **Flow:**
 1. Buat atau pilih subtest terlebih dahulu (di Manajemen Subtest)
-2. Pilih subtest yang akan ditambahkan soal
-3. Gunakan endpoint ini untuk menambahkan soal ke subtest tersebut
-4. Setiap soal harus memiliki 4 pilihan jawaban (A, B, C, D) dengan tepat 1 jawaban benar
+2. Upload gambar soal (jika ada) via POST /question/upload-image
+3. Upload gambar pembahasan (jika ada) - bisa menggunakan URL video
+4. Gunakan endpoint ini untuk membuat soal (TANPA choices)
+5. Setelah soal dibuat, gunakan POST /question/:id/choices untuk menambahkan 4 pilihan jawaban
+    
+**Keamanan:**
+- Soal harus lengkap (dengan image dan pembahasan) sebelum bisa tambah choices
+- Validasi bertahap untuk memastikan data lengkap
     
 **Cara menggunakan:**
 1. Login sebagai admin di endpoint /auth/admin untuk mendapatkan token
 2. Klik tombol "Authorize" di atas, masukkan token dengan format: Bearer <token>
-3. Isi request body dengan data yang valid, termasuk \`exam_id\` (ID subtest)`,
+3. Isi request body dengan data soal (TANPA choices)
+4. Setelah berhasil, gunakan POST /question/:id/choices untuk menambahkan pilihan jawaban`,
   })
   @ApiBody({
-    description: "Data soal baru",
+    description: "Data soal baru (TANPA choices)",
     examples: {
       example1: {
-        summary: "Contoh soal dengan pilihan jawaban untuk subtest",
-        description: "exam_id adalah ID subtest yang dipilih",
+        summary: "Contoh soal tanpa pilihan jawaban",
+        description: "exam_id adalah ID subtest yang dipilih. Choices dibuat terpisah via POST /question/:id/choices",
         value: {
           exam_id: 1, // ID subtest (dari Manajemen Subtest)
           question_text: "Berapakah hasil dari 2 + 2?",
-          question_image_url: "",
+          question_image_url: "https://res.cloudinary.com/.../question-images/abc123.jpg", // URL dari upload-image
           question_audio_url: "",
-          discussion: "Hasil dari 2 + 2 adalah 4",
-          video_discussion: "",
+          discussion: "Hasil dari 2 + 2 adalah 4. Penjumlahan adalah operasi dasar matematika.",
+          video_discussion: "https://youtube.com/...", // Opsional: URL video pembahasan
           difficulty: "easy",
+        },
+      },
+    },
+  })
+  @ApiCreatedResponse({
+    description: "Soal berhasil dibuat (belum ada choices). Gunakan POST /question/:id/choices untuk menambahkan pilihan jawaban.",
+    schema: {
+      example: {
+        id: 1,
+        exam_id: 1,
+        question_text: "Berapakah hasil dari 2 + 2?",
+        question_image_url: "https://res.cloudinary.com/...",
+        discussion: "Hasil dari 2 + 2 adalah 4",
+        question_choices: [],
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Token tidak valid atau belum login",
+  })
+  @ApiForbiddenResponse({
+    description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
+  })
+  create(
+    @Body(new ZodValidationPipe(CreateQuestionSchema))
+    createQuestionDto: CreateQuestionDto,
+  ) {
+    return this.questionService.create(createQuestionDto);
+  }
+
+  // Create choices untuk question yang sudah ada (flow baru)
+  @Post(":id/choices")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiOperation({
+    summary: "Tambah pilihan jawaban untuk soal (Admin Only)",
+    description: `Menambahkan 4 pilihan jawaban untuk soal yang sudah dibuat.
+    **Hanya bisa digunakan setelah soal dibuat via POST /question**
+    
+**Flow:**
+1. Buat soal dulu via POST /question (dengan image dan pembahasan)
+2. Upload gambar pilihan jawaban (jika ada) via POST /question/upload-choice-image
+3. Gunakan endpoint ini untuk menambahkan 4 pilihan jawaban
+4. Harus ada tepat 1 jawaban yang benar (is_correct: true)
+    
+**Validasi:**
+- Soal harus sudah ada
+- Soal belum boleh punya choices (jika sudah ada, gunakan PATCH /question/:id)
+- Harus ada tepat 4 choices
+- Harus ada tepat 1 yang is_correct: true`,
+  })
+  @ApiParam({
+    name: "id",
+    description: "ID soal yang akan ditambahkan pilihan jawaban",
+    type: Number,
+    example: 1,
+  })
+  @ApiBody({
+    description: "Data 4 pilihan jawaban. Setiap choice bisa punya teks saja, gambar saja, atau teks DAN gambar sekaligus.",
+    examples: {
+      example1: {
+        summary: "Contoh choice dengan teks saja",
+        value: {
           choices: [
             {
               choice_text: "3",
@@ -110,23 +180,63 @@ export class QuestionController {
           ],
         },
       },
+      example2: {
+        summary: "Contoh choice dengan teks DAN gambar sekaligus",
+        description: "choice_text WAJIB, choice_image_url OPSIONAL. Bisa punya keduanya sekaligus.",
+        value: {
+          choices: [
+            {
+              choice_text: "Jawaban A",
+              choice_image_url: "https://res.cloudinary.com/.../choice-images/abc123.jpg", // URL dari upload-choice-image
+              choice_audio_url: "",
+              is_correct: false,
+            },
+            {
+              choice_text: "Jawaban B (Benar)",
+              choice_image_url: "https://res.cloudinary.com/.../choice-images/xyz789.jpg", // Teks + Gambar sekaligus
+              choice_audio_url: "",
+              is_correct: true,
+            },
+            {
+              choice_text: "Jawaban C",
+              choice_image_url: "", // Hanya teks, tanpa gambar
+              choice_audio_url: "",
+              is_correct: false,
+            },
+            {
+              choice_text: "Jawaban D",
+              choice_image_url: "https://res.cloudinary.com/.../choice-images/def456.jpg", // Teks + Gambar sekaligus
+              choice_audio_url: "",
+              is_correct: false,
+            },
+          ],
+        },
+      },
     },
   })
   @ApiCreatedResponse({
-    description: "Soal berhasil dibuat",
+    description: "Pilihan jawaban berhasil ditambahkan",
+  })
+  @ApiResponse({
+    status: 400,
+    description: "Bad Request - Soal sudah punya choices atau validasi gagal",
   })
   @ApiResponse({
     status: 401,
-    description: "Unauthorized - Token tidak valid atau belum login",
+    description: "Unauthorized - Token tidak valid",
   })
   @ApiForbiddenResponse({
     description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
   })
-  create(
-    @Body(new ZodValidationPipe(CreateQuestionSchema))
-    createQuestionDto: CreateQuestionDto,
+  @ApiNotFoundResponse({
+    description: "Soal tidak ditemukan",
+  })
+  createChoices(
+    @Param("id", ParseIntPipe) id: number,
+    @Body(new ZodValidationPipe(CreateQuestionChoicesSchema))
+    createChoicesDto: CreateQuestionChoicesDto,
   ) {
-    return this.questionService.create(createQuestionDto);
+    return this.questionService.createChoices(id, createChoicesDto);
   }
 
   // Get all questions untuk exam tertentu
@@ -363,6 +473,177 @@ export class QuestionController {
   })
   async uploadChoiceImage(@UploadedFile() file: Express.Multer.File) {
     const url = await this.cloudinaryService.uploadImage(file, "choice-images");
+    return { url };
+  }
+
+  @Post("upload-audio")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseInterceptors(
+    FileInterceptor("file", {
+      storage: memoryStorage(),
+      fileFilter: (_req, file, cb) => {
+        // Validasi file audio (mp3, wav, m4a, ogg, aac, dll)
+        const allowedMimes = [
+          "audio/mpeg",
+          "audio/mp3",
+          "audio/wav",
+          "audio/wave",
+          "audio/x-wav",
+          "audio/mp4",
+          "audio/m4a",
+          "audio/ogg",
+          "audio/aac",
+          "audio/webm",
+        ];
+        if (!allowedMimes.includes(file.mimetype)) {
+          return cb(
+            new Error(
+              "Only audio files are allowed! (mp3, wav, m4a, ogg, aac, webm)",
+            ),
+            false,
+          );
+        }
+        cb(null, true);
+      },
+      limits: {
+        fileSize: 10 * 1024 * 1024, // 10MB untuk audio
+      },
+    }),
+  )
+  @ApiOperation({
+    summary: "Upload audio soal (listening) (Admin Only)",
+    description: `Upload file audio untuk soal listening. File akan di-upload ke Cloudinary dan return URL.
+    **Hanya admin yang bisa akses endpoint ini.**
+    
+**Format audio yang didukung:**
+- MP3 (.mp3)
+- WAV (.wav)
+- M4A (.m4a)
+- OGG (.ogg)
+- AAC (.aac)
+- WebM (.webm)
+
+**Maksimal ukuran file: 10MB**
+
+**Gunakan URL yang dikembalikan di field \`question_audio_url\` saat create/update question.`,
+  })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        file: {
+          type: "string",
+          format: "binary",
+          description: "File audio (max 10MB, format: mp3, wav, m4a, ogg, aac, webm)",
+        },
+      },
+    },
+  })
+  @ApiCreatedResponse({
+    description: "Audio berhasil di-upload",
+    schema: {
+      example: {
+        url: "https://res.cloudinary.com/your-cloud/video/upload/v1234567890/question-audios/abc123.mp3",
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Token tidak valid",
+  })
+  @ApiForbiddenResponse({
+    description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
+  })
+  async uploadQuestionAudio(@UploadedFile() file: Express.Multer.File) {
+    const url = await this.cloudinaryService.uploadAudio(
+      file,
+      "question-audios",
+    );
+    return { url };
+  }
+
+  @Post("upload-choice-audio")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseInterceptors(
+    FileInterceptor("file", {
+      storage: memoryStorage(),
+      fileFilter: (_req, file, cb) => {
+        // Validasi file audio (mp3, wav, m4a, ogg, aac, dll)
+        const allowedMimes = [
+          "audio/mpeg",
+          "audio/mp3",
+          "audio/wav",
+          "audio/wave",
+          "audio/x-wav",
+          "audio/mp4",
+          "audio/m4a",
+          "audio/ogg",
+          "audio/aac",
+          "audio/webm",
+        ];
+        if (!allowedMimes.includes(file.mimetype)) {
+          return cb(
+            new Error(
+              "Only audio files are allowed! (mp3, wav, m4a, ogg, aac, webm)",
+            ),
+            false,
+          );
+        }
+        cb(null, true);
+      },
+      limits: {
+        fileSize: 10 * 1024 * 1024, // 10MB untuk audio
+      },
+    }),
+  )
+  @ApiOperation({
+    summary: "Upload audio pilihan jawaban (Admin Only)",
+    description: `Upload file audio untuk pilihan jawaban. File akan di-upload ke Cloudinary dan return URL.
+    **Hanya admin yang bisa akses endpoint ini.**
+    
+**Format audio yang didukung:**
+- MP3 (.mp3)
+- WAV (.wav)
+- M4A (.m4a)
+- OGG (.ogg)
+- AAC (.aac)
+- WebM (.webm)
+
+**Maksimal ukuran file: 10MB**
+
+**Gunakan URL yang dikembalikan di field \`choice_audio_url\` saat create/update question choices.`,
+  })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        file: {
+          type: "string",
+          format: "binary",
+          description: "File audio (max 10MB, format: mp3, wav, m4a, ogg, aac, webm)",
+        },
+      },
+    },
+  })
+  @ApiCreatedResponse({
+    description: "Audio berhasil di-upload",
+    schema: {
+      example: {
+        url: "https://res.cloudinary.com/your-cloud/video/upload/v1234567890/choice-audios/abc123.mp3",
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Token tidak valid",
+  })
+  @ApiForbiddenResponse({
+    description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
+  })
+  async uploadChoiceAudio(@UploadedFile() file: Express.Multer.File) {
+    const url = await this.cloudinaryService.uploadAudio(file, "choice-audios");
     return { url };
   }
 }

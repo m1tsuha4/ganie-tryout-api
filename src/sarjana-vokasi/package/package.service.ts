@@ -170,12 +170,20 @@ export class PackageService {
   }
 
   // Update package (termasuk publish/unpublish via published field)
+  // Type (SARJANA/PASCASARJANA) TIDAK BISA DIUBAH setelah package dibuat
   async update(id: number, updatePackageDto: UpdatePackageDto): Promise<ResponsePackageDto> {
     const existingPackage = await this.findOne(id);
 
+    // Type tidak bisa diubah setelah package dibuat (untuk keamanan data)
+    // UpdatePackageDto sudah tidak punya field type, jadi sudah aman
+    // Tapi kita pastikan dengan tidak include type di data update
     const updatedPackage = await this.prismaService.package.update({
       where: { id },
-      data: updatePackageDto,
+      data: {
+        ...updatePackageDto,
+        // Type tidak di-include, jadi tidak akan ter-update
+        // Type tetap sama seperti saat package dibuat
+      },
     });
     
     return this.mapToResponseDto(updatedPackage);

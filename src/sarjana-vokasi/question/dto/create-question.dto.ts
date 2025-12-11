@@ -13,7 +13,7 @@ export class CreateQuestionChoiceDto extends createZodDto(
   CreateQuestionChoiceSchema,
 ) {}
 
-// DTO untuk create question
+// DTO untuk create question (TANPA choices - choices dibuat terpisah)
 export const CreateQuestionSchema = z.object({
   exam_id: z.number().int().positive(),
   question_text: z.string().min(1), // Teks Soal (mandatory)
@@ -22,6 +22,13 @@ export const CreateQuestionSchema = z.object({
   discussion: z.string().min(1), // Pembahasan (mandatory)
   video_discussion: z.string().optional(), // Video Pembahasan (opsional)
   difficulty: z.string().optional(),
+  // choices dihapus - dibuat terpisah via POST /question/:id/choices
+});
+
+export class CreateQuestionDto extends createZodDto(CreateQuestionSchema) {}
+
+// DTO untuk create choices (setelah question dibuat)
+export const CreateQuestionChoicesSchema = z.object({
   choices: z
     .array(CreateQuestionChoiceSchema)
     .length(4, "Must have exactly 4 choices (A, B, C, D)")
@@ -31,4 +38,6 @@ export const CreateQuestionSchema = z.object({
     ),
 });
 
-export class CreateQuestionDto extends createZodDto(CreateQuestionSchema) {}
+export class CreateQuestionChoicesDto extends createZodDto(
+  CreateQuestionChoicesSchema,
+) {}

@@ -56,6 +56,33 @@ export class CloudinaryService {
     });
   }
 
+  async uploadAudio(
+    file: Express.Multer.File,
+    folder: string = "uploads",
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: "video", // Cloudinary handle audio sebagai video
+          folder: folder,
+          // Audio tidak perlu transformation seperti image
+        },
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else if (!result || !result.secure_url) {
+            reject(new Error("Failed to upload audio: No result returned"));
+          } else {
+            resolve(result.secure_url);
+          }
+        },
+      );
+
+      // Upload file buffer to Cloudinary
+      uploadStream.end(file.buffer);
+    });
+  }
+
   async deleteImage(url: string): Promise<void> {
     try {
       // Extract public_id from Cloudinary URL
@@ -69,6 +96,26 @@ export class CloudinaryService {
       await cloudinary.uploader.destroy(publicId);
     } catch (error) {
       console.error("Error deleting image from Cloudinary:", error);
+      // Don't throw error, just log it
+    }
+  }
+
+  async deleteAudio(url: string): Promise<void> {
+    try {
+      // Extract public_id from Cloudinary URL
+      const urlParts = url.split("/");
+      const filenameWithExt = urlParts[urlParts.length - 1];
+      const filename = filenameWithExt.split(".")[0];
+      const folder = urlParts[urlParts.length - 2];
+
+      const publicId = folder ? `${folder}/${filename}` : filename;
+
+      // Delete dengan resource_type video karena audio disimpan sebagai video
+      await cloudinary.uploader.destroy(publicId, {
+        resource_type: "video",
+      });
+    } catch (error) {
+      console.error("Error deleting audio from Cloudinary:", error);
       // Don't throw error, just log it
     }
   }
