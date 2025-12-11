@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
 } from '@nestjs/common';
 import {
@@ -13,6 +14,7 @@ import {
   ApiBody,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -43,11 +45,19 @@ export class ExamController {
   @Get('session/:sessionId/question')
   @ApiOperation({ summary: 'Get the current question for a session' })
   @ApiParam({ name: 'sessionId', description: 'ID of the user exam session', type: Number })
+  @ApiQuery({ name: 'index', required: false, description: 'Optional question index to fetch specific question' })
   @ApiResponse({ status: 200, description: 'Returns question DTO with choices (choices do not include is_correct).' })
-  async getQuestion(@Param('sessionId') sessionIdParam: string, @Req() req: any) {
+  async getQuestion(@Param('sessionId') sessionIdParam: string,@Query('index') indexQuery: string | undefined, @Req() req: any) {
     const sessionId = Number(sessionIdParam);
     const userId: string = req.user?.id;
-    const question = await this.examService.getCurrentQuestion(sessionId, userId);
+    let index: number | undefined;
+    if (indexQuery !== undefined) {
+      index = Number(indexQuery);
+      if (!Number.isInteger(index) || index < 0) {
+        throw new BadRequestException('Invalid index query parameter');
+      }
+    }
+    const question = await this.examService.getCurrentQuestion(sessionId, userId, index);
     return question;
   }
 
@@ -71,12 +81,14 @@ export class ExamController {
 
     const questionId = parsed.questionId ?? parsed.question_id;
     const choiceId = parsed.choiceId ?? parsed.choice_id ?? parsed.answer;
+    const indexRaw = body.index ?? body.questionIndex ?? body.question_index;
+    const index = indexRaw === undefined ? undefined : Number(indexRaw);
 
     if (typeof questionId !== 'number' || typeof choiceId !== 'number') {
       throw new BadRequestException('Invalid questionId or choiceId');
     }
 
-    const answer = await this.examService.submitAnswer(sessionId, userId, questionId, choiceId);
+    const answer = await this.examService.submitAnswer(sessionId, userId, questionId, choiceId, index);
     return answer;
   }
 

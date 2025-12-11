@@ -273,7 +273,11 @@ export const UserExamSessionScalarFieldEnum = {
   question_order: 'question_order',
   choice_order: 'choice_order',
   current_position: 'current_position',
+  correct_answers: 'correct_answers',
+  wrong_answers: 'wrong_answers',
+  empty_answers: 'empty_answers',
   started_at: 'started_at',
+  ticked_at: 'ticked_at',
   completed_at: 'completed_at',
   created_at: 'created_at',
   updated_at: 'updated_at'

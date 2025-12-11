@@ -212,12 +212,19 @@ model UserExamSession {
   question_order   Json
   choice_order     Json
   current_position Int       @default(0)
+  correct_answers  Int       @default(0)
+  wrong_answers    Int       @default(0)
+  empty_answers    Int       @default(0)
+  score            Float     @default(0)
   started_at       DateTime?
+  ticked_at        DateTime?
   completed_at     DateTime?
   created_at       DateTime  @default(now())
   updated_at       DateTime  @updatedAt
 
   user_answers UserAnswer[]
+
+  @@unique([user_id, exam_id])
 }
 
 model UserAnswer {

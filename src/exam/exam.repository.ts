@@ -81,4 +81,29 @@ export class ExamRepository {
         data: safeData as any,
         });
     }
+
+    async findExistingSessionForUserExam(userId: string, examId: number) {
+        return this.prismaService.userExamSession.findFirst({
+            where: {
+                exam_id: examId,
+                user_id: userId,
+            },
+        });
+    }
+
+    async findUserAnswerForSessionQuestion(sessionId: number, questionId: number) {
+        return this.prismaService.userAnswer.findFirst({
+            where: {
+                session_id: sessionId,
+                question_id: questionId,
+            },
+        });
+    }
+
+    async findAnswerForSession(sessionId: number) {
+        return this.prismaService.userAnswer.findMany({
+            where: { session_id: sessionId },
+            select: { question_id: true },
+        });
+    }
 }
