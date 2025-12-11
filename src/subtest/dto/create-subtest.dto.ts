@@ -11,4 +11,3 @@ export const CreateSubtestSchema = z.object({
 });
 
 export class CreateSubtestDto extends createZodDto(CreateSubtestSchema) {}
-

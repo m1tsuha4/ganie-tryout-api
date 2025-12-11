@@ -306,7 +306,10 @@ export class QuestionController {
     description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
   })
   async uploadQuestionImage(@UploadedFile() file: Express.Multer.File) {
-    const url = await this.cloudinaryService.uploadImage(file, "question-images");
+    const url = await this.cloudinaryService.uploadImage(
+      file,
+      "question-images",
+    );
     return { url };
   }
 

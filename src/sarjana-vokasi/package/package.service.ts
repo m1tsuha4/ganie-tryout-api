@@ -28,7 +28,9 @@ export class PackageService {
   }
 
   // Create package (untuk Sarjana & Vokasi atau Pascasarjana)
-  async create(createPackageDto: CreatePackageDto): Promise<ResponsePackageDto> {
+  async create(
+    createPackageDto: CreatePackageDto,
+  ): Promise<ResponsePackageDto> {
     const packageData = await this.prismaService.package.create({
       data: {
         ...createPackageDto,
@@ -39,14 +41,16 @@ export class PackageService {
   }
 
   // Get all packages (filter by type jika diberikan)
-  async findAll(type?: "SARJANA" | "PASCASARJANA"): Promise<ResponsePackageDto[]> {
+  async findAll(
+    type?: "SARJANA" | "PASCASARJANA",
+  ): Promise<ResponsePackageDto[]> {
     const where: any = {
       deleted_at: null, // Hanya yang tidak dihapus
     };
     if (type) {
       where.type = type;
     }
-    
+
     const packages = await this.prismaService.package.findMany({
       where,
       include: {
@@ -64,12 +68,15 @@ export class PackageService {
         created_at: "desc",
       },
     });
-    
+
     return packages.map((pkg) => this.mapToResponseDto(pkg));
   }
 
   // Get packages by published status (filter by type jika diberikan)
-  async findByStatus(published: boolean, type?: "SARJANA" | "PASCASARJANA"): Promise<ResponsePackageDto[]> {
+  async findByStatus(
+    published: boolean,
+    type?: "SARJANA" | "PASCASARJANA",
+  ): Promise<ResponsePackageDto[]> {
     const where: any = {
       published,
       deleted_at: null, // Hanya yang tidak dihapus
@@ -77,7 +84,7 @@ export class PackageService {
     if (type) {
       where.type = type;
     }
-    
+
     const packages = await this.prismaService.package.findMany({
       where,
       include: {
@@ -95,7 +102,7 @@ export class PackageService {
         created_at: "desc",
       },
     });
-    
+
     return packages.map((pkg) => this.mapToResponseDto(pkg));
   }
 
@@ -135,7 +142,15 @@ export class PackageService {
     }
 
     // Return dengan exclude updated_at dan created_at dari field utama, tapi tetap include nested data
-    const { updated_at, created_at, deleted_at, created_by, updated_by, deleted_by, ...packageMain } = packageData;
+    const {
+      updated_at,
+      created_at,
+      deleted_at,
+      created_by,
+      updated_by,
+      deleted_by,
+      ...packageMain
+    } = packageData;
     return packageMain;
   }
 
@@ -170,14 +185,17 @@ export class PackageService {
   }
 
   // Update package (termasuk publish/unpublish via published field)
-  async update(id: number, updatePackageDto: UpdatePackageDto): Promise<ResponsePackageDto> {
+  async update(
+    id: number,
+    updatePackageDto: UpdatePackageDto,
+  ): Promise<ResponsePackageDto> {
     const existingPackage = await this.findOne(id);
 
     const updatedPackage = await this.prismaService.package.update({
       where: { id },
       data: updatePackageDto,
     });
-    
+
     return this.mapToResponseDto(updatedPackage);
   }
 
@@ -295,9 +313,7 @@ export class PackageService {
     });
 
     if (existingLink) {
-      throw new BadRequestException(
-        "Subtest sudah terpilih untuk paket ini",
-      );
+      throw new BadRequestException("Subtest sudah terpilih untuk paket ini");
     }
 
     // Create PackageExam relation

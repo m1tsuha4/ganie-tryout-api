@@ -39,4 +39,3 @@ export class ResponseSubtestDto {
   })
   type_exam: "TKA" | "TKD" | "TBI";
 }
-

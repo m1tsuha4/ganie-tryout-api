@@ -9,4 +9,3 @@ export const FilterSubtestSchema = z.object({
 });
 
 export class FilterSubtestDto extends createZodDto(FilterSubtestSchema) {}
-

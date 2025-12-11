@@ -131,7 +131,9 @@ export class TransactionService {
       },
     });
 
-    return transactions.map((transaction) => this.mapToResponseDto(transaction));
+    return transactions.map((transaction) =>
+      this.mapToResponseDto(transaction),
+    );
   }
 
   async findOne(
@@ -204,7 +206,9 @@ export class TransactionService {
       },
     });
 
-    return transactions.map((transaction) => this.mapToResponseDto(transaction));
+    return transactions.map((transaction) =>
+      this.mapToResponseDto(transaction),
+    );
   }
 
   async updateStatus(

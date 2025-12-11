@@ -10,4 +10,3 @@ import { PrismaModule } from "src/prisma/prisma.module";
   exports: [SubtestService],
 })
 export class SubtestModule {}
-

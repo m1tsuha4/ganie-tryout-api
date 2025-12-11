@@ -32,7 +32,10 @@ import {
   UpdateSubtestDto,
   UpdateSubtestSchema,
 } from "./dto/update-subtest.dto";
-import { FilterSubtestDto, FilterSubtestSchema } from "./dto/filter-subtest.dto";
+import {
+  FilterSubtestDto,
+  FilterSubtestSchema,
+} from "./dto/filter-subtest.dto";
 import { ZodValidationPipe } from "src/common/pipes/zod-validation.pipe";
 import { ResponseSubtestDto } from "./dto/response-subtest.dto";
 import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
@@ -170,32 +173,40 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
     try {
       // Parse query parameters dengan validasi
       const filter: any = {};
-      
+
       if (query?.type_exam) {
         filter.type_exam = query.type_exam;
       }
-      
-      if (query?.duration_min !== undefined && query.duration_min !== null && query.duration_min !== '') {
+
+      if (
+        query?.duration_min !== undefined &&
+        query.duration_min !== null &&
+        query.duration_min !== ""
+      ) {
         const durationMin = Number(query.duration_min);
         if (!isNaN(durationMin) && durationMin > 0) {
           filter.duration_min = durationMin;
         }
       }
-      
-      if (query?.duration_max !== undefined && query.duration_max !== null && query.duration_max !== '') {
+
+      if (
+        query?.duration_max !== undefined &&
+        query.duration_max !== null &&
+        query.duration_max !== ""
+      ) {
         const durationMax = Number(query.duration_max);
         if (!isNaN(durationMax) && durationMax > 0) {
           filter.duration_max = durationMax;
         }
       }
-      
-      if (query?.search && query.search.trim() !== '') {
+
+      if (query?.search && query.search.trim() !== "") {
         filter.search = query.search.trim();
       }
-      
+
       // Validate dengan Zod
       const validatedFilter = FilterSubtestSchema.parse(filter);
-      
+
       return this.subtestService.findAll(validatedFilter);
     } catch (error) {
       console.error("Error parsing filter in findAll subtest:", error);
@@ -324,4 +335,3 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
     return this.subtestService.remove(id);
   }
 }
-
