@@ -153,7 +153,8 @@ export class TransactionController {
     description: "Unauthorized - Token tidak valid",
   })
   @ApiForbiddenResponse({
-    description: "Forbidden - User biasa tidak bisa mengakses transaksi milik user lain",
+    description:
+      "Forbidden - User biasa tidak bisa mengakses transaksi milik user lain",
   })
   @ApiNotFoundResponse({
     description: "Transaction not found",

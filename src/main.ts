@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import "dotenv/config";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import {
@@ -22,8 +22,8 @@ async function bootstrap() {
   });
 
   app.useGlobalFilters(new AllExceptionsFilter());
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
-    prefix: '/uploads/',
+  app.useStaticAssets(join(__dirname, "..", "uploads"), {
+    prefix: "/uploads/",
   });
 
   const config = new DocumentBuilder()
@@ -36,7 +36,8 @@ async function bootstrap() {
         scheme: "bearer",
         bearerFormat: "JWT",
         name: "Authorization",
-        description: "Enter JWT token (dapatkan dari endpoint /auth/admin atau /auth/login)",
+        description:
+          "Enter JWT token (dapatkan dari endpoint /auth/admin atau /auth/login)",
         in: "header",
       },
       "bearer", // Default name untuk @ApiBearerAuth()

@@ -27,7 +27,8 @@ export class ResponsePackageDto {
   price: number;
 
   @ApiProperty({
-    example: "https://res.cloudinary.com/your-cloud/image/upload/v1234567890/package-thumbnails/abc123.jpg",
+    example:
+      "https://res.cloudinary.com/your-cloud/image/upload/v1234567890/package-thumbnails/abc123.jpg",
     description: "URL thumbnail paket",
     required: false,
   })
@@ -46,4 +47,3 @@ export class ResponsePackageDto {
   })
   type: "SARJANA" | "PASCASARJANA";
 }
-

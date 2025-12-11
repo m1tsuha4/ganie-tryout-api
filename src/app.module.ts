@@ -14,7 +14,7 @@ import { TransactionModule } from "./transaction/transaction.module";
 import { SubtestModule } from "./subtest/subtest.module";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { TransformResponseInterceptor } from "./common/interceptors/transform-response.interceptor";
-import { ExamModule } from './exam/exam.module';
+import { ExamModule } from "./exam/exam.module";
 
 @Module({
   imports: [

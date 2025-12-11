@@ -118,4 +118,3 @@ export class ResponseTransactionDto {
   })
   package?: PackageInfoDto;
 }
-

@@ -154,12 +154,12 @@ export class PackageController {
     @Query("published") published?: string,
   ) {
     const isAdmin = req.user?.type === "admin";
-    
+
     // Jika user biasa dan tidak ada filter published, default ke published=true
     if (!isAdmin && published === undefined) {
       return this.packageService.findByStatus(true, type);
     }
-    
+
     if (published !== undefined) {
       const isPublished = published === "true";
       // User biasa tidak bisa akses unpublished
@@ -168,7 +168,7 @@ export class PackageController {
       }
       return this.packageService.findByStatus(isPublished, type);
     }
-    
+
     // Admin bisa lihat semua, user biasa hanya published
     if (isAdmin) {
       return this.packageService.findAll(type);
@@ -334,7 +334,8 @@ Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
   })
   @ApiResponse({
     status: 400,
-    description: "Package tidak bisa dihapus karena masih ada transaksi yang menggunakan package ini",
+    description:
+      "Package tidak bisa dihapus karena masih ada transaksi yang menggunakan package ini",
   })
   @ApiForbiddenResponse({
     description: "Access denied. Admin privileges required.",
@@ -461,7 +462,10 @@ Digunakan untuk menampilkan subtest yang bisa dipilih saat mengelola paket.`,
   @ApiNotFoundResponse({
     description: "Paket tidak ditemukan",
   })
-  getSubtests(@Request() req: any, @Param("id", ParseIntPipe) packageId: number) {
+  getSubtests(
+    @Request() req: any,
+    @Param("id", ParseIntPipe) packageId: number,
+  ) {
     const isAdmin = req.user?.type === "admin";
     return this.packageService.getSubtests(packageId, isAdmin);
   }

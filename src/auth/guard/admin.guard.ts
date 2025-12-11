@@ -17,12 +17,9 @@ export class AdminGuard implements CanActivate {
 
     // Cek apakah user adalah admin
     if (user.type !== "admin") {
-      throw new ForbiddenException(
-        "Access denied. Admin privileges required.",
-      );
+      throw new ForbiddenException("Access denied. Admin privileges required.");
     }
 
     return true;
   }
 }
-

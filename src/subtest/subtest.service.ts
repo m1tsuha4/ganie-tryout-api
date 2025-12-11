@@ -25,7 +25,9 @@ export class SubtestService {
     };
   }
 
-  async create(createSubtestDto: CreateSubtestDto): Promise<ResponseSubtestDto> {
+  async create(
+    createSubtestDto: CreateSubtestDto,
+  ): Promise<ResponseSubtestDto> {
     const exam = await this.prismaService.exam.create({
       data: {
         title: createSubtestDto.title,
@@ -51,7 +53,10 @@ export class SubtestService {
       }
 
       // Filter berdasarkan durasi (min dan max)
-      if (filter?.duration_min !== undefined || filter?.duration_max !== undefined) {
+      if (
+        filter?.duration_min !== undefined ||
+        filter?.duration_max !== undefined
+      ) {
         where.duration = {};
         if (filter.duration_min !== undefined && filter.duration_min !== null) {
           where.duration.gte = Number(filter.duration_min);
@@ -98,7 +103,10 @@ export class SubtestService {
     return this.mapToResponseDto(exam);
   }
 
-  async update(id: number, updateSubtestDto: UpdateSubtestDto): Promise<ResponseSubtestDto> {
+  async update(
+    id: number,
+    updateSubtestDto: UpdateSubtestDto,
+  ): Promise<ResponseSubtestDto> {
     // Verify subtest exists
     const existingExam = await this.findOne(id);
 
@@ -106,7 +114,7 @@ export class SubtestService {
       where: { id },
       data: updateSubtestDto,
     });
-    
+
     return this.mapToResponseDto(updatedExam);
   }
 
@@ -123,4 +131,3 @@ export class SubtestService {
     });
   }
 }
-

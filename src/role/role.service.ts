@@ -9,7 +9,7 @@ export class RoleService {
   async create(createRoleDto: CreateRoleDto) {
     return this.prismaService.role.create({
       data: {
-        ...createRoleDto, 
+        ...createRoleDto,
       },
     });
   }
