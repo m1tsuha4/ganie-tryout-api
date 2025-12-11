@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Query,
   UseGuards,
+  Request,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -105,10 +106,11 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
     description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
   })
   create(
+    @Request() req: any,
     @Body(new ZodValidationPipe(CreateSubtestSchema))
     createSubtestDto: CreateSubtestDto,
   ) {
-    return this.subtestService.create(createSubtestDto);
+    return this.subtestService.create(createSubtestDto, req.user.id);
   }
 
   @Get()
@@ -293,11 +295,12 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
     description: "Subtest tidak ditemukan",
   })
   update(
+    @Request() req: any,
     @Param("id", ParseIntPipe) id: number,
     @Body(new ZodValidationPipe(UpdateSubtestSchema))
     updateSubtestDto: UpdateSubtestDto,
   ) {
-    return this.subtestService.update(id, updateSubtestDto);
+    return this.subtestService.update(id, updateSubtestDto, req.user.id);
   }
 
   @Delete(":id")
@@ -331,7 +334,10 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
   @ApiNotFoundResponse({
     description: "Subtest tidak ditemukan",
   })
-  remove(@Param("id", ParseIntPipe) id: number) {
-    return this.subtestService.remove(id);
+  remove(
+    @Request() req: any,
+    @Param("id", ParseIntPipe) id: number,
+  ) {
+    return this.subtestService.remove(id, req.user.id);
   }
 }

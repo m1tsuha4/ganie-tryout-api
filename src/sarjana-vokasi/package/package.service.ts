@@ -14,7 +14,7 @@ import { ResponsePackageDto } from "./dto/response-package.dto";
 export class PackageService {
   constructor(private prismaService: PrismaService) {}
 
-  // Helper method untuk map package ke DTO (exclude updated_at, created_at, deleted_at)
+  // Helper method untuk map package ke DTO (exclude updated_at, created_at, deleted_at, created_by, updated_by, deleted_by)
   private mapToResponseDto(packageData: any): ResponsePackageDto {
     return {
       id: packageData.id,
@@ -30,10 +30,12 @@ export class PackageService {
   // Create package (untuk Sarjana & Vokasi atau Pascasarjana)
   async create(
     createPackageDto: CreatePackageDto,
+    userId: string,
   ): Promise<ResponsePackageDto> {
     const packageData = await this.prismaService.package.create({
       data: {
         ...createPackageDto,
+        created_by: userId,
         // deleted_at default null (tidak dihapus)
       },
     });
@@ -188,6 +190,7 @@ export class PackageService {
   async update(
     id: number,
     updatePackageDto: UpdatePackageDto,
+    userId: string,
   ): Promise<ResponsePackageDto> {
     const existingPackage = await this.findOne(id);
 
@@ -198,6 +201,7 @@ export class PackageService {
       where: { id },
       data: {
         ...updatePackageDto,
+        updated_by: userId,
         // Type tidak di-include, jadi tidak akan ter-update
         // Type tetap sama seperti saat package dibuat
       },
@@ -207,7 +211,7 @@ export class PackageService {
   }
 
   // Delete package (soft delete)
-  async remove(id: number) {
+  async remove(id: number, userId: string) {
     const packageData = await this.findOne(id, true); // Admin bisa akses untuk delete
 
     // Cek apakah package masih digunakan oleh transaction yang aktif
@@ -224,11 +228,12 @@ export class PackageService {
       );
     }
 
-    // Soft delete (update deleted_at)
+    // Soft delete (update deleted_at dan deleted_by)
     return this.prismaService.package.update({
       where: { id },
       data: {
         deleted_at: new Date(),
+        deleted_by: userId,
       },
     });
   }

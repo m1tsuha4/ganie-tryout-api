@@ -99,6 +99,14 @@ export class ResponseTransactionDto {
   status: "unpaid" | "paid";
 
   @ApiProperty({
+    example:
+      "https://res.cloudinary.com/your-cloud/image/upload/v1234567890/payment-proofs/abc123.jpg",
+    description: "URL bukti pembayaran",
+    required: false,
+  })
+  payment_proof_url?: string;
+
+  @ApiProperty({
     example: "2025-01-01T00:00:00.000Z",
     description: "Tanggal transaksi",
   })

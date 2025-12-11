@@ -16,7 +16,7 @@ export class QuestionService {
 
   // Create question TANPA choices (choices dibuat terpisah via createChoices)
   // Flow baru: Buat soal dulu dengan image dan pembahasan, baru tambah choices
-  async create(createQuestionDto: CreateQuestionDto) {
+  async create(createQuestionDto: CreateQuestionDto, userId: string) {
     // Verify exam exists (bisa untuk Sarjana atau Pascasarjana)
     const exam = await this.prismaService.exam.findUnique({
       where: { id: createQuestionDto.exam_id },
@@ -36,6 +36,7 @@ export class QuestionService {
         discussion: createQuestionDto.discussion,
         video_discussion: createQuestionDto.video_discussion,
         difficulty: createQuestionDto.difficulty,
+        created_by: userId,
         // deleted_at default null (tidak dihapus)
       },
     });
@@ -58,6 +59,7 @@ export class QuestionService {
   async createChoices(
     questionId: number,
     createChoicesDto: CreateQuestionChoicesDto,
+    userId: string,
   ) {
     // Verify question exists
     const question = await this.prismaService.question.findUnique({
@@ -86,6 +88,7 @@ export class QuestionService {
         choice_image_url: choice.choice_image_url || "",
         choice_audio_url: choice.choice_audio_url || "",
         is_correct: choice.is_correct,
+        created_by: userId,
         // deleted_at default null (tidak dihapus)
       })),
     });
@@ -113,11 +116,17 @@ export class QuestionService {
     }
 
     const questions = await this.prismaService.question.findMany({
-      where: { exam_id: examId },
+      where: {
+        exam_id: examId,
+        deleted_at: null, // Hanya yang tidak dihapus
+      },
       include: {
         question_choices: {
+          where: {
+            deleted_at: null, // Hanya choices yang tidak dihapus
+          },
           orderBy: {
-            id: "asc", // Order by ID untuk konsistensi (A, B, C, D)
+            id: "asc", // Order by ID untuk konsistensi (A, B, C, D, E)
           },
         },
       },
@@ -131,10 +140,16 @@ export class QuestionService {
 
   // Get question by ID
   async findOne(id: number) {
-    const question = await this.prismaService.question.findUnique({
-      where: { id },
+    const question = await this.prismaService.question.findFirst({
+      where: {
+        id,
+        deleted_at: null, // Hanya yang tidak dihapus
+      },
       include: {
         question_choices: {
+          where: {
+            deleted_at: null, // Hanya choices yang tidak dihapus
+          },
           orderBy: {
             id: "asc",
           },
@@ -164,11 +179,13 @@ export class QuestionService {
   }
 
   // Update question
-  async update(id: number, updateQuestionDto: UpdateQuestionDto) {
+  async update(id: number, updateQuestionDto: UpdateQuestionDto, userId: string) {
     const existingQuestion = await this.findOne(id);
 
     // Update question
-    const updateData: any = {};
+    const updateData: any = {
+      updated_by: userId,
+    };
     if (updateQuestionDto.question_text !== undefined) {
       updateData.question_text = updateQuestionDto.question_text;
     }
@@ -211,6 +228,7 @@ export class QuestionService {
           choice_image_url: choice.choice_image_url || "",
           choice_audio_url: choice.choice_audio_url || "",
           is_correct: choice.is_correct,
+          created_by: userId,
           // deleted_at default null (tidak dihapus)
         })),
       });
@@ -222,18 +240,34 @@ export class QuestionService {
     return question;
   }
 
-  // Delete question
-  async remove(id: number) {
+  // Delete question (soft delete)
+  async remove(id: number, userId: string) {
     const question = await this.findOne(id);
 
-    // Delete question (akan cascade delete choices)
-    await this.prismaService.question.delete({
+    // Soft delete question
+    await this.prismaService.question.update({
       where: { id },
+      data: {
+        deleted_at: new Date(),
+        deleted_by: userId,
+      },
     });
 
-    // Update total_questions di Exam
+    // Soft delete semua choices
+    await this.prismaService.questionChoice.updateMany({
+      where: { question_id: id },
+      data: {
+        deleted_at: new Date(),
+        deleted_by: userId,
+      },
+    });
+
+    // Update total_questions di Exam (hitung yang tidak dihapus)
     const totalQuestions = await this.prismaService.question.count({
-      where: { exam_id: question.exam_id },
+      where: {
+        exam_id: question.exam_id,
+        deleted_at: null,
+      },
     });
 
     await this.prismaService.exam.update({

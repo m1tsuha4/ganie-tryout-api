@@ -8,10 +8,14 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { CreateTransactionDto } from "./dto/create-transaction.dto";
 import { UpdateTransactionStatusDto } from "./dto/update-transaction-status.dto";
 import { ResponseTransactionDto } from "./dto/response-transaction.dto";
+import { CloudinaryService } from "src/common/services/cloudinary.service";
 
 @Injectable()
 export class TransactionService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private cloudinaryService: CloudinaryService,
+  ) {}
 
   // Helper method untuk map transaction ke DTO
   private mapToResponseDto(transaction: any): ResponseTransactionDto {
@@ -22,6 +26,7 @@ export class TransactionService {
       amount: transaction.amount,
       payment_method: transaction.payment_method,
       status: transaction.status as "unpaid" | "paid",
+      payment_proof_url: transaction.payment_proof_url,
       transaction_date: transaction.transaction_date,
       user: transaction.user
         ? {
@@ -76,6 +81,7 @@ export class TransactionService {
         amount: amount,
         payment_method: createTransactionDto.payment_method,
         status: "unpaid",
+        created_by: userId, // User yang membuat transaksi
         // deleted_at default null (tidak dihapus)
       },
       include: {
@@ -214,6 +220,7 @@ export class TransactionService {
   async updateStatus(
     id: number,
     updateTransactionStatusDto: UpdateTransactionStatusDto,
+    userId: string,
   ) {
     const transaction = await this.prismaService.transaction.findUnique({
       where: {
@@ -262,6 +269,81 @@ export class TransactionService {
       },
       data: {
         status: updateTransactionStatusDto.status,
+        updated_by: userId, // Admin yang update status transaksi
+        updated_at: new Date(),
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            name: true,
+            email: true,
+          },
+        },
+        package: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            price: true,
+            type: true,
+          },
+        },
+      },
+    });
+
+    return this.mapToResponseDto(updatedTransaction);
+  }
+
+  async uploadPaymentProof(
+    id: number,
+    paymentProofUrl: string,
+    userId: string,
+  ): Promise<ResponseTransactionDto> {
+    // Cek transaksi exists
+    const transaction = await this.prismaService.transaction.findUnique({
+      where: { id },
+    });
+
+    if (!transaction) {
+      throw new NotFoundException("Transaction not found");
+    }
+
+    if (transaction.deleted_at && transaction.deleted_at.getTime() !== 0) {
+      throw new NotFoundException("Transaction not found");
+    }
+
+    // Validasi: hanya user pemilik transaksi yang bisa upload bukti bayar
+    if (transaction.user_id !== userId) {
+      throw new ForbiddenException(
+        "Anda tidak memiliki akses untuk upload bukti bayar transaksi ini",
+      );
+    }
+
+    // Validasi: hanya transaksi dengan status "unpaid" yang bisa upload bukti
+    if (transaction.status !== "unpaid") {
+      throw new BadRequestException(
+        "Hanya transaksi dengan status 'unpaid' yang bisa upload bukti bayar",
+      );
+    }
+
+    // Hapus bukti bayar lama jika ada
+    if (transaction.payment_proof_url) {
+      try {
+        await this.cloudinaryService.deleteImage(transaction.payment_proof_url);
+      } catch (error) {
+        // Log error tapi tidak throw, karena upload baru sudah berhasil
+        console.error("Error deleting old payment proof:", error);
+      }
+    }
+
+    // Update payment_proof_url
+    const updatedTransaction = await this.prismaService.transaction.update({
+      where: { id },
+      data: {
+        payment_proof_url: paymentProofUrl,
+        updated_by: userId,
         updated_at: new Date(),
       },
       include: {

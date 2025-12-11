@@ -182,6 +182,7 @@ model Transaction {
   amount           Float
   payment_method   String
   status           String
+  payment_proof_url String?   @db.Text
   transaction_date DateTime  @default(now())
   created_at       DateTime  @default(now())
   created_by       String?

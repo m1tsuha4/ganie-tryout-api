@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseInterceptors,
   UseGuards,
+  Request,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -114,10 +115,11 @@ export class QuestionController {
     description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
   })
   create(
+    @Request() req: any,
     @Body(new ZodValidationPipe(CreateQuestionSchema))
     createQuestionDto: CreateQuestionDto,
   ) {
-    return this.questionService.create(createQuestionDto);
+    return this.questionService.create(createQuestionDto, req.user.id);
   }
 
   // Create choices untuk question yang sudah ada (flow baru)
@@ -244,11 +246,12 @@ export class QuestionController {
     description: "Soal tidak ditemukan",
   })
   createChoices(
+    @Request() req: any,
     @Param("id", ParseIntPipe) id: number,
     @Body(new ZodValidationPipe(CreateQuestionChoicesSchema))
     createChoicesDto: CreateQuestionChoicesDto,
   ) {
-    return this.questionService.createChoices(id, createChoicesDto);
+    return this.questionService.createChoices(id, createChoicesDto, req.user.id);
   }
 
   // Get all questions untuk exam tertentu
@@ -338,11 +341,12 @@ export class QuestionController {
     description: "Soal tidak ditemukan",
   })
   update(
+    @Request() req: any,
     @Param("id", ParseIntPipe) id: number,
     @Body(new ZodValidationPipe(UpdateQuestionSchema))
     updateQuestionDto: UpdateQuestionDto,
   ) {
-    return this.questionService.update(id, updateQuestionDto);
+    return this.questionService.update(id, updateQuestionDto, req.user.id);
   }
 
   // Delete question
@@ -372,8 +376,11 @@ export class QuestionController {
   @ApiNotFoundResponse({
     description: "Soal tidak ditemukan",
   })
-  remove(@Param("id", ParseIntPipe) id: number) {
-    return this.questionService.remove(id);
+  remove(
+    @Request() req: any,
+    @Param("id", ParseIntPipe) id: number,
+  ) {
+    return this.questionService.remove(id, req.user.id);
   }
 
   @Post("upload-image")
