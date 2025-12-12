@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -13,12 +15,15 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiNotFoundResponse,
+  ApiBearerAuth,
 } from "@nestjs/swagger";
 import { AdminService } from "./admin.service";
 import { CreateAdminDto, CreateAdminSchema } from "./dto/create-admin.dto";
 import { UpdateAdminDto, UpdateAdminSchema } from "./dto/update-admin.dto";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { ResponseAdminDto } from "./dto/response-admin.dto";
+import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
+import { AdminGuard } from "src/auth/guard/admin.guard";
 
 @ApiTags("admin")
 @Controller("admin")
@@ -47,7 +52,9 @@ export class AdminController {
   ) {
     return this.adminService.create(createAdminDto);
   }
-
+  
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
   @Get()
   @ApiOkResponse({
     description: "List of admins",
@@ -58,6 +65,8 @@ export class AdminController {
     return this.adminService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
   @Get(":id")
   @ApiOkResponse({
     description: "Admin detail",
@@ -68,6 +77,8 @@ export class AdminController {
     return this.adminService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
   @Patch(":id")
   @ApiBody({
     description: "Update admin",
@@ -88,13 +99,16 @@ export class AdminController {
     @Param("id") id: string,
     @Body(new ZodValidationPipe(UpdateAdminSchema))
     updateAdminDto: UpdateAdminDto,
+    @Req() req,
   ) {
-    return this.adminService.update(id, updateAdminDto);
+    return this.adminService.update(id, updateAdminDto, req.user.id);
   }
 
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
   @Delete(":id")
   @ApiOkResponse({ description: "Admin deleted successfully" })
-  remove(@Param("id") id: string) {
-    return this.adminService.remove(id);
+  remove(@Param("id") id: string, @Req() req) {
+    return this.adminService.remove(id, req.user.id);
   }
 }

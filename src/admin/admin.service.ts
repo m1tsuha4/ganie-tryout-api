@@ -21,7 +21,7 @@ export class AdminService {
       throw new BadRequestException("Admin already exists");
     }
     const hashPassword = await bcrypt.hash(createAdminDto.password, 10);
-    return this.prismaService.admin.create({
+    const newAdmin = await this.prismaService.admin.create({
       data: {
         username: createAdminDto.username,
         email: createAdminDto.email,
@@ -35,10 +35,21 @@ export class AdminService {
         role_id: true,
       },
     });
+    return await this.prismaService.admin.update({
+      where: {
+        id: newAdmin.id,
+      },
+      data: {
+        created_by: newAdmin.id,
+      }
+    })
   }
 
   async findAll() {
     const existingAdmin = await this.prismaService.admin.findMany({
+      where: {
+        deleted_at: null,
+      },
       select: {
         id: true,
         username: true,
@@ -56,6 +67,7 @@ export class AdminService {
     const existingAdmin = await this.prismaService.admin.findUnique({
       where: {
         id,
+        deleted_at: null,
       },
       select: {
         id: true,
@@ -70,10 +82,11 @@ export class AdminService {
     return existingAdmin;
   }
 
-  async update(id: string, updateAdminDto: UpdateAdminDto) {
+  async update(id: string, updateAdminDto: UpdateAdminDto, authId: string) {
     const existingAdmin = await this.prismaService.admin.findUnique({
       where: {
         id,
+        deleted_at: null,
       },
     });
     if (!existingAdmin) {
@@ -91,8 +104,9 @@ export class AdminService {
       email: updateAdminDto.email,
       username: updateAdminDto.username,
       role_id: updateAdminDto.role_id,
+      updated_by: authId,
       ...(updateAdminDto.password && {
-        password_hash: await bcrypt.hash(updateAdminDto.password, 10),
+        password_hash: await bcrypt.hash(updateAdminDto.password, 10)  
       }),
     };
     return this.prismaService.admin.update({
@@ -109,18 +123,24 @@ export class AdminService {
     });
   }
 
-  async remove(id: string) {
+  async remove(id: string, authId: string) {
     const existingAdmin = await this.prismaService.admin.findUnique({
       where: {
         id,
+        deleted_at: null,
       },
     });
     if (!existingAdmin) {
       throw new NotFoundException("Admin not found");
     }
-    return this.prismaService.admin.delete({
+    return this.prismaService.admin.update({
       where: {
         id,
+        deleted_at: null,
+      },
+      data: {
+        deleted_by: authId,
+        deleted_at: new Date(),
       },
     });
   }
