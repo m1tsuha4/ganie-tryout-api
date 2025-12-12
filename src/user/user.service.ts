@@ -29,13 +29,12 @@ export class UserService {
       throw new BadRequestException("Username already exists");
     }
     const hashPassword = await bcrypt.hash(createUserDto.password, 10);
-    return this.prismaService.user.create({
+    const newUser = await this.prismaService.user.create({
       data: {
         username: createUserDto.username,
         name: createUserDto.name,
         email: createUserDto.email,
         password_hash: hashPassword,
-        // deleted_at default null (tidak dihapus)
       },
       select: {
         id: true,
@@ -44,10 +43,21 @@ export class UserService {
         email: true,
       },
     });
+    return await this.prismaService.user.update({
+      where: {
+        id: newUser.id,
+      },
+      data: {
+        created_by: newUser.id,
+      }
+    })
   }
 
   async findAll() {
     const existingUser = await this.prismaService.user.findMany({
+      where: {
+        deleted_at: null,
+      },
       select: {
         id: true,
         username: true,
@@ -65,6 +75,7 @@ export class UserService {
     const existingUser = await this.prismaService.user.findUnique({
       where: {
         id,
+        deleted_at: null,
       },
       select: {
         id: true,
@@ -79,7 +90,7 @@ export class UserService {
     return existingUser;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto, authId: string) {
     const existingUser = await this.prismaService.user.findUnique({
       where: {
         id,
@@ -111,6 +122,7 @@ export class UserService {
       ...(updateUserDto.password && {
         password_hash: await bcrypt.hash(updateUserDto.password, 10),
       }),
+      updated_by: authId,
     };
     return this.prismaService.user.update({
       where: {
@@ -126,7 +138,7 @@ export class UserService {
     });
   }
 
-  async remove(id: string) {
+  async remove(id: string, authId: string) {
     const existingUser = await this.prismaService.user.findUnique({
       where: {
         id,
@@ -135,9 +147,13 @@ export class UserService {
     if (!existingUser) {
       throw new NotFoundException("User Not Found");
     }
-    return this.prismaService.user.delete({
+    return this.prismaService.user.update({
       where: {
         id,
+      },
+      data: {
+        deleted_by: authId,
+        deleted_at: new Date(),
       },
     });
   }

@@ -25,7 +25,6 @@ import { AuthGuard } from "@nestjs/passport";
 import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
 import { UseGuards } from "@nestjs/common";
 
-@ApiTags("exam")
 @ApiBearerAuth()
 @Controller("exam")
 @UseGuards(JwtAuthGuard)

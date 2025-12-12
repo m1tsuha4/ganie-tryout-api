@@ -6,15 +6,21 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto, CreateUserSchema } from "./dto/create-user.dto";
 import { UpdateUserDto, UpdateUserSchema } from "./dto/update-user.dto";
 import { ZodValidationPipe } from "src/common/pipes/zod-validation.pipe";
-import { ApiBody, ApiNotFoundResponse, ApiOkResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiNotFoundResponse, ApiOkResponse } from "@nestjs/swagger";
 import { ResponseUserDto } from "./dto/response-user.dto";
+import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
 
+
+@ApiBearerAuth()
 @Controller("user")
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -55,14 +61,14 @@ export class UserController {
   })
   update(
     @Param("id") id: string,
-    @Body(new ZodValidationPipe(UpdateUserSchema)) updateUserDto: UpdateUserDto,
+    @Body(new ZodValidationPipe(UpdateUserSchema)) updateUserDto: UpdateUserDto, @Req() req,
   ) {
-    return this.userService.update(id, updateUserDto);
+    return this.userService.update(id, updateUserDto, req.user.id);
   }
 
   @Delete(":id")
   @ApiOkResponse({ description: "User deleted successfully" })
-  remove(@Param("id") id: string) {
-    return this.userService.remove(id);
+  remove(@Param("id") id: string, @Req() req) {
+    return this.userService.remove(id, req.user.id);
   }
 }
