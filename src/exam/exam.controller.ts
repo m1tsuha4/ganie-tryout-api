@@ -160,4 +160,15 @@ export class ExamController {
     const userId: string = req.user?.id;
     return this.examService.resumeSession(sessionId, userId);
   }
+
+  @Post('session/:sessionId/ping')
+  @ApiOperation({ summary: "Ping to update session tick time" })
+  async pingSession(
+    @Param("sessionId") sessionIdParam: string,
+    @Req() req: any,
+  ) {
+    const sessionId = Number(sessionIdParam);
+    const userId: string = req.user?.id;
+    return this.examService.pingSession(sessionId, userId);
+  }
 }

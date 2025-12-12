@@ -5,7 +5,7 @@ import {
   InternalServerErrorException,
 } from "@nestjs/common";
 import { ExamRepository } from "./exam.repository";
-import { isExpired, remainingSeconds, shuffle } from "./util";
+import { computeSecondsLeftForSession, isExpired, remainingSeconds, shuffle } from "./util";
 import { acquireLock, redis, releaseLock } from "../common/utils/redis.util";
 import { PrismaService } from "src/prisma/prisma.service";
 
@@ -69,10 +69,13 @@ export class ExamService {
       session.started_at = now;
     }
 
-    if (isExpired(session.started_at, durationMin)) {
-      await this.repo.updateSessionPositionRaw(sessionId, {
-        completed_at: new Date(),
-      });
+    const now = new Date();
+    await this.repo.updateTick(sessionId, now);
+    session.ticked_at = now;
+
+    const secondsLeft = computeSecondsLeftForSession(session, durationMin);
+    if (secondsLeft <= 0) {
+      await this.repo.updateSessionPositionRaw(sessionId, { completed_at: new Date() });
       throw new ForbiddenException("Time is up for this exam");
     }
 
@@ -102,6 +105,12 @@ export class ExamService {
       return { id: c.id, choice_text: c.choice_text };
     });
 
+    const existingAnswer = await this.repo.findUserAnswerForSessionQuestion(
+      sessionId,
+      qid,
+    );
+    const selectedChoiceId = existingAnswer?.choice_id ?? null;
+
     const expiresAt = session.started_at
       ? new Date(
           session.started_at.getTime() + durationMin * 60 * 1000,
@@ -116,7 +125,8 @@ export class ExamService {
       orderedChoices: orderedChoices,
       position: pos,
       totalQuestions: qOrder.length,
-      secondsLeft: remainingSeconds(session.started_at, durationMin),
+      selectedChoiceId: selectedChoiceId,
+      secondsLeft: secondsLeft,
       expiresAt: expiresAt,
     };
   }
@@ -150,10 +160,13 @@ export class ExamService {
       session.started_at = now;
     }
 
-    if (isExpired(session.started_at, durationMin)) {
-      await this.repo.updateSessionPositionRaw(sessionId, {
-        completed_at: new Date(),
-      });
+    const now = new Date();
+    await this.repo.updateTick(sessionId, now);
+    session.ticked_at = now;
+
+    const secondsLeft = computeSecondsLeftForSession(session, durationMin);
+    if (secondsLeft <= 0) {
+      await this.repo.updateSessionPositionRaw(sessionId, { completed_at: new Date() });
       throw new ForbiddenException("Time is up for this exam");
     }
 
@@ -189,7 +202,6 @@ export class ExamService {
 
     try {
       await this.prisma.$transaction(async (tx) => {
-        // find existing answer (atomic within transaction)
         const existing = await tx.userAnswer.findFirst({
           where: { session_id: sessionId, question_id: questionId },
         });
@@ -209,7 +221,6 @@ export class ExamService {
           });
         }
 
-        // fetch answered question ids within tx
         const answeredRows = await tx.userAnswer.findMany({
           where: { session_id: sessionId },
           select: { question_id: true },
@@ -243,16 +254,9 @@ export class ExamService {
     if (!updated) {
       throw new ForbiddenException("Session not found");
     }
-    if (isExpired(updated.started_at, durationMin)) {
-      await this.repo.updateSessionPositionRaw(sessionId, {
-        completed_at: new Date(),
-      });
-      return {
-        finished: true,
-        nextPosition: updated.current_position,
-        secondsLeft: 0,
-        expiresAt: null,
-      };
+    if (computeSecondsLeftForSession(updated, durationMin) <= 0) {
+      await this.repo.updateSessionPositionRaw(sessionId, { completed_at: new Date() });
+      return { finished: true, nextPosition: updated.current_position, secondsLeft: 0, expiresAt: null };
     }
     const expiresAt = updated.started_at
       ? new Date(
@@ -262,7 +266,7 @@ export class ExamService {
     return {
       finished: !!updated.completed_at,
       nextPosition: updated.current_position,
-      secondsLeft: remainingSeconds(updated.started_at, durationMin),
+      secondsLeft: computeSecondsLeftForSession(updated, durationMin),
       expiresAt,
     };
   }
@@ -305,4 +309,93 @@ export class ExamService {
       nextQuestionId,
     };
   }
+
+  async pingSession(sessionId: number, userId: string) {
+    const session = await this.repo.findSessionById(sessionId);
+    if (!session) {
+      throw new ForbiddenException("Session not found");
+    }
+    if (session.user_id !== userId) {
+      throw new ForbiddenException(
+        "User is not allowed to access this session",
+      );
+    }
+
+    const now = new Date();
+    if (session.started_at) {
+      await this.repo.updateSessionPositionRaw(sessionId, {
+        started_at: now,
+        ticked_at: now,
+      });
+
+      session.started_at = now;
+      session.ticked_at = now;
+    } else {
+      await this.repo.updateTick(sessionId, now);
+      session.ticked_at = now;
+    }
+
+    const exam = await this.repo.findByExamId(session.exam_id);
+    const durationMin: number = exam?.duration ?? 0;
+    const lastTick = session.ticked_at ?? new Date();
+    const startedAt = session.started_at ?? lastTick;
+    const elapsedSec = Math.floor((lastTick.getTime() - startedAt.getTime()) / 1000);
+    const secondsleft = Math.max(0, durationMin * 60 - elapsedSec);
+
+    if (secondsleft <= 0) {
+      await this.finalizeSession(sessionId, session.started_at, exam, now);
+      return { secondsLeft: 0, expiresAt: session.started_at ? new Date(
+        session.started_at.getTime() + durationMin * 60 * 1000,
+      ).toISOString() : null };
+    }
+
+    return { secondsLeft: secondsleft, expiresAt: session.started_at ? new Date(
+      session.started_at.getTime() + durationMin * 60 * 1000,
+    ).toISOString() : null };
+  }
+
+  async finalizeSession(
+    sessionId: number, 
+    startedAt: Date | null,
+    exam?: any,
+    now?: Date,
+  ) {
+    const txNow = now ?? new Date();
+    const session = await this.repo.findSessionById(sessionId);
+    if (!session) {
+      throw new ForbiddenException("Session not found");
+    }
+    if (session.completed_at) {
+      return;
+    }
+
+    const examData = exam ?? (await this.repo.findByExamId(session.exam_id));
+    const durationMin: number = examData?.duration ?? 0;
+
+    const answer = await this.repo.findUserAnswer(sessionId);
+
+    const totalQuestions = Array.isArray(session.question_order) ? (session.question_order as number[]).length : 0;
+    const answeredCount = answer.length;
+    let correct = 0;
+    for (const ans of answer) {
+      if (ans.choice && ans.choice.is_correct) correct++;
+    }
+    const wrong = answeredCount - correct;
+    const empty = Math.max(0, totalQuestions - answeredCount);
+
+    const score = totalQuestions > 0 ? (correct / totalQuestions) * 100 : 0;
+
+    await this.prisma.$transaction(async (tx) => {
+      await this.repo.updateSessionScore(tx, sessionId, {
+        correct_answer: correct,
+        wrong_answer: wrong,
+        empty_answer: empty,
+        score: score,
+        completed_at: txNow,
+      });
+    });
+
+    return { correct, wrong, empty, score };
+  }
 }
+

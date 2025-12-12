@@ -119,4 +119,31 @@ export class ExamRepository {
       select: { question_id: true },
     });
   }
+
+  async updateTick(sessionId: number, now: Date) {
+    return this.prismaService.userExamSession.update({
+      where: { id: sessionId },
+      data: { ticked_at: now },
+    });
+  }
+
+  async findUserAnswer(sessionId: number) {
+    return this.prismaService.userAnswer.findMany({
+      where: { session_id: sessionId },
+      include: { choice: true },
+    });
+  }
+
+  async updateSessionScore(tx: any, sessionId: number, data: {
+    correct_answer?: number;
+    wrong_answer?: number;
+    empty_answer?: number;
+    score?: number;
+    completed_at?: Date
+  }) {
+    return tx.UserExamSession.update({
+      where: { id: sessionId },
+      data,
+    });
+  }
 }
