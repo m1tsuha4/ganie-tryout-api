@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseInterceptors,
   UseGuards,
+  Request,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -63,7 +64,7 @@ export class QuestionController {
 2. Upload gambar soal (jika ada) via POST /question/upload-image
 3. Upload gambar pembahasan (jika ada) - bisa menggunakan URL video
 4. Gunakan endpoint ini untuk membuat soal (TANPA choices)
-5. Setelah soal dibuat, gunakan POST /question/:id/choices untuk menambahkan 4 pilihan jawaban
+5. Setelah soal dibuat, gunakan POST /question/:id/choices untuk menambahkan 5 pilihan jawaban (A, B, C, D, E)
     
 **Keamanan:**
 - Soal harus lengkap (dengan image dan pembahasan) sebelum bisa tambah choices
@@ -114,10 +115,11 @@ export class QuestionController {
     description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
   })
   create(
+    @Request() req: any,
     @Body(new ZodValidationPipe(CreateQuestionSchema))
     createQuestionDto: CreateQuestionDto,
   ) {
-    return this.questionService.create(createQuestionDto);
+    return this.questionService.create(createQuestionDto, req.user.id);
   }
 
   // Create choices untuk question yang sudah ada (flow baru)
@@ -125,19 +127,19 @@ export class QuestionController {
   @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
     summary: "Tambah pilihan jawaban untuk soal (Admin Only)",
-    description: `Menambahkan 4 pilihan jawaban untuk soal yang sudah dibuat.
+    description: `Menambahkan 5 pilihan jawaban (A, B, C, D, E) untuk soal yang sudah dibuat.
     **Hanya bisa digunakan setelah soal dibuat via POST /question**
     
 **Flow:**
 1. Buat soal dulu via POST /question (dengan image dan pembahasan)
 2. Upload gambar pilihan jawaban (jika ada) via POST /question/upload-choice-image
-3. Gunakan endpoint ini untuk menambahkan 4 pilihan jawaban
+3. Gunakan endpoint ini untuk menambahkan 5 pilihan jawaban
 4. Harus ada tepat 1 jawaban yang benar (is_correct: true)
     
 **Validasi:**
 - Soal harus sudah ada
 - Soal belum boleh punya choices (jika sudah ada, gunakan PATCH /question/:id)
-- Harus ada tepat 4 choices
+- Harus ada tepat 5 choices (A, B, C, D, E)
 - Harus ada tepat 1 yang is_correct: true`,
   })
   @ApiParam({
@@ -147,7 +149,7 @@ export class QuestionController {
     example: 1,
   })
   @ApiBody({
-    description: "Data 4 pilihan jawaban. Setiap choice bisa punya teks saja, gambar saja, atau teks DAN gambar sekaligus.",
+    description: "Data 5 pilihan jawaban (A, B, C, D, E). Setiap choice bisa punya teks saja, gambar saja, atau teks DAN gambar sekaligus.",
     examples: {
       example1: {
         summary: "Contoh choice dengan teks saja",
@@ -173,6 +175,12 @@ export class QuestionController {
             },
             {
               choice_text: "6",
+              choice_image_url: "",
+              choice_audio_url: "",
+              is_correct: false,
+            },
+            {
+              choice_text: "7",
               choice_image_url: "",
               choice_audio_url: "",
               is_correct: false,
@@ -209,6 +217,12 @@ export class QuestionController {
               choice_audio_url: "",
               is_correct: false,
             },
+            {
+              choice_text: "Jawaban E",
+              choice_image_url: "https://res.cloudinary.com/.../choice-images/ghi789.jpg", // Teks + Gambar sekaligus
+              choice_audio_url: "",
+              is_correct: false,
+            },
           ],
         },
       },
@@ -232,11 +246,12 @@ export class QuestionController {
     description: "Soal tidak ditemukan",
   })
   createChoices(
+    @Request() req: any,
     @Param("id", ParseIntPipe) id: number,
     @Body(new ZodValidationPipe(CreateQuestionChoicesSchema))
     createChoicesDto: CreateQuestionChoicesDto,
   ) {
-    return this.questionService.createChoices(id, createChoicesDto);
+    return this.questionService.createChoices(id, createChoicesDto, req.user.id);
   }
 
   // Get all questions untuk exam tertentu
@@ -326,11 +341,12 @@ export class QuestionController {
     description: "Soal tidak ditemukan",
   })
   update(
+    @Request() req: any,
     @Param("id", ParseIntPipe) id: number,
     @Body(new ZodValidationPipe(UpdateQuestionSchema))
     updateQuestionDto: UpdateQuestionDto,
   ) {
-    return this.questionService.update(id, updateQuestionDto);
+    return this.questionService.update(id, updateQuestionDto, req.user.id);
   }
 
   // Delete question
@@ -360,8 +376,11 @@ export class QuestionController {
   @ApiNotFoundResponse({
     description: "Soal tidak ditemukan",
   })
-  remove(@Param("id", ParseIntPipe) id: number) {
-    return this.questionService.remove(id);
+  remove(
+    @Request() req: any,
+    @Param("id", ParseIntPipe) id: number,
+  ) {
+    return this.questionService.remove(id, req.user.id);
   }
 
   @Post("upload-image")

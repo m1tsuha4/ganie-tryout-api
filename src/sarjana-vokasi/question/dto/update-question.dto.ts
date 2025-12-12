@@ -11,7 +11,7 @@ export const UpdateQuestionSchema = z.object({
   difficulty: z.string().optional(),
   choices: z
     .array(CreateQuestionChoiceSchema)
-    .length(4, "Must have exactly 4 choices (A, B, C, D)")
+    .length(5, "Must have exactly 5 choices (A, B, C, D, E)")
     .refine(
       (choices) => choices.filter((c) => c.is_correct).length === 1,
       "Must have exactly one correct answer",

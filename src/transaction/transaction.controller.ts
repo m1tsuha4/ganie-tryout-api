@@ -8,6 +8,9 @@ import {
   UseGuards,
   Request,
   ParseIntPipe,
+  UploadedFile,
+  UseInterceptors,
+  BadRequestException,
 } from "@nestjs/common";
 import { TransactionService } from "./transaction.service";
 import {
@@ -31,14 +34,21 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiForbiddenResponse,
+  ApiConsumes,
 } from "@nestjs/swagger";
 import { ResponseTransactionDto } from "./dto/response-transaction.dto";
+import { CloudinaryService } from "src/common/services/cloudinary.service";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { memoryStorage } from "multer";
 
 @ApiTags("Transaction")
 @Controller("transaction")
 @ApiBearerAuth()
 export class TransactionController {
-  constructor(private readonly transactionService: TransactionService) {}
+  constructor(
+    private readonly transactionService: TransactionService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -205,10 +215,98 @@ export class TransactionController {
     description: "Transaction not found",
   })
   updateStatus(
+    @Request() req: any,
     @Param("id", ParseIntPipe) id: number,
     @Body(new ZodValidationPipe(UpdateTransactionStatusSchema))
     updateTransactionStatusDto: UpdateTransactionStatusDto,
   ) {
-    return this.transactionService.updateStatus(id, updateTransactionStatusDto);
+    return this.transactionService.updateStatus(
+      id,
+      updateTransactionStatusDto,
+      req.user.id,
+    );
+  }
+
+  @Patch(":id/upload-proof")
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileInterceptor("file", {
+      storage: memoryStorage(),
+      fileFilter: (_req, file, cb) => {
+        if (!file.mimetype.startsWith("image/")) {
+          return cb(new Error("Only image files are allowed!"), false);
+        }
+        cb(null, true);
+      },
+      limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB
+      },
+    }),
+  )
+  @ApiOperation({
+    summary: "Upload bukti pembayaran",
+    description: `User mengupload bukti pembayaran untuk transaksi yang sudah dibuat.
+    
+**Ketentuan:**
+- Hanya user pemilik transaksi yang bisa upload bukti bayar
+- Hanya transaksi dengan status "unpaid" yang bisa upload bukti
+- File harus berupa gambar (max 5MB)
+- File akan di-upload ke Cloudinary dan URL disimpan di database
+
+**Flow:**
+1. User buat transaksi dengan status "unpaid"
+2. User upload bukti bayar menggunakan endpoint ini
+3. Admin verifikasi bukti bayar dan update status menjadi "paid"`,
+  })
+  @ApiForbiddenResponse({
+    description:
+      "Forbidden - Anda tidak memiliki akses untuk upload bukti bayar transaksi ini",
+  })
+  @ApiNotFoundResponse({
+    description: "Transaction not found",
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      "Bad Request - Hanya transaksi dengan status 'unpaid' yang bisa upload bukti bayar",
+  })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        file: {
+          type: "string",
+          format: "binary",
+          description: "File gambar bukti pembayaran (max 5MB)",
+        },
+      },
+    },
+  })
+  @ApiOkResponse({
+    description: "Bukti pembayaran berhasil di-upload",
+    type: ResponseTransactionDto,
+  })
+  async uploadPaymentProof(
+    @Request() req: any,
+    @Param("id", ParseIntPipe) id: number,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) {
+      throw new BadRequestException("File is required");
+    }
+
+    // Upload image ke Cloudinary
+    const paymentProofUrl = await this.cloudinaryService.uploadImage(
+      file,
+      "payment-proofs",
+    );
+
+    // Update transaction dengan payment_proof_url
+    return this.transactionService.uploadPaymentProof(
+      id,
+      paymentProofUrl,
+      req.user.id,
+    );
   }
 }

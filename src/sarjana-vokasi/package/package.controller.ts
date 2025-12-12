@@ -105,10 +105,11 @@ export class PackageController {
     type: ResponsePackageDto,
   })
   create(
+    @Request() req: any,
     @Body(new ZodValidationPipe(CreatePackageSchema))
     createPackageDto: CreatePackageDto,
   ) {
-    return this.packageService.create(createPackageDto);
+    return this.packageService.create(createPackageDto, req.user.id);
   }
 
   @Get()
@@ -313,11 +314,12 @@ Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
     description: "Paket tidak ditemukan",
   })
   update(
+    @Request() req: any,
     @Param("id", ParseIntPipe) id: number,
     @Body(new ZodValidationPipe(UpdatePackageSchema))
     updatePackageDto: UpdatePackageDto,
   ) {
-    return this.packageService.update(id, updatePackageDto);
+    return this.packageService.update(id, updatePackageDto, req.user.id);
   }
 
   @Delete(":id")
@@ -352,8 +354,11 @@ Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
   @ApiNotFoundResponse({
     description: "Paket tidak ditemukan",
   })
-  remove(@Param("id", ParseIntPipe) id: number) {
-    return this.packageService.remove(id);
+  remove(
+    @Request() req: any,
+    @Param("id", ParseIntPipe) id: number,
+  ) {
+    return this.packageService.remove(id, req.user.id);
   }
 
   @Post(":id/subtest/:examId")

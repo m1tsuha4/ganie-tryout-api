@@ -13,7 +13,7 @@ import { ResponseSubtestDto } from "./dto/response-subtest.dto";
 export class SubtestService {
   constructor(private prismaService: PrismaService) {}
 
-  // Helper method untuk map subtest ke DTO (exclude updated_at, created_at, deleted_at)
+  // Helper method untuk map subtest ke DTO (exclude updated_at, created_at, deleted_at, created_by, updated_by, deleted_by)
   private mapToResponseDto(exam: any): ResponseSubtestDto {
     return {
       id: exam.id,
@@ -27,6 +27,7 @@ export class SubtestService {
 
   async create(
     createSubtestDto: CreateSubtestDto,
+    userId: string,
   ): Promise<ResponseSubtestDto> {
     const exam = await this.prismaService.exam.create({
       data: {
@@ -35,6 +36,7 @@ export class SubtestService {
         duration: createSubtestDto.duration,
         total_questions: 0, // Default, akan di-update saat ada soal
         type_exam: createSubtestDto.type_exam,
+        created_by: userId,
         // deleted_at default null (tidak dihapus)
       },
     });
@@ -106,19 +108,23 @@ export class SubtestService {
   async update(
     id: number,
     updateSubtestDto: UpdateSubtestDto,
+    userId: string,
   ): Promise<ResponseSubtestDto> {
     // Verify subtest exists
     const existingExam = await this.findOne(id);
 
     const updatedExam = await this.prismaService.exam.update({
       where: { id },
-      data: updateSubtestDto,
+      data: {
+        ...updateSubtestDto,
+        updated_by: userId,
+      },
     });
-
+    
     return this.mapToResponseDto(updatedExam);
   }
 
-  async remove(id: number) {
+  async remove(id: number, userId: string) {
     // Verify subtest exists
     const existingExam = await this.findOne(id);
 
@@ -127,6 +133,7 @@ export class SubtestService {
       where: { id },
       data: {
         deleted_at: new Date(),
+        deleted_by: userId,
       },
     });
   }
