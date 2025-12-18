@@ -40,6 +40,8 @@ import { ResponseTransactionDto } from "./dto/response-transaction.dto";
 import { CloudinaryService } from "src/common/services/cloudinary.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { memoryStorage } from "multer";
+import { ConfigService } from "@nestjs/config";
+import { getMaxImageSize } from "src/common/utils/file-upload.util";
 
 @ApiTags("Transaction")
 @Controller("transaction")
@@ -48,6 +50,7 @@ export class TransactionController {
   constructor(
     private readonly transactionService: TransactionService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Post()
@@ -232,14 +235,14 @@ export class TransactionController {
   @UseInterceptors(
     FileInterceptor("file", {
       storage: memoryStorage(),
-      fileFilter: (_req, file, cb) => {
+      fileFilter: (_req: any, file: Express.Multer.File, cb: any) => {
         if (!file.mimetype.startsWith("image/")) {
           return cb(new Error("Only image files are allowed!"), false);
         }
         cb(null, true);
       },
       limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB
+        fileSize: getMaxImageSize(),
       },
     }),
   )

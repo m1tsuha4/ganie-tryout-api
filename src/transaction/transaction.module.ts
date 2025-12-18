@@ -7,7 +7,6 @@ import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtStrategy } from "src/auth/strategies/jwt.strategy";
 import { CloudinaryModule } from "src/common/services/cloudinary.module";
-
 @Module({
   controllers: [TransactionController],
   providers: [TransactionService, JwtStrategy],
