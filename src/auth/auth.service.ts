@@ -37,11 +37,15 @@ export class AuthService {
       username: existingUser.username,
       type: "user", // Tandai sebagai user biasa
     });
+
+    const decoded = this.jwtService.decode(token);
+
     return {
       id: existingUser.id,
       email: existingUser.email,
       username: existingUser.username,
       token,
+      expiresAt: decoded ? decoded['exp'] : null,
     };
   }
 
@@ -67,11 +71,15 @@ export class AuthService {
       username: existingAdmin.username,
       type: "admin", // Tandai sebagai admin
     });
+
+    const decoded = this.jwtService.decode(token);
+
     return {
       id: existingAdmin.id,
       email: existingAdmin.email,
       username: existingAdmin.username,
       token,
+      expiresAt: decoded ? decoded['exp'] : null,
     };
   }
   async logout(user: any) {
