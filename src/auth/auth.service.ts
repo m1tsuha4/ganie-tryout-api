@@ -45,7 +45,7 @@ export class AuthService {
       email: existingUser.email,
       username: existingUser.username,
       token,
-      expiresAt: decoded ? decoded['exp'] : null,
+      expiresAt: decoded ? decoded['exp'].toString() : null,
     };
   }
 
@@ -79,7 +79,7 @@ export class AuthService {
       email: existingAdmin.email,
       username: existingAdmin.username,
       token,
-      expiresAt: decoded ? decoded['exp'] : null,
+      expiresAt: decoded ? decoded['exp'].toString() : null,
     };
   }
   async logout(user: any) {
