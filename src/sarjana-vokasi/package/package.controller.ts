@@ -44,6 +44,8 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { memoryStorage } from "multer";
 import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
 import { AdminGuard } from "src/auth/guard/admin.guard";
+import { ConfigService } from "@nestjs/config";
+import { getMaxImageSize } from "src/common/utils/file-upload.util";
 
 @ApiTags("Package")
 @Controller("package")
@@ -51,6 +53,7 @@ export class PackageController {
   constructor(
     private readonly packageService: PackageService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Post()
@@ -521,14 +524,14 @@ Digunakan untuk menampilkan subtest yang bisa dipilih saat mengelola paket.`,
   @UseInterceptors(
     FileInterceptor("file", {
       storage: memoryStorage(),
-      fileFilter: (_req, file, cb) => {
+      fileFilter: (_req: any, file: Express.Multer.File, cb: any) => {
         if (!file.mimetype.startsWith("image/")) {
           return cb(new Error("Only image files are allowed!"), false);
         }
         cb(null, true);
       },
       limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB
+        fileSize: getMaxImageSize(),
       },
     }),
   )

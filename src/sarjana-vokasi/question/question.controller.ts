@@ -42,6 +42,8 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { memoryStorage } from "multer";
 import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
 import { AdminGuard } from "src/auth/guard/admin.guard";
+import { ConfigService } from "@nestjs/config";
+import { getMaxImageSize, getMaxAudioSize } from "src/common/utils/file-upload.util";
 
 @ApiTags("Question")
 @Controller("question")
@@ -50,6 +52,7 @@ export class QuestionController {
   constructor(
     private readonly questionService: QuestionService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly configService: ConfigService,
   ) {}
 
   // Create question TANPA choices (flow baru: buat soal dulu, baru tambah choices)
@@ -388,14 +391,14 @@ export class QuestionController {
   @UseInterceptors(
     FileInterceptor("file", {
       storage: memoryStorage(),
-      fileFilter: (_req, file, cb) => {
+      fileFilter: (_req: any, file: Express.Multer.File, cb: any) => {
         if (!file.mimetype.startsWith("image/")) {
           return cb(new Error("Only image files are allowed!"), false);
         }
         cb(null, true);
       },
       limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB
+        fileSize: getMaxImageSize(),
       },
     }),
   )
@@ -447,14 +450,14 @@ export class QuestionController {
   @UseInterceptors(
     FileInterceptor("file", {
       storage: memoryStorage(),
-      fileFilter: (_req, file, cb) => {
+      fileFilter: (_req: any, file: Express.Multer.File, cb: any) => {
         if (!file.mimetype.startsWith("image/")) {
           return cb(new Error("Only image files are allowed!"), false);
         }
         cb(null, true);
       },
       limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB
+        fileSize: getMaxImageSize(),
       },
     }),
   )
@@ -503,8 +506,7 @@ export class QuestionController {
   @UseInterceptors(
     FileInterceptor("file", {
       storage: memoryStorage(),
-      fileFilter: (_req, file, cb) => {
-        // Validasi file audio (mp3, wav, m4a, ogg, aac, dll)
+      fileFilter: (_req: any, file: Express.Multer.File, cb: any) => {
         const allowedMimes = [
           "audio/mpeg",
           "audio/mp3",
@@ -528,7 +530,7 @@ export class QuestionController {
         cb(null, true);
       },
       limits: {
-        fileSize: 10 * 1024 * 1024, // 10MB untuk audio
+        fileSize: getMaxAudioSize(),
       },
     }),
   )
@@ -590,8 +592,7 @@ export class QuestionController {
   @UseInterceptors(
     FileInterceptor("file", {
       storage: memoryStorage(),
-      fileFilter: (_req, file, cb) => {
-        // Validasi file audio (mp3, wav, m4a, ogg, aac, dll)
+      fileFilter: (_req: any, file: Express.Multer.File, cb: any) => {
         const allowedMimes = [
           "audio/mpeg",
           "audio/mp3",
@@ -615,7 +616,7 @@ export class QuestionController {
         cb(null, true);
       },
       limits: {
-        fileSize: 10 * 1024 * 1024, // 10MB untuk audio
+        fileSize: getMaxAudioSize(),
       },
     }),
   )

@@ -3,6 +3,8 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";
 import { existsSync, mkdirSync } from "fs";
+import { ConfigService } from "@nestjs/config";
+import { getMaxImageSize } from "../utils/file-upload.util";
 
 const ensureDirExists = (folder: string) => {
   if (!existsSync(folder)) {
@@ -10,7 +12,14 @@ const ensureDirExists = (folder: string) => {
   }
 };
 
-export function UploadImageInterceptor(folderName: string = "") {
+/**
+ * Factory function untuk membuat UploadImageInterceptor
+ * Menerima ConfigService untuk membaca MAX_IMAGE_SIZE_MB dari config
+ */
+export function UploadImageInterceptor(
+  configService: ConfigService,
+  folderName: string = "",
+) {
   const folderPath = `./uploads/${folderName}`;
 
   ensureDirExists(folderPath);
@@ -38,7 +47,7 @@ export function UploadImageInterceptor(folderName: string = "") {
         cb(null, true);
       },
       limits: {
-        fileSize: 5 * 1024 * 1024,
+        fileSize: getMaxImageSize(configService),
       },
     }),
   );
