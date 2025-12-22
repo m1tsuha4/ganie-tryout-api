@@ -82,6 +82,14 @@ export class TransactionController {
           amount: 50000,
         },
       },
+      withProof: {
+        summary: "Contoh dengan bukti bayar",
+        value: {
+           package_id: 1,
+           payment_method: "Transfer Bank BCA",
+           payment_proof_url: "https://res.cloudinary.com/..."
+        }
+      }
     },
   })
   @ApiCreatedResponse({
@@ -145,6 +153,123 @@ export class TransactionController {
   })
   findByUser(@Request() req: any) {
     return this.transactionService.findByUser(req.user.id);
+  }
+
+  @Post("upload-proof-image")
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileInterceptor("file", {
+      storage: memoryStorage(),
+      fileFilter: (_req: any, file: Express.Multer.File, cb: any) => {
+        if (!file.mimetype.startsWith("image/")) {
+          return cb(new Error("Only image files are allowed!"), false);
+        }
+        cb(null, true);
+      },
+      limits: {
+        fileSize: getMaxImageSize(),
+      },
+    }),
+  )
+  @ApiOperation({
+    summary: "Upload image bukti pembayaran",
+    description: `Upload image bukti pembayaran ke Cloudinary dan dapatkan URL-nya.
+    URL ini nanti digunakan untuk endpoint upload-proof.`,
+  })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        file: {
+          type: "string",
+          format: "binary",
+          description: "File gambar bukti pembayaran (max 5MB)",
+        },
+      },
+    },
+  })
+  @ApiOkResponse({
+    description: "Image berhasil di-upload",
+    schema: {
+      type: "object",
+      properties: {
+        url: {
+          type: "string",
+          example: "https://res.cloudinary.com/...",
+        },
+      },
+    },
+  })
+  async uploadImage(
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) {
+      throw new BadRequestException("File is required");
+    }
+
+    // Upload image ke Cloudinary
+    const url = await this.cloudinaryService.uploadImage(
+      file,
+      "payment-proofs",
+    );
+
+    return { url };
+  }
+
+  @Patch(":id/upload-proof")
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: "Submit bukti pembayaran",
+    description: `User mensubmit URL bukti pembayaran untuk transaksi.
+    
+    **Flow:**
+    1. User upload image via POST /transaction/upload-proof-image -> dapat URL
+    2. User submit URL via endpoint ini`,
+  })
+  @ApiForbiddenResponse({
+    description:
+      "Forbidden - Anda tidak memiliki akses untuk upload bukti bayar transaksi ini",
+  })
+  @ApiNotFoundResponse({
+    description: "Transaction not found",
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      "Bad Request - Hanya transaksi dengan status 'unpaid' yang bisa upload bukti bayar",
+  })
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        paymentProofUrl: {
+          type: "string",
+          description: "URL gambar bukti pembayaran dari Cloudinary",
+        },
+      },
+      required: ["paymentProofUrl"],
+    },
+  })
+  @ApiOkResponse({
+    description: "Bukti pembayaran berhasil di-submit",
+    type: ResponseTransactionDto,
+  })
+  async uploadPaymentProof(
+    @Request() req: any,
+    @Param("id", ParseIntPipe) id: number,
+    @Body("paymentProofUrl") paymentProofUrl: string,
+  ) {
+    if (!paymentProofUrl) {
+      throw new BadRequestException("paymentProofUrl is required");
+    }
+
+    // Update transaction dengan payment_proof_url
+    return this.transactionService.uploadPaymentProof(
+      id,
+      paymentProofUrl,
+      req.user.id,
+    );
   }
 
   @Get(":id")
@@ -226,89 +351,6 @@ export class TransactionController {
     return this.transactionService.updateStatus(
       id,
       updateTransactionStatusDto,
-      req.user.id,
-    );
-  }
-
-  @Patch(":id/upload-proof")
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(
-    FileInterceptor("file", {
-      storage: memoryStorage(),
-      fileFilter: (_req: any, file: Express.Multer.File, cb: any) => {
-        if (!file.mimetype.startsWith("image/")) {
-          return cb(new Error("Only image files are allowed!"), false);
-        }
-        cb(null, true);
-      },
-      limits: {
-        fileSize: getMaxImageSize(),
-      },
-    }),
-  )
-  @ApiOperation({
-    summary: "Upload bukti pembayaran",
-    description: `User mengupload bukti pembayaran untuk transaksi yang sudah dibuat.
-    
-**Ketentuan:**
-- Hanya user pemilik transaksi yang bisa upload bukti bayar
-- Hanya transaksi dengan status "unpaid" yang bisa upload bukti
-- File harus berupa gambar (max 5MB)
-- File akan di-upload ke Cloudinary dan URL disimpan di database
-
-**Flow:**
-1. User buat transaksi dengan status "unpaid"
-2. User upload bukti bayar menggunakan endpoint ini
-3. Admin verifikasi bukti bayar dan update status menjadi "paid"`,
-  })
-  @ApiForbiddenResponse({
-    description:
-      "Forbidden - Anda tidak memiliki akses untuk upload bukti bayar transaksi ini",
-  })
-  @ApiNotFoundResponse({
-    description: "Transaction not found",
-  })
-  @ApiResponse({
-    status: 400,
-    description:
-      "Bad Request - Hanya transaksi dengan status 'unpaid' yang bisa upload bukti bayar",
-  })
-  @ApiConsumes("multipart/form-data")
-  @ApiBody({
-    schema: {
-      type: "object",
-      properties: {
-        file: {
-          type: "string",
-          format: "binary",
-          description: "File gambar bukti pembayaran (max 5MB)",
-        },
-      },
-    },
-  })
-  @ApiOkResponse({
-    description: "Bukti pembayaran berhasil di-upload",
-    type: ResponseTransactionDto,
-  })
-  async uploadPaymentProof(
-    @Request() req: any,
-    @Param("id", ParseIntPipe) id: number,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    if (!file) {
-      throw new BadRequestException("File is required");
-    }
-
-    // Upload image ke Cloudinary
-    const paymentProofUrl = await this.cloudinaryService.uploadImage(
-      file,
-      "payment-proofs",
-    );
-
-    // Update transaction dengan payment_proof_url
-    return this.transactionService.uploadPaymentProof(
-      id,
-      paymentProofUrl,
       req.user.id,
     );
   }

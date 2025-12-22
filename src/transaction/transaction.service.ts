@@ -81,6 +81,7 @@ export class TransactionService {
         amount: amount,
         payment_method: createTransactionDto.payment_method,
         status: "unpaid",
+        payment_proof_url: createTransactionDto.payment_proof_url, // Simpan bukti bayar jika ada
         created_by: userId, // User yang membuat transaksi
         // deleted_at default null (tidak dihapus)
       },
