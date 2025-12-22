@@ -60,6 +60,19 @@ export class AuthController {
     return this.authService.loginUser(loginDto);
   }
 
+  @Post("verify-token")
+  @ApiBody({
+    description: "Verify login token",
+    schema: {
+      example: {
+        token: "eee65650-982c-4bc1-9685-ffe860e8ab8a",
+      },
+    },
+  })
+  verifyLoginToken(@Body("token") token: string) {
+    return this.authService.verifyLoginToken(token);
+  }
+
   @Post("admin")
   @ApiBody({
     description: "Login admin",

@@ -8,6 +8,8 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { LoginDto } from "./dto/login.dto";
 import * as bcrypt from "bcryptjs";
 import { JwtService } from "@nestjs/jwt";
+import { randomUUID } from "node:crypto";
+import { redis } from "src/common/utils/redis.util";
 
 @Injectable()
 export class AuthService {
@@ -31,20 +33,55 @@ export class AuthService {
     if (!isPasswordMatch) {
       throw new ConflictException("Invalid Credentials");
     }
-    const token = this.jwtService.sign({
-      id: existingUser.id,
-      email: existingUser.email,
-      username: existingUser.username,
-      type: "user", // Tandai sebagai user biasa
-    });
+    const token = randomUUID();
 
-    const decoded = this.jwtService.decode(token);
+    await redis.set(
+      `login_token:${token}`,
+      JSON.stringify({
+        id: existingUser.id,
+        email: existingUser.email,
+        username: existingUser.username,
+        type: "user",
+      }),
+      "EX",
+      3600,
+    );
 
     return {
       id: existingUser.id,
       email: existingUser.email,
       username: existingUser.username,
       token,
+      expiresAt: 3600,
+    };
+  }
+
+  async verifyLoginToken(token: string) {
+    const key = `login_token:${token}`;
+
+    const cached = await redis.get(key);
+    if (!cached) {
+      throw new BadRequestException("Invalid or expired login token");
+    }
+
+    const user = JSON.parse(cached);
+
+    await redis.del(key);
+
+    const accessToken = this.jwtService.sign({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      type: user.type,
+    });
+
+    const decoded = this.jwtService.decode(accessToken);
+
+    return {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      token: accessToken,
       expiresAt: decoded ? decoded['exp'].toString() : null,
     };
   }
