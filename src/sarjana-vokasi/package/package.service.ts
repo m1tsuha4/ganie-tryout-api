@@ -137,11 +137,11 @@ export class PackageService {
     }
 
     // User biasa tidak bisa akses unpublished package
-    if (!isAdmin && !packageData.published) {
-      throw new ForbiddenException(
-        "User biasa tidak bisa mengakses paket yang belum dipublish",
-      );
-    }
+    // if (!isAdmin && !packageData.published) {
+    //   throw new ForbiddenException(
+    //     "User biasa tidak bisa mengakses paket yang belum dipublish",
+    //   );
+    // }
 
     // Return dengan exclude updated_at dan created_at dari field utama, tapi tetap include nested data
     const {
