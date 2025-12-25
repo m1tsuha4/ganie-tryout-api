@@ -72,15 +72,15 @@ export class QuestionService {
     if (!question) {
       throw new NotFoundException("Question not found");
     }
-
+    
     // Validasi: Question tidak boleh sudah punya choices
     if (question.question_choices.length > 0) {
-      throw new BadRequestException(
-        "Question already has choices. Use update endpoint to modify choices.",
-      );
-    }
-
-    // Create choices
+        throw new BadRequestException(
+            "Question already has choices. Use update endpoint to modify choices.",
+          );
+        }
+        
+        // Create choices
     await this.prismaService.questionChoice.createMany({
       data: createChoicesDto.choices.map((choice) => ({
         question_id: questionId,
@@ -171,9 +171,9 @@ export class QuestionService {
     }
 
     // Verify question exists (bisa untuk Sarjana atau Pascasarjana)
-    if (question.exam.package_exams.length === 0) {
-      throw new NotFoundException("Question not found");
-    }
+    // if (question.exam.package_exams.length === 0) {
+    //   throw new NotFoundException("Question not found");
+    // }
 
     return question;
   }
