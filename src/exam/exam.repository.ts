@@ -135,9 +135,9 @@ export class ExamRepository {
   }
 
   async updateSessionScore(tx: any, sessionId: number, data: {
-    correct_answer?: number;
-    wrong_answer?: number;
-    empty_answer?: number;
+    correct_answers?: number;
+    wrong_answers?: number;
+    empty_answers?: number;
     score?: number;
     completed_at?: Date
   }) {

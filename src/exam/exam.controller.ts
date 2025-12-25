@@ -171,4 +171,26 @@ export class ExamController {
     const userId: string = req.user?.id;
     return this.examService.pingSession(sessionId, userId);
   }
+
+  @Post('session/:sessionId/submit')
+  @ApiOperation({ summary: 'Submit session (finalize exam and compute score)' })
+  async submitSession(
+    @Param('sessionId') sessionIdParam: string,
+    @Req() req: any,
+  ) {
+    const sessionId = Number(sessionIdParam);
+    const userId: string = req.user?.id;
+    return this.examService.submitSession(sessionId, userId);
+  }
+
+  @Get('package/:packageId/progress')
+  @ApiOperation({ summary: 'Get package progress (per-session and totals) for current user' })
+  async getPackageProgress(
+    @Param('packageId') packageIdParam: string,
+    @Req() req: any,
+  ) {
+    const packageId = Number(packageIdParam);
+    const userId: string = req.user?.id;
+    return this.examService.getPackageProgress(packageId, userId);
+  }
 }

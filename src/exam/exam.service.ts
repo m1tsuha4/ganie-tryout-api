@@ -6,6 +6,7 @@ import {
 } from "@nestjs/common";
 import { ExamRepository } from "./exam.repository";
 import { computeSecondsLeftForSession, isExpired, remainingSeconds, shuffle } from "./util";
+import { getScoringConstants } from "src/common/constants/scoring.constants";
 import { acquireLock, redis, releaseLock } from "../common/utils/redis.util";
 import { PrismaService } from "src/prisma/prisma.service";
 
@@ -15,6 +16,36 @@ export class ExamService {
     private readonly repo: ExamRepository,
     private readonly prisma: PrismaService,
   ) {}
+
+  // If the gap between last tick and now is larger than this threshold
+  // we consider the client was offline and should NOT count that gap
+  // toward elapsed time. Threshold set to 30s (30_000 ms).
+  private readonly OFFLINE_THRESHOLD_MS = 30_000;
+
+  private async handleTick(sessionId: number, session: any, now: Date) {
+    const prevTick: Date | null = session.ticked_at ?? null;
+
+    if (prevTick) {
+      const gap = now.getTime() - prevTick.getTime();
+      if (gap > this.OFFLINE_THRESHOLD_MS) {
+        // Client was likely offline; shift started_at forward by gap
+        if (session.started_at) {
+          const newStarted = new Date(session.started_at.getTime() + gap);
+          await this.repo.updateSessionPositionRaw(sessionId, {
+            started_at: newStarted,
+          });
+          await this.repo.updateTick(sessionId, now);
+          session.started_at = newStarted;
+          session.ticked_at = now;
+          return;
+        }
+      }
+    }
+
+    // Normal case: just update ticked_at
+    await this.repo.updateTick(sessionId, now);
+    session.ticked_at = now;
+  }
 
   async startPackageForUser(userId: string, packageId: number) {
     const userPackage = await this.repo.findUserPackage(userId, packageId);
@@ -31,6 +62,18 @@ export class ExamService {
       for (const q of pe.exam.questions) {
         choiceOrder[q.id] = shuffle(q.question_choices.map((qc) => qc.id));
       }
+
+      // If a session for this user+exam already exists, return it (do not reset)
+      const existing = await this.repo.findExistingSessionForUserExam(userId, pe.exam.id);
+      if (existing) {
+        created.push(existing);
+        await redis.hset(`session:${existing.id}:meta`, {
+          userId,
+          examId: String(pe.exam.id),
+        });
+        continue;
+      }
+
       const session = await this.repo.createUserExamSession({
         user_id: userId,
         exam_id: pe.exam.id,
@@ -70,8 +113,7 @@ export class ExamService {
     }
 
     const now = new Date();
-    await this.repo.updateTick(sessionId, now);
-    session.ticked_at = now;
+    await this.handleTick(sessionId, session, now);
 
     const secondsLeft = computeSecondsLeftForSession(session, durationMin);
     if (secondsLeft <= 0) {
@@ -161,8 +203,7 @@ export class ExamService {
     }
 
     const now = new Date();
-    await this.repo.updateTick(sessionId, now);
-    session.ticked_at = now;
+    await this.handleTick(sessionId, session, now);
 
     const secondsLeft = computeSecondsLeftForSession(session, durationMin);
     if (secondsLeft <= 0) {
@@ -181,13 +222,14 @@ export class ExamService {
       if (!Number.isInteger(idx) || idx < 0 || idx >= qOrder.length) {
         throw new BadRequestException("Invalid question index");
       }
-      if (qOrder[idx] !== questionId) {
+      if (Number(qOrder[idx]) !== questionId) {
         throw new BadRequestException(
           "QuestionId does not match the provided index",
         );
       }
     } else {
-      idx = qOrder.findIndex((q) => q === questionId);
+      // qOrder may contain numeric IDs or stringified numbers (JSON). Normalize when comparing.
+      idx = qOrder.findIndex((q) => Number(q) === questionId);
       if (idx === -1)
         throw new BadRequestException(
           "Question does not belong to this session",
@@ -225,21 +267,21 @@ export class ExamService {
           where: { session_id: sessionId },
           select: { question_id: true },
         });
-        const answeredSet = new Set(answeredRows.map((r) => r.question_id));
+        // Normalize answered IDs to strings for reliable comparison with qOrder JSON values
+        const answeredSet = new Set(answeredRows.map((r) => String(r.question_id)));
 
         // compute first unanswered index
         let newPos = qOrder.length;
         for (let i = 0; i < qOrder.length; i++) {
-          if (!answeredSet.has(qOrder[i])) {
+          if (!answeredSet.has(String(qOrder[i]))) {
             newPos = i;
             break;
           }
         }
 
         const updateData: any = { current_position: newPos };
-        if (newPos >= qOrder.length) {
-          updateData.completed_at = new Date();
-        }
+        // Do NOT auto-mark session as completed when all questions are answered.
+        // Allow client to review and explicitly submit. Time expiry still finalizes session.
 
         await tx.userExamSession.update({
           where: { id: sessionId },
@@ -322,17 +364,14 @@ export class ExamService {
     }
 
     const now = new Date();
-    if (session.started_at) {
-      await this.repo.updateSessionPositionRaw(sessionId, {
-        started_at: now,
-        ticked_at: now,
-      });
-
+    // If session hasn't started yet, set started_at.
+    // Otherwise update tick handling which will pause for offline gaps.
+    if (!session.started_at) {
+      await this.repo.updateSessionPositionRaw(sessionId, { started_at: now });
       session.started_at = now;
-      session.ticked_at = now;
+      await this.handleTick(sessionId, session, now);
     } else {
-      await this.repo.updateTick(sessionId, now);
-      session.ticked_at = now;
+      await this.handleTick(sessionId, session, now);
     }
 
     const exam = await this.repo.findByExamId(session.exam_id);
@@ -352,6 +391,69 @@ export class ExamService {
     return { secondsLeft: secondsleft, expiresAt: session.started_at ? new Date(
       session.started_at.getTime() + durationMin * 60 * 1000,
     ).toISOString() : null };
+  }
+
+  // Explicit submit endpoint: finalize session (compute score and mark completed_at)
+  async submitSession(sessionId: number, userId: string) {
+    const session = await this.repo.findSessionById(sessionId);
+    if (!session) {
+      throw new ForbiddenException("Session not found");
+    }
+    if (session.user_id !== userId) {
+      throw new ForbiddenException("User is not allowed to access this session");
+    }
+    if (session.completed_at) {
+      return { finished: true };
+    }
+
+    const exam = await this.repo.findByExamId(session.exam_id);
+    const res = await this.finalizeSession(sessionId, session.started_at, exam, new Date());
+    return { finished: true, result: res };
+  }
+
+  /**
+   * Return per-session details and package-level totals for a user's package attempt.
+   * Note: sessions that are not finalized (`completed_at` is null) may have zero scores.
+   */
+  async getPackageProgress(packageId: number, userId: string) {
+    const packageExam = await this.repo.findPackageExamWithQeustions(packageId);
+    const examIds = packageExam.map((pe) => pe.exam.id);
+
+    const sessions = await this.prisma.userExamSession.findMany({
+      where: { user_id: userId, exam_id: { in: examIds } },
+    });
+
+    const sessionSummaries = sessions.map((s) => ({
+      sessionId: s.id,
+      examId: s.exam_id,
+      current_position: s.current_position ?? 0,
+      correct_answers: s.correct_answers ?? 0,
+      wrong_answers: s.wrong_answers ?? 0,
+      empty_answers: s.empty_answers ?? 0,
+      score: s.score ?? 0,
+      completed_at: s.completed_at ?? null,
+    }));
+
+    const totals = sessionSummaries.reduce(
+      (acc, cur) => {
+        acc.correct += cur.correct_answers;
+        acc.wrong += cur.wrong_answers;
+        acc.empty += cur.empty_answers;
+        acc.scoreSum += cur.score;
+        return acc;
+      },
+      { correct: 0, wrong: 0, empty: 0, scoreSum: 0 },
+    );
+
+    return {
+      sessions: sessionSummaries,
+      totals: {
+        correct: totals.correct,
+        wrong: totals.wrong,
+        empty: totals.empty,
+        averageScore: sessions.length > 0 ? totals.scoreSum / sessions.length : 0,
+      },
+    };
   }
 
   async finalizeSession(
@@ -383,19 +485,23 @@ export class ExamService {
     const wrong = answeredCount - correct;
     const empty = Math.max(0, totalQuestions - answeredCount);
 
-    const score = totalQuestions > 0 ? (correct / totalQuestions) * 100 : 0;
+    // Compute raw score using scoring constants (e.g., +4 / -1 / 0)
+    const scoring = getScoringConstants("SARJANA", examData?.type);
+    const rawScore = correct * scoring.CORRECT_ANSWER + wrong * scoring.WRONG_ANSWER + empty * scoring.NOT_ANSWERED;
+    // Optionally compute percentage score too (for convenience)
+    const percentScore = totalQuestions > 0 ? (correct / totalQuestions) * 100 : 0;
 
     await this.prisma.$transaction(async (tx) => {
       await this.repo.updateSessionScore(tx, sessionId, {
-        correct_answer: correct,
-        wrong_answer: wrong,
-        empty_answer: empty,
-        score: score,
+        correct_answers: correct,
+        wrong_answers: wrong,
+        empty_answers: empty,
+        score: rawScore,
         completed_at: txNow,
       });
     });
 
-    return { correct, wrong, empty, score };
+    return { correct, wrong, empty, rawScore, percentScore };
   }
 }
 
