@@ -8,9 +8,9 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { CreateUserDto, CreateUserSchema } from "./dto/create-user.dto";
 import { UpdateUserDto, UpdateUserSchema } from "./dto/update-user.dto";
 import { ZodValidationPipe } from "src/common/pipes/zod-validation.pipe";
 import {
@@ -21,6 +21,10 @@ import {
 } from "@nestjs/swagger";
 import { ResponseUserDto } from "./dto/response-user.dto";
 import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
+import {
+  PaginationDto,
+  PaginationSchema,
+} from "src/common/dtos/pagination.dto";
 
 @ApiBearerAuth()
 @Controller("user")
@@ -34,8 +38,11 @@ export class UserController {
     type: ResponseUserDto,
     isArray: true,
   })
-  findAll() {
-    return this.userService.findAll();
+  findAll(
+    @Query(new ZodValidationPipe(PaginationSchema))
+    paginationDto: PaginationDto,
+  ) {
+    return this.userService.findAll(paginationDto);
   }
 
   @Get(":id")

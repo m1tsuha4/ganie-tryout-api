@@ -7,6 +7,8 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import * as bcrypt from "bcryptjs";
+import { PaginationDto } from "src/common/dtos/pagination.dto";
+import { ok } from "src/common/utils/response.util";
 
 @Injectable()
 export class UserService {
@@ -53,22 +55,37 @@ export class UserService {
     });
   }
 
-  async findAll() {
-    const existingUser = await this.prismaService.user.findMany({
-      where: {
-        deleted_at: null,
-      },
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        email: true,
-      },
+  async findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
+    const [data, total] = await Promise.all([
+      this.prismaService.user.findMany({
+        where: {
+          deleted_at: null,
+        },
+        select: {
+          id: true,
+          username: true,
+          name: true,
+          email: true,
+        },
+        take: limit,
+        skip: offset,
+        orderBy: {
+          created_at: "desc",
+        },
+      }),
+      this.prismaService.user.count({
+        where: {
+          deleted_at: null,
+        },
+      }),
+    ]);
+    return ok(data, "Fetched successfully", {
+      total,
+      limit,
+      offset,
+      nextPage: total > offset + limit ? offset + limit : null,
     });
-    if (existingUser.length === 0) {
-      throw new NotFoundException("User Not Found");
-    }
-    return existingUser;
   }
 
   async findOne(id: string) {
