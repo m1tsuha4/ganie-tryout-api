@@ -120,7 +120,7 @@ export class SubtestService {
         updated_by: userId,
       },
     });
-    
+
     return this.mapToResponseDto(updatedExam);
   }
 

@@ -85,11 +85,11 @@ export class TransactionController {
       withProof: {
         summary: "Contoh dengan bukti bayar",
         value: {
-           package_id: 1,
-           payment_method: "Transfer Bank BCA",
-           payment_proof_url: "https://res.cloudinary.com/..."
-        }
-      }
+          package_id: 1,
+          payment_method: "Transfer Bank BCA",
+          payment_proof_url: "https://res.cloudinary.com/...",
+        },
+      },
     },
   })
   @ApiCreatedResponse({
@@ -201,9 +201,7 @@ export class TransactionController {
       },
     },
   })
-  async uploadImage(
-    @UploadedFile() file: Express.Multer.File,
-  ) {
+  async uploadImage(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new BadRequestException("File is required");
     }

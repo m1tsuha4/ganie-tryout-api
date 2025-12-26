@@ -72,15 +72,15 @@ export class QuestionService {
     if (!question) {
       throw new NotFoundException("Question not found");
     }
-    
+
     // Validasi: Question tidak boleh sudah punya choices
     if (question.question_choices.length > 0) {
-        throw new BadRequestException(
-            "Question already has choices. Use update endpoint to modify choices.",
-          );
-        }
-        
-        // Create choices
+      throw new BadRequestException(
+        "Question already has choices. Use update endpoint to modify choices.",
+      );
+    }
+
+    // Create choices
     await this.prismaService.questionChoice.createMany({
       data: createChoicesDto.choices.map((choice) => ({
         question_id: questionId,
@@ -179,7 +179,11 @@ export class QuestionService {
   }
 
   // Update question
-  async update(id: number, updateQuestionDto: UpdateQuestionDto, userId: string) {
+  async update(
+    id: number,
+    updateQuestionDto: UpdateQuestionDto,
+    userId: string,
+  ) {
     const existingQuestion = await this.findOne(id);
 
     // Update question

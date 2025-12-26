@@ -5,7 +5,12 @@ import {
   InternalServerErrorException,
 } from "@nestjs/common";
 import { ExamRepository } from "./exam.repository";
-import { computeSecondsLeftForSession, isExpired, remainingSeconds, shuffle } from "./util";
+import {
+  computeSecondsLeftForSession,
+  isExpired,
+  remainingSeconds,
+  shuffle,
+} from "./util";
 import { getScoringConstants } from "src/common/constants/scoring.constants";
 import { acquireLock, redis, releaseLock } from "../common/utils/redis.util";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -64,7 +69,10 @@ export class ExamService {
       }
 
       // If a session for this user+exam already exists, return it (do not reset)
-      const existing = await this.repo.findExistingSessionForUserExam(userId, pe.exam.id);
+      const existing = await this.repo.findExistingSessionForUserExam(
+        userId,
+        pe.exam.id,
+      );
       if (existing) {
         created.push(existing);
         await redis.hset(`session:${existing.id}:meta`, {
@@ -117,7 +125,9 @@ export class ExamService {
 
     const secondsLeft = computeSecondsLeftForSession(session, durationMin);
     if (secondsLeft <= 0) {
-      await this.repo.updateSessionPositionRaw(sessionId, { completed_at: new Date() });
+      await this.repo.updateSessionPositionRaw(sessionId, {
+        completed_at: new Date(),
+      });
       throw new ForbiddenException("Time is up for this exam");
     }
 
@@ -207,7 +217,9 @@ export class ExamService {
 
     const secondsLeft = computeSecondsLeftForSession(session, durationMin);
     if (secondsLeft <= 0) {
-      await this.repo.updateSessionPositionRaw(sessionId, { completed_at: new Date() });
+      await this.repo.updateSessionPositionRaw(sessionId, {
+        completed_at: new Date(),
+      });
       throw new ForbiddenException("Time is up for this exam");
     }
 
@@ -268,7 +280,9 @@ export class ExamService {
           select: { question_id: true },
         });
         // Normalize answered IDs to strings for reliable comparison with qOrder JSON values
-        const answeredSet = new Set(answeredRows.map((r) => String(r.question_id)));
+        const answeredSet = new Set(
+          answeredRows.map((r) => String(r.question_id)),
+        );
 
         // compute first unanswered index
         let newPos = qOrder.length;
@@ -297,8 +311,15 @@ export class ExamService {
       throw new ForbiddenException("Session not found");
     }
     if (computeSecondsLeftForSession(updated, durationMin) <= 0) {
-      await this.repo.updateSessionPositionRaw(sessionId, { completed_at: new Date() });
-      return { finished: true, nextPosition: updated.current_position, secondsLeft: 0, expiresAt: null };
+      await this.repo.updateSessionPositionRaw(sessionId, {
+        completed_at: new Date(),
+      });
+      return {
+        finished: true,
+        nextPosition: updated.current_position,
+        secondsLeft: 0,
+        expiresAt: null,
+      };
     }
     const expiresAt = updated.started_at
       ? new Date(
@@ -378,19 +399,31 @@ export class ExamService {
     const durationMin: number = exam?.duration ?? 0;
     const lastTick = session.ticked_at ?? new Date();
     const startedAt = session.started_at ?? lastTick;
-    const elapsedSec = Math.floor((lastTick.getTime() - startedAt.getTime()) / 1000);
+    const elapsedSec = Math.floor(
+      (lastTick.getTime() - startedAt.getTime()) / 1000,
+    );
     const secondsleft = Math.max(0, durationMin * 60 - elapsedSec);
 
     if (secondsleft <= 0) {
       await this.finalizeSession(sessionId, session.started_at, exam, now);
-      return { secondsLeft: 0, expiresAt: session.started_at ? new Date(
-        session.started_at.getTime() + durationMin * 60 * 1000,
-      ).toISOString() : null };
+      return {
+        secondsLeft: 0,
+        expiresAt: session.started_at
+          ? new Date(
+              session.started_at.getTime() + durationMin * 60 * 1000,
+            ).toISOString()
+          : null,
+      };
     }
 
-    return { secondsLeft: secondsleft, expiresAt: session.started_at ? new Date(
-      session.started_at.getTime() + durationMin * 60 * 1000,
-    ).toISOString() : null };
+    return {
+      secondsLeft: secondsleft,
+      expiresAt: session.started_at
+        ? new Date(
+            session.started_at.getTime() + durationMin * 60 * 1000,
+          ).toISOString()
+        : null,
+    };
   }
 
   // Explicit submit endpoint: finalize session (compute score and mark completed_at)
@@ -400,14 +433,21 @@ export class ExamService {
       throw new ForbiddenException("Session not found");
     }
     if (session.user_id !== userId) {
-      throw new ForbiddenException("User is not allowed to access this session");
+      throw new ForbiddenException(
+        "User is not allowed to access this session",
+      );
     }
     if (session.completed_at) {
       return { finished: true };
     }
 
     const exam = await this.repo.findByExamId(session.exam_id);
-    const res = await this.finalizeSession(sessionId, session.started_at, exam, new Date());
+    const res = await this.finalizeSession(
+      sessionId,
+      session.started_at,
+      exam,
+      new Date(),
+    );
     return { finished: true, result: res };
   }
 
@@ -451,13 +491,14 @@ export class ExamService {
         correct: totals.correct,
         wrong: totals.wrong,
         empty: totals.empty,
-        averageScore: sessions.length > 0 ? totals.scoreSum / sessions.length : 0,
+        averageScore:
+          sessions.length > 0 ? totals.scoreSum / sessions.length : 0,
       },
     };
   }
 
   async finalizeSession(
-    sessionId: number, 
+    sessionId: number,
     startedAt: Date | null,
     exam?: any,
     now?: Date,
@@ -476,7 +517,9 @@ export class ExamService {
 
     const answer = await this.repo.findUserAnswer(sessionId);
 
-    const totalQuestions = Array.isArray(session.question_order) ? (session.question_order as number[]).length : 0;
+    const totalQuestions = Array.isArray(session.question_order)
+      ? (session.question_order as number[]).length
+      : 0;
     const answeredCount = answer.length;
     let correct = 0;
     for (const ans of answer) {
@@ -487,9 +530,13 @@ export class ExamService {
 
     // Compute raw score using scoring constants (e.g., +4 / -1 / 0)
     const scoring = getScoringConstants("SARJANA", examData?.type);
-    const rawScore = correct * scoring.CORRECT_ANSWER + wrong * scoring.WRONG_ANSWER + empty * scoring.NOT_ANSWERED;
+    const rawScore =
+      correct * scoring.CORRECT_ANSWER +
+      wrong * scoring.WRONG_ANSWER +
+      empty * scoring.NOT_ANSWERED;
     // Optionally compute percentage score too (for convenience)
-    const percentScore = totalQuestions > 0 ? (correct / totalQuestions) * 100 : 0;
+    const percentScore =
+      totalQuestions > 0 ? (correct / totalQuestions) * 100 : 0;
 
     await this.prisma.$transaction(async (tx) => {
       await this.repo.updateSessionScore(tx, sessionId, {
@@ -504,4 +551,3 @@ export class ExamService {
     return { correct, wrong, empty, rawScore, percentScore };
   }
 }
-

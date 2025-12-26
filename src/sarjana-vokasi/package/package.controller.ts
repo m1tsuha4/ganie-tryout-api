@@ -357,10 +357,7 @@ Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
   @ApiNotFoundResponse({
     description: "Paket tidak ditemukan",
   })
-  remove(
-    @Request() req: any,
-    @Param("id", ParseIntPipe) id: number,
-  ) {
+  remove(@Request() req: any, @Param("id", ParseIntPipe) id: number) {
     return this.packageService.remove(id, req.user.id);
   }
 

@@ -161,7 +161,7 @@ export class ExamController {
     return this.examService.resumeSession(sessionId, userId);
   }
 
-  @Post('session/:sessionId/ping')
+  @Post("session/:sessionId/ping")
   @ApiOperation({ summary: "Ping to update session tick time" })
   async pingSession(
     @Param("sessionId") sessionIdParam: string,
@@ -172,10 +172,10 @@ export class ExamController {
     return this.examService.pingSession(sessionId, userId);
   }
 
-  @Post('session/:sessionId/submit')
-  @ApiOperation({ summary: 'Submit session (finalize exam and compute score)' })
+  @Post("session/:sessionId/submit")
+  @ApiOperation({ summary: "Submit session (finalize exam and compute score)" })
   async submitSession(
-    @Param('sessionId') sessionIdParam: string,
+    @Param("sessionId") sessionIdParam: string,
     @Req() req: any,
   ) {
     const sessionId = Number(sessionIdParam);
@@ -183,10 +183,12 @@ export class ExamController {
     return this.examService.submitSession(sessionId, userId);
   }
 
-  @Get('package/:packageId/progress')
-  @ApiOperation({ summary: 'Get package progress (per-session and totals) for current user' })
+  @Get("package/:packageId/progress")
+  @ApiOperation({
+    summary: "Get package progress (per-session and totals) for current user",
+  })
   async getPackageProgress(
-    @Param('packageId') packageIdParam: string,
+    @Param("packageId") packageIdParam: string,
     @Req() req: any,
   ) {
     const packageId = Number(packageIdParam);

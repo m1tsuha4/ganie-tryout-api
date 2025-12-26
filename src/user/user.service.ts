@@ -49,8 +49,8 @@ export class UserService {
       },
       data: {
         created_by: newUser.id,
-      }
-    })
+      },
+    });
   }
 
   async findAll() {

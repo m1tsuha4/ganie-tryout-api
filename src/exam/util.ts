@@ -30,10 +30,14 @@ export function remainingSeconds(
   return Math.max(0, Math.floor((expiresAt.getTime() - Date.now()) / 1000));
 }
 
-export function computeSecondsLeftForSession(session: any, durationMin: number): number {
+export function computeSecondsLeftForSession(
+  session: any,
+  durationMin: number,
+): number {
   const lastTick = session.ticked_at ?? new Date();
   const startedAt = session.started_at ?? lastTick;
-  const elapsedSec = Math.floor((lastTick.getTime() - startedAt.getTime()) / 1000);
+  const elapsedSec = Math.floor(
+    (lastTick.getTime() - startedAt.getTime()) / 1000,
+  );
   return Math.max(0, durationMin * 60 - elapsedSec);
 }
-

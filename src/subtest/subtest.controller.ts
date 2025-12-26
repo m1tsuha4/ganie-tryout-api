@@ -334,10 +334,7 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
   @ApiNotFoundResponse({
     description: "Subtest tidak ditemukan",
   })
-  remove(
-    @Request() req: any,
-    @Param("id", ParseIntPipe) id: number,
-  ) {
+  remove(@Request() req: any, @Param("id", ParseIntPipe) id: number) {
     return this.subtestService.remove(id, req.user.id);
   }
 }

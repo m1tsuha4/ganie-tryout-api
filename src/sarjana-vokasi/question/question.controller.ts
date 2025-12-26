@@ -43,7 +43,10 @@ import { memoryStorage } from "multer";
 import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
 import { AdminGuard } from "src/auth/guard/admin.guard";
 import { ConfigService } from "@nestjs/config";
-import { getMaxImageSize, getMaxAudioSize } from "src/common/utils/file-upload.util";
+import {
+  getMaxImageSize,
+  getMaxAudioSize,
+} from "src/common/utils/file-upload.util";
 
 @ApiTags("Question")
 @Controller("question")
@@ -84,13 +87,16 @@ export class QuestionController {
     examples: {
       example1: {
         summary: "Contoh soal tanpa pilihan jawaban",
-        description: "exam_id adalah ID subtest yang dipilih. Choices dibuat terpisah via POST /question/:id/choices",
+        description:
+          "exam_id adalah ID subtest yang dipilih. Choices dibuat terpisah via POST /question/:id/choices",
         value: {
           exam_id: 1, // ID subtest (dari Manajemen Subtest)
           question_text: "Berapakah hasil dari 2 + 2?",
-          question_image_url: "https://res.cloudinary.com/.../question-images/abc123.jpg", // URL dari upload-image
+          question_image_url:
+            "https://res.cloudinary.com/.../question-images/abc123.jpg", // URL dari upload-image
           question_audio_url: "",
-          discussion: "Hasil dari 2 + 2 adalah 4. Penjumlahan adalah operasi dasar matematika.",
+          discussion:
+            "Hasil dari 2 + 2 adalah 4. Penjumlahan adalah operasi dasar matematika.",
           video_discussion: "https://youtube.com/...", // Opsional: URL video pembahasan
           difficulty: "easy",
         },
@@ -98,7 +104,8 @@ export class QuestionController {
     },
   })
   @ApiCreatedResponse({
-    description: "Soal berhasil dibuat (belum ada choices). Gunakan POST /question/:id/choices untuk menambahkan pilihan jawaban.",
+    description:
+      "Soal berhasil dibuat (belum ada choices). Gunakan POST /question/:id/choices untuk menambahkan pilihan jawaban.",
     schema: {
       example: {
         id: 1,
@@ -152,7 +159,8 @@ export class QuestionController {
     example: 1,
   })
   @ApiBody({
-    description: "Data 5 pilihan jawaban (A, B, C, D, E). Setiap choice bisa punya teks saja, gambar saja, atau teks DAN gambar sekaligus.",
+    description:
+      "Data 5 pilihan jawaban (A, B, C, D, E). Setiap choice bisa punya teks saja, gambar saja, atau teks DAN gambar sekaligus.",
     examples: {
       example1: {
         summary: "Contoh choice dengan teks saja",
@@ -193,18 +201,21 @@ export class QuestionController {
       },
       example2: {
         summary: "Contoh choice dengan teks DAN gambar sekaligus",
-        description: "choice_text WAJIB, choice_image_url OPSIONAL. Bisa punya keduanya sekaligus.",
+        description:
+          "choice_text WAJIB, choice_image_url OPSIONAL. Bisa punya keduanya sekaligus.",
         value: {
           choices: [
             {
               choice_text: "Jawaban A",
-              choice_image_url: "https://res.cloudinary.com/.../choice-images/abc123.jpg", // URL dari upload-choice-image
+              choice_image_url:
+                "https://res.cloudinary.com/.../choice-images/abc123.jpg", // URL dari upload-choice-image
               choice_audio_url: "",
               is_correct: false,
             },
             {
               choice_text: "Jawaban B (Benar)",
-              choice_image_url: "https://res.cloudinary.com/.../choice-images/xyz789.jpg", // Teks + Gambar sekaligus
+              choice_image_url:
+                "https://res.cloudinary.com/.../choice-images/xyz789.jpg", // Teks + Gambar sekaligus
               choice_audio_url: "",
               is_correct: true,
             },
@@ -216,13 +227,15 @@ export class QuestionController {
             },
             {
               choice_text: "Jawaban D",
-              choice_image_url: "https://res.cloudinary.com/.../choice-images/def456.jpg", // Teks + Gambar sekaligus
+              choice_image_url:
+                "https://res.cloudinary.com/.../choice-images/def456.jpg", // Teks + Gambar sekaligus
               choice_audio_url: "",
               is_correct: false,
             },
             {
               choice_text: "Jawaban E",
-              choice_image_url: "https://res.cloudinary.com/.../choice-images/ghi789.jpg", // Teks + Gambar sekaligus
+              choice_image_url:
+                "https://res.cloudinary.com/.../choice-images/ghi789.jpg", // Teks + Gambar sekaligus
               choice_audio_url: "",
               is_correct: false,
             },
@@ -254,7 +267,11 @@ export class QuestionController {
     @Body(new ZodValidationPipe(CreateQuestionChoicesSchema))
     createChoicesDto: CreateQuestionChoicesDto,
   ) {
-    return this.questionService.createChoices(id, createChoicesDto, req.user.id);
+    return this.questionService.createChoices(
+      id,
+      createChoicesDto,
+      req.user.id,
+    );
   }
 
   // Get all questions untuk exam tertentu
@@ -379,10 +396,7 @@ export class QuestionController {
   @ApiNotFoundResponse({
     description: "Soal tidak ditemukan",
   })
-  remove(
-    @Request() req: any,
-    @Param("id", ParseIntPipe) id: number,
-  ) {
+  remove(@Request() req: any, @Param("id", ParseIntPipe) id: number) {
     return this.questionService.remove(id, req.user.id);
   }
 
@@ -559,7 +573,8 @@ export class QuestionController {
         file: {
           type: "string",
           format: "binary",
-          description: "File audio (max 10MB, format: mp3, wav, m4a, ogg, aac, webm)",
+          description:
+            "File audio (max 10MB, format: mp3, wav, m4a, ogg, aac, webm)",
         },
       },
     },
@@ -645,7 +660,8 @@ export class QuestionController {
         file: {
           type: "string",
           format: "binary",
-          description: "File audio (max 10MB, format: mp3, wav, m4a, ogg, aac, webm)",
+          description:
+            "File audio (max 10MB, format: mp3, wav, m4a, ogg, aac, webm)",
         },
       },
     },

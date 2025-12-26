@@ -7,6 +7,8 @@ import { CreateAdminDto } from "./dto/create-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import * as bcrypt from "bcryptjs";
+import { ok } from "src/common/utils/response.util";
+import { PaginationDto } from "src/common/dtos/pagination.dto";
 
 @Injectable()
 export class AdminService {
@@ -41,26 +43,41 @@ export class AdminService {
       },
       data: {
         created_by: newAdmin.id,
-      }
-    })
-  }
-
-  async findAll() {
-    const existingAdmin = await this.prismaService.admin.findMany({
-      where: {
-        deleted_at: null,
-      },
-      select: {
-        id: true,
-        username: true,
-        email: true,
-        role_id: true,
       },
     });
-    if (existingAdmin.length === 0) {
-      throw new NotFoundException("Admin not found");
-    }
-    return existingAdmin;
+  }
+
+  async findAll(PaginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = PaginationDto;
+    const [data, total] = await Promise.all([
+      this.prismaService.admin.findMany({
+        where: {
+          deleted_at: null,
+        },
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          role_id: true,
+        },
+        take: limit,
+        skip: offset,
+        orderBy: {
+          created_at: "desc",
+        },
+      }),
+      this.prismaService.admin.count({
+        where: {
+          deleted_at: null,
+        },
+      }),
+    ]);
+    return ok(data, "Fetched successfully", {
+      total,
+      limit,
+      offset,
+      nextPage: total > offset + limit ? offset + limit : null,
+    });
   }
 
   async findOne(id: string) {
@@ -106,7 +123,7 @@ export class AdminService {
       role_id: updateAdminDto.role_id,
       updated_by: authId,
       ...(updateAdminDto.password && {
-        password_hash: await bcrypt.hash(updateAdminDto.password, 10)  
+        password_hash: await bcrypt.hash(updateAdminDto.password, 10),
       }),
     };
     return this.prismaService.admin.update({

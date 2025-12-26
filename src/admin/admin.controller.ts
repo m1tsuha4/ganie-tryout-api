@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -24,6 +25,10 @@ import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { ResponseAdminDto } from "./dto/response-admin.dto";
 import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
 import { AdminGuard } from "src/auth/guard/admin.guard";
+import {
+  PaginationDto,
+  PaginationSchema,
+} from "src/common/dtos/pagination.dto";
 
 @ApiTags("admin")
 @Controller("admin")
@@ -52,7 +57,7 @@ export class AdminController {
   ) {
     return this.adminService.create(createAdminDto);
   }
-  
+
   @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiBearerAuth()
   @Get()
@@ -61,8 +66,11 @@ export class AdminController {
     type: ResponseAdminDto,
     isArray: true,
   })
-  findAll() {
-    return this.adminService.findAll();
+  findAll(
+    @Query(new ZodValidationPipe(PaginationSchema))
+    PaginationDto: PaginationDto,
+  ) {
+    return this.adminService.findAll(PaginationDto);
   }
 
   @UseGuards(JwtAuthGuard, AdminGuard)

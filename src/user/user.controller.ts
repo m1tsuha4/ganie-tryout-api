@@ -13,10 +13,14 @@ import { UserService } from "./user.service";
 import { CreateUserDto, CreateUserSchema } from "./dto/create-user.dto";
 import { UpdateUserDto, UpdateUserSchema } from "./dto/update-user.dto";
 import { ZodValidationPipe } from "src/common/pipes/zod-validation.pipe";
-import { ApiBearerAuth, ApiBody, ApiNotFoundResponse, ApiOkResponse } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+} from "@nestjs/swagger";
 import { ResponseUserDto } from "./dto/response-user.dto";
 import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
-
 
 @ApiBearerAuth()
 @Controller("user")
@@ -61,7 +65,8 @@ export class UserController {
   })
   update(
     @Param("id") id: string,
-    @Body(new ZodValidationPipe(UpdateUserSchema)) updateUserDto: UpdateUserDto, @Req() req,
+    @Body(new ZodValidationPipe(UpdateUserSchema)) updateUserDto: UpdateUserDto,
+    @Req() req,
   ) {
     return this.userService.update(id, updateUserDto, req.user.id);
   }

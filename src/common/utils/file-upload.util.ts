@@ -33,4 +33,3 @@ export function getMaxAudioSize(configService?: ConfigService): number {
   }
   return maxSizeMB * 1024 * 1024; // Convert MB to bytes
 }
-

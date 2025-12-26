@@ -318,16 +318,14 @@ export class PackageService {
 
     // Check apakah sudah terlink ke package ini
     const existingLink = await this.prismaService.packageExam.findFirst({
-          where: {
+      where: {
         package_id: packageId,
         exam_id: examId,
       },
     });
 
     if (existingLink) {
-      throw new BadRequestException(
-        "Subtest sudah terpilih untuk paket ini",
-      );
+      throw new BadRequestException("Subtest sudah terpilih untuk paket ini");
     }
 
     // Create PackageExam relation

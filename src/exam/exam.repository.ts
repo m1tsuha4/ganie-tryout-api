@@ -134,13 +134,17 @@ export class ExamRepository {
     });
   }
 
-  async updateSessionScore(tx: any, sessionId: number, data: {
-    correct_answers?: number;
-    wrong_answers?: number;
-    empty_answers?: number;
-    score?: number;
-    completed_at?: Date
-  }) {
+  async updateSessionScore(
+    tx: any,
+    sessionId: number,
+    data: {
+      correct_answers?: number;
+      wrong_answers?: number;
+      empty_answers?: number;
+      score?: number;
+      completed_at?: Date;
+    },
+  ) {
     return tx.UserExamSession.update({
       where: { id: sessionId },
       data,
