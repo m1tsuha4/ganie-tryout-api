@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateRoleDto } from "./dto/create-role.dto";
 import { UpdateRoleDto } from "./dto/update-role.dto";
 import { PrismaService } from "src/prisma/prisma.service";
+import { PaginationDto } from "src/common/dtos/pagination.dto";
+import { ok } from "src/common/utils/response.util";
 
 @Injectable()
 export class RoleService {
@@ -14,21 +16,33 @@ export class RoleService {
     });
   }
 
-  async findAll() {
-    const role = await this.prismaService.role.findMany({
-      where: {
-        deleted_at: null,
-      },
-      select: {
-        id: true,
-        name: true,
-        permissions_mask: true,
-      },
+  async findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
+    const [data, total] = await Promise.all([
+      this.prismaService.role.findMany({
+        where: {
+          deleted_at: null,
+        },
+        select: {
+          id: true,
+          name: true,
+          permissions_mask: true,
+        },
+        take: limit,
+        skip: offset,
+      }),
+      this.prismaService.role.count({
+        where: {
+          deleted_at: null,
+        },
+      }),
+    ]);
+    return ok(data, "Fetched successfully", {
+      total,
+      limit,
+      offset,
+      nextPage: total > offset + limit ? offset + limit : null,
     });
-    if (role.length === 0) {
-      throw new NotFoundException("Role not found");
-    }
-    return role;
   }
 
   async findOne(id: number) {

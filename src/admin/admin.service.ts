@@ -47,8 +47,8 @@ export class AdminService {
     });
   }
 
-  async findAll(PaginationDto: PaginationDto) {
-    const { limit = 10, offset = 0 } = PaginationDto;
+  async findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
     const [data, total] = await Promise.all([
       this.prismaService.admin.findMany({
         where: {

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from "@nestjs/common";
 import { RoleService } from "./role.service";
 import { CreateRoleDto, CreateRoleSchema } from "./dto/create-role.dto";
@@ -19,6 +20,7 @@ import {
   ApiOkResponse,
 } from "@nestjs/swagger";
 import { ResponseRoleDto } from "./dto/response-role.dto";
+import { PaginationDto, PaginationSchema } from "src/common/dtos/pagination.dto";
 
 @Controller("role")
 export class RoleController {
@@ -52,8 +54,8 @@ export class RoleController {
   @ApiNotFoundResponse({
     description: "Roles not found",
   })
-  findAll() {
-    return this.roleService.findAll();
+  findAll(@Query(new ZodValidationPipe(PaginationSchema)) paginationDto: PaginationDto) {
+    return this.roleService.findAll(paginationDto);
   }
 
   @Get(":id")
