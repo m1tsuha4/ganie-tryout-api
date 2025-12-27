@@ -9,6 +9,8 @@ import { CreateTransactionDto } from "./dto/create-transaction.dto";
 import { UpdateTransactionStatusDto } from "./dto/update-transaction-status.dto";
 import { ResponseTransactionDto } from "./dto/response-transaction.dto";
 import { CloudinaryService } from "src/common/services/cloudinary.service";
+import { PaginationDto } from "src/common/dtos/pagination.dto";
+import { ok } from "src/common/utils/response.util";
 
 @Injectable()
 export class TransactionService {
@@ -109,38 +111,44 @@ export class TransactionService {
     return this.mapToResponseDto(transaction);
   }
 
-  async findAll(): Promise<ResponseTransactionDto[]> {
-    const transactions = await this.prismaService.transaction.findMany({
-      where: {
-        deleted_at: null, // Hanya yang tidak dihapus
-      },
-      include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-            name: true,
-            email: true,
-          },
-        },
-        package: {
-          select: {
-            id: true,
-            title: true,
-            description: true,
-            price: true,
-            type: true,
-          },
-        },
-      },
-      orderBy: {
-        created_at: "desc",
-      },
-    });
+  async findAll(paginationDto: PaginationDto) {
+    let { limit = 10, offset = 0 } = paginationDto as any;
+    limit = Number(limit) || 10;
+    offset = Number(offset) || 0;
 
-    return transactions.map((transaction) =>
-      this.mapToResponseDto(transaction),
-    );
+    const [transactions, total] = await Promise.all([
+      this.prismaService.transaction.findMany({
+        where: { deleted_at: null },
+        include: {
+          user: {
+            select: { id: true, username: true, name: true, email: true },
+          },
+          package: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              price: true,
+              type: true,
+            },
+          },
+        },
+        take: limit,
+        skip: offset,
+        orderBy: { created_at: "desc" },
+      }),
+      this.prismaService.transaction.count({ where: { deleted_at: null } }),
+    ]);
+
+    const data = transactions.map((t) => this.mapToResponseDto(t));
+    const meta = {
+      total,
+      limit,
+      offset,
+      nextPage: total > offset + limit ? offset + limit : null,
+    };
+
+    return ok(data, "Fetched successfully", meta);
   }
 
   async findOne(
@@ -191,31 +199,43 @@ export class TransactionService {
     return this.mapToResponseDto(transaction);
   }
 
-  async findByUser(userId: string): Promise<ResponseTransactionDto[]> {
-    const transactions = await this.prismaService.transaction.findMany({
-      where: {
-        user_id: userId,
-        deleted_at: null, // Hanya yang tidak dihapus
-      },
-      include: {
-        package: {
-          select: {
-            id: true,
-            title: true,
-            description: true,
-            price: true,
-            type: true,
+  async findByUser(userId: string, paginationDto?: PaginationDto) {
+    let { limit = 10, offset = 0 } = (paginationDto as any) || {};
+    limit = Number(limit) || 10;
+    offset = Number(offset) || 0;
+
+    const [transactions, total] = await Promise.all([
+      this.prismaService.transaction.findMany({
+        where: { user_id: userId, deleted_at: null },
+        include: {
+          package: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              price: true,
+              type: true,
+            },
           },
         },
-      },
-      orderBy: {
-        created_at: "desc",
-      },
-    });
+        take: limit,
+        skip: offset,
+        orderBy: { created_at: "desc" },
+      }),
+      this.prismaService.transaction.count({
+        where: { user_id: userId, deleted_at: null },
+      }),
+    ]);
 
-    return transactions.map((transaction) =>
-      this.mapToResponseDto(transaction),
-    );
+    const data = transactions.map((t) => this.mapToResponseDto(t));
+    const meta = {
+      total,
+      limit,
+      offset,
+      nextPage: total > offset + limit ? offset + limit : null,
+    };
+
+    return ok(data, "Fetched successfully", meta);
   }
 
   async updateStatus(

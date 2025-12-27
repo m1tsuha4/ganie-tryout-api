@@ -11,6 +11,7 @@ import {
   UploadedFile,
   UseInterceptors,
   BadRequestException,
+  Query,
 } from "@nestjs/common";
 import { TransactionService } from "./transaction.service";
 import {
@@ -42,6 +43,10 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { memoryStorage } from "multer";
 import { ConfigService } from "@nestjs/config";
 import { getMaxImageSize } from "src/common/utils/file-upload.util";
+import {
+  PaginationDto,
+  PaginationSchema,
+} from "src/common/dtos/pagination.dto";
 
 @ApiTags("Transaction")
 @Controller("transaction")
@@ -132,8 +137,11 @@ export class TransactionController {
   @ApiForbiddenResponse({
     description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
   })
-  findAll() {
-    return this.transactionService.findAll();
+  findAll(
+    @Query(new ZodValidationPipe(PaginationSchema))
+    paginationDto: PaginationDto,
+  ) {
+    return this.transactionService.findAll(paginationDto);
   }
 
   @Get("user")
@@ -151,8 +159,12 @@ export class TransactionController {
     status: 401,
     description: "Unauthorized - Token tidak valid",
   })
-  findByUser(@Request() req: any) {
-    return this.transactionService.findByUser(req.user.id);
+  findByUser(
+    @Request() req: any,
+    @Query(new ZodValidationPipe(PaginationSchema))
+    paginationDto: PaginationDto,
+  ) {
+    return this.transactionService.findByUser(req.user.id, paginationDto);
   }
 
   @Post("upload-proof-image")
