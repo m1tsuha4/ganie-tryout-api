@@ -9,6 +9,8 @@ import {
   CreateQuestionChoicesDto,
 } from "./dto/create-question.dto";
 import { UpdateQuestionDto } from "./dto/update-question.dto";
+import { PaginationDto } from "src/common/dtos/pagination.dto";
+import { ok } from "src/common/utils/response.util";
 
 @Injectable()
 export class QuestionService {
@@ -98,7 +100,8 @@ export class QuestionService {
   }
 
   // Get all questions untuk exam tertentu (support Sarjana & Pascasarjana)
-  async findByExam(examId: number) {
+  async findByExam(examId: number, paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
     // Verify exam exists (bisa untuk Sarjana atau Pascasarjana)
     const exam = await this.prismaService.exam.findUnique({
       where: { id: examId },
@@ -115,27 +118,55 @@ export class QuestionService {
       throw new NotFoundException("Exam not found");
     }
 
-    const questions = await this.prismaService.question.findMany({
-      where: {
-        exam_id: examId,
-        deleted_at: null, // Hanya yang tidak dihapus
-      },
-      include: {
-        question_choices: {
-          where: {
-            deleted_at: null, // Hanya choices yang tidak dihapus
-          },
-          orderBy: {
-            id: "asc", // Order by ID untuk konsistensi (A, B, C, D, E)
+    const [question, total] = await Promise.all([
+      this.prismaService.question.findMany({
+        where: {
+          exam_id: examId,
+          deleted_at: null,
+        },
+        select: {
+          id: true,
+          exam_id: true,
+          question_text: true,
+          question_image_url: true,
+          question_audio_url: true,
+          discussion: true,
+          video_discussion: true,
+          difficulty: true,
+          question_choices: {
+            select: {
+              id: true,
+              question_id: true,
+              choice_text: true,
+              choice_image_url: true,
+              choice_audio_url: true,
+              is_correct: true,
+            },
+            orderBy: {
+              id: "asc",
+            },
           },
         },
-      },
-      orderBy: {
-        id: "asc",
-      },
-    });
+        orderBy: {
+          id: "asc",
+        },
+        take: limit,
+        skip: offset,
+      }),
+      this.prismaService.question.count({
+        where: {
+          exam_id: examId,
+          deleted_at: null,
+        },
+      }),
+    ]);
 
-    return questions;
+    return ok(question, "Fetched successfully", {
+      total,
+      limit,
+      offset,
+      nextPage: total > offset + limit ? offset + limit : null,
+    });
   }
 
   // Get question by ID

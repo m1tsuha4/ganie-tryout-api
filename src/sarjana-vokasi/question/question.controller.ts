@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   UseGuards,
   Request,
+  Query,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -47,6 +48,10 @@ import {
   getMaxImageSize,
   getMaxAudioSize,
 } from "src/common/utils/file-upload.util";
+import {
+  PaginationDto,
+  PaginationSchema,
+} from "src/common/dtos/pagination.dto";
 
 @ApiTags("Question")
 @Controller("question")
@@ -298,8 +303,12 @@ export class QuestionController {
   @ApiForbiddenResponse({
     description: "Forbidden - Hanya admin yang bisa akses endpoint ini",
   })
-  findByExam(@Param("examId", ParseIntPipe) examId: number) {
-    return this.questionService.findByExam(examId);
+  findByExam(
+    @Param("examId", ParseIntPipe) examId: number,
+    @Query(new ZodValidationPipe(PaginationSchema))
+    paginationDto: PaginationDto,
+  ) {
+    return this.questionService.findByExam(examId, paginationDto);
   }
 
   // Get question by ID
