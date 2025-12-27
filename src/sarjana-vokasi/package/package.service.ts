@@ -9,6 +9,7 @@ import { CreatePackageDto } from "./dto/create-package.dto";
 import { UpdatePackageDto } from "./dto/update-package.dto";
 import { CreateSubtestDto } from "./dto/create-subtest.dto";
 import { ResponsePackageDto } from "./dto/response-package.dto";
+import { ok } from "src/common/utils/response.util";
 
 @Injectable()
 export class PackageService {
@@ -45,7 +46,8 @@ export class PackageService {
   // Get all packages (filter by type jika diberikan)
   async findAll(
     type?: "SARJANA" | "PASCASARJANA",
-  ): Promise<ResponsePackageDto[]> {
+    pagination?: { limit: number; offset: number },
+  ) {
     const where: any = {
       deleted_at: null, // Hanya yang tidak dihapus
     };
@@ -53,32 +55,48 @@ export class PackageService {
       where.type = type;
     }
 
-    const packages = await this.prismaService.package.findMany({
-      where,
-      include: {
-        package_exams: {
-          include: {
-            exam: {
-              include: {
-                questions: true,
+    const [packages, total] = await Promise.all([
+      this.prismaService.package.findMany({
+        where,
+        include: {
+          package_exams: {
+            include: {
+              exam: {
+                include: {
+                  questions: true,
+                },
               },
             },
           },
         },
-      },
-      orderBy: {
-        created_at: "desc",
-      },
-    });
+        orderBy: {
+          created_at: "desc",
+        },
+        take: pagination?.limit ?? 10,
+        skip: pagination?.offset ?? 0,
+      }),
+      this.prismaService.package.count({ where }),
+    ]);
 
-    return packages.map((pkg) => this.mapToResponseDto(pkg));
+    const data = packages.map((pkg) => this.mapToResponseDto(pkg));
+
+    return ok(data, "Fetched successfully", {
+      total,
+      limit: pagination?.limit ?? 10,
+      offset: pagination?.offset ?? 0,
+      nextPage:
+        (pagination?.offset ?? 0) + (pagination?.limit ?? 10) < total
+          ? (pagination?.offset ?? 0) + (pagination?.limit ?? 10)
+          : null,
+    });
   }
 
   // Get packages by published status (filter by type jika diberikan)
   async findByStatus(
     published: boolean,
     type?: "SARJANA" | "PASCASARJANA",
-  ): Promise<ResponsePackageDto[]> {
+    pagination?: { limit: number; offset: number },
+  ) {
     const where: any = {
       published,
       deleted_at: null, // Hanya yang tidak dihapus
@@ -87,25 +105,40 @@ export class PackageService {
       where.type = type;
     }
 
-    const packages = await this.prismaService.package.findMany({
-      where,
-      include: {
-        package_exams: {
-          include: {
-            exam: {
-              include: {
-                questions: true,
+    const [packages, total] = await Promise.all([
+      this.prismaService.package.findMany({
+        where,
+        include: {
+          package_exams: {
+            include: {
+              exam: {
+                include: {
+                  questions: true,
+                },
               },
             },
           },
         },
-      },
-      orderBy: {
-        created_at: "desc",
-      },
-    });
+        orderBy: {
+          created_at: "desc",
+        },
+        take: pagination?.limit ?? 10,
+        skip: pagination?.offset ?? 0,
+      }),
+      this.prismaService.package.count({ where }),
+    ]);
 
-    return packages.map((pkg) => this.mapToResponseDto(pkg));
+    const data = packages.map((pkg) => this.mapToResponseDto(pkg));
+
+    return ok(data, "Fetched successfully", {
+      total,
+      limit: pagination?.limit ?? 10,
+      offset: pagination?.offset ?? 0,
+      nextPage:
+        (pagination?.offset ?? 0) + (pagination?.limit ?? 10) < total
+          ? (pagination?.offset ?? 0) + (pagination?.limit ?? 10)
+          : null,
+    });
   }
 
   // Get package by ID (return dengan nested data, tapi exclude updated_at dan created_at dari field utama)

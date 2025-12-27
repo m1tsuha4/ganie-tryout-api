@@ -46,6 +46,10 @@ import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
 import { AdminGuard } from "src/auth/guard/admin.guard";
 import { ConfigService } from "@nestjs/config";
 import { getMaxImageSize } from "src/common/utils/file-upload.util";
+import {
+  PaginationDto,
+  PaginationSchema,
+} from "src/common/dtos/pagination.dto";
 
 @ApiTags("Package")
 @Controller("package")
@@ -147,6 +151,20 @@ export class PackageController {
     type: String,
     example: "true",
   })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    description: "Jumlah data per halaman",
+    type: Number,
+    example: 10,
+  })
+  @ApiQuery({
+    name: "offset",
+    required: false,
+    description: "Jumlah data yang dilewati",
+    type: Number,
+    example: 0,
+  })
   @ApiOkResponse({
     description: "Daftar paket berhasil diambil",
     type: ResponsePackageDto,
@@ -156,28 +174,36 @@ export class PackageController {
     @Request() req: any,
     @Query("type") type?: "SARJANA" | "PASCASARJANA",
     @Query("published") published?: string,
+    @Query("limit") limit?: string,
+    @Query("offset") offset?: string,
   ) {
     const isAdmin = req.user?.type === "admin";
 
-    // Jika user biasa dan tidak ada filter published, default ke published=true
+    const pagination = {
+      limit: limit ? Number(limit) : 10,
+      offset: offset ? Number(offset) : 0,
+    };
+
+    // User biasa: default published=true
     if (!isAdmin && published === undefined) {
-      return this.packageService.findByStatus(true, type);
+      return this.packageService.findByStatus(true, type, pagination);
     }
 
     if (published !== undefined) {
       const isPublished = published === "true";
-      // User biasa tidak bisa akses unpublished
+
       if (!isAdmin && !isPublished) {
-        return this.packageService.findByStatus(true, type);
+        return this.packageService.findByStatus(true, type, pagination);
       }
-      return this.packageService.findByStatus(isPublished, type);
+
+      return this.packageService.findByStatus(isPublished, type, pagination);
     }
 
-    // Admin bisa lihat semua, user biasa hanya published
     if (isAdmin) {
-      return this.packageService.findAll(type);
+      return this.packageService.findAll(type, pagination);
     }
-    return this.packageService.findByStatus(true, type);
+
+    return this.packageService.findByStatus(true, type, pagination);
   }
 
   @Get(":id/summary")
