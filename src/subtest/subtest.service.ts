@@ -8,6 +8,7 @@ import { CreateSubtestDto } from "./dto/create-subtest.dto";
 import { UpdateSubtestDto } from "./dto/update-subtest.dto";
 import { FilterSubtestDto } from "./dto/filter-subtest.dto";
 import { ResponseSubtestDto } from "./dto/response-subtest.dto";
+import { ok } from "src/common/utils/response.util";
 
 @Injectable()
 export class SubtestService {
@@ -43,7 +44,10 @@ export class SubtestService {
     return this.mapToResponseDto(exam);
   }
 
-  async findAll(filter?: FilterSubtestDto): Promise<ResponseSubtestDto[]> {
+  async findAll(
+    filter?: FilterSubtestDto,
+    pagination?: { limit: number; offset: number },
+  ) {
     try {
       const where: any = {
         deleted_at: null, // Hanya ambil yang belum dihapus
@@ -76,14 +80,28 @@ export class SubtestService {
         };
       }
 
-      const exams = await this.prismaService.exam.findMany({
-        where,
-        orderBy: {
-          created_at: "desc",
-        },
-      });
+      const [exams, total] = await Promise.all([
+        this.prismaService.exam.findMany({
+          where,
+          take: pagination?.limit ?? 10,
+          skip: pagination?.offset ?? 0,
+          orderBy: {
+            created_at: "desc",
+          },
+        }),
+        this.prismaService.exam.count({ where }),
+      ]);
 
-      return exams.map((exam) => this.mapToResponseDto(exam));
+      const data = exams.map((exam) => this.mapToResponseDto(exam));
+      return ok(data, "Fetched successfully", {
+        total,
+        limit: pagination?.limit ?? 10,
+        offset: pagination?.offset ?? 0,
+        nextPage:
+          total > (pagination?.offset ?? 0) + (pagination?.limit ?? 10)
+            ? (pagination?.offset ?? 0) + (pagination?.limit ?? 10)
+            : null,
+      });
     } catch (error) {
       console.error("Error in findAll subtest:", error);
       throw error;

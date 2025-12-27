@@ -159,6 +159,20 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
     type: String,
     example: "Matematika",
   })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    description: "Jumlah data per halaman",
+    type: Number,
+    example: 10,
+  })
+  @ApiQuery({
+    name: "offset",
+    required: false,
+    description: "Jumlah data yang dilewati",
+    type: Number,
+    example: 0,
+  })
   @ApiOkResponse({
     description: "Daftar subtest berhasil diambil",
     type: ResponseSubtestDto,
@@ -206,10 +220,16 @@ Subtest yang dibuat bisa digunakan untuk berbagai paket.`,
         filter.search = query.search.trim();
       }
 
+      const limit = query?.limit ? Number(query.limit) : 10;
+      const offset = query?.offset ? Number(query.offset) : 0;
+
       // Validate dengan Zod
       const validatedFilter = FilterSubtestSchema.parse(filter);
 
-      return this.subtestService.findAll(validatedFilter);
+      return this.subtestService.findAll(validatedFilter, {
+        limit,
+        offset,
+      });
     } catch (error) {
       console.error("Error parsing filter in findAll subtest:", error);
       throw error;
