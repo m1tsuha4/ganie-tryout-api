@@ -114,9 +114,9 @@ export class QuestionService {
       throw new NotFoundException("Exam not found");
     }
 
-    if (exam.package_exams.length === 0) {
-      throw new NotFoundException("Exam not found");
-    }
+    // if (exam.package_exams.length === 0) {
+    //   throw new NotFoundException("Exam not found");
+    // }
 
     const [question, total] = await Promise.all([
       this.prismaService.question.findMany({
