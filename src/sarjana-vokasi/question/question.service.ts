@@ -11,6 +11,7 @@ import {
 import { UpdateQuestionDto } from "./dto/update-question.dto";
 import { PaginationDto } from "src/common/dtos/pagination.dto";
 import { ok } from "src/common/utils/response.util";
+import { boolean } from "zod";
 
 @Injectable()
 export class QuestionService {
@@ -161,7 +162,11 @@ export class QuestionService {
       }),
     ]);
 
-    return ok(question, "Fetched successfully", {
+    const mappedQuestions = question.map((q) => ({
+      ...q,
+      discussion: Boolean(q.discussion),
+    }));
+    return ok(mappedQuestions, "Fetched successfully", {
       total,
       limit,
       offset,
