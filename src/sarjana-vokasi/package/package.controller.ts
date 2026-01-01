@@ -46,10 +46,6 @@ import { JwtAuthGuard } from "src/auth/guard/jwt-guard.auth";
 import { AdminGuard } from "src/auth/guard/admin.guard";
 import { ConfigService } from "@nestjs/config";
 import { getMaxImageSize } from "src/common/utils/file-upload.util";
-import {
-  PaginationDto,
-  PaginationSchema,
-} from "src/common/dtos/pagination.dto";
 
 @ApiTags("Package")
 @Controller("package")
