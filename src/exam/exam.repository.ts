@@ -150,4 +150,24 @@ export class ExamRepository {
       data,
     });
   }
+
+  async findPackageByExamId(
+    examId: number
+  ) {
+    const packageId = await this.prismaService.packageExam.findFirst({
+      where: { exam_id: examId },
+      select: {
+        package_id: true,
+      }
+    });
+    if (packageId) {
+      return await this.prismaService.package.findUnique({
+        where: { id: packageId.package_id },
+        select: {
+          title: true,
+          type: true,
+        }
+      }) 
+    }
+  }
 }

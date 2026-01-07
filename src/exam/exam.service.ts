@@ -14,6 +14,7 @@ import {
 import { getScoringConstants } from "src/common/constants/scoring.constants";
 import { acquireLock, redis, releaseLock } from "../common/utils/redis.util";
 import { PrismaService } from "src/prisma/prisma.service";
+import { title } from "node:process";
 
 @Injectable()
 export class ExamService {
@@ -47,7 +48,6 @@ export class ExamService {
       }
     }
 
-    // Normal case: just update ticked_at
     await this.repo.updateTick(sessionId, now);
     session.ticked_at = now;
   }
@@ -68,13 +68,13 @@ export class ExamService {
         choiceOrder[q.id] = shuffle(q.question_choices.map((qc) => qc.id));
       }
 
-      // If a session for this user+exam already exists, return it (do not reset)
+      // If a session for this user+exam already exists, return it 
       const existing = await this.repo.findExistingSessionForUserExam(
         userId,
         pe.exam.id,
       );
       if (existing) {
-        created.push(existing);
+        created.push({ ...existing, title: pe.exam.title });
         await redis.hset(`session:${existing.id}:meta`, {
           userId,
           examId: String(pe.exam.id),
@@ -88,7 +88,7 @@ export class ExamService {
         question_order: questionOrder,
         choice_order: choiceOrder,
       });
-      created.push(session);
+      created.push({ ...session, title: pe.exam.title });
       await redis.hset(`session:${session.id}:meta`, {
         userId,
         examId: String(pe.exam.id),
@@ -172,6 +172,7 @@ export class ExamService {
     return {
       sessionId: session.id,
       examId: session.exam_id,
+      title: exam?.title,
       questionId: question.id,
       questionText: question.question_text,
       orderedChoices: orderedChoices,
@@ -461,11 +462,13 @@ export class ExamService {
 
     const sessions = await this.prisma.userExamSession.findMany({
       where: { user_id: userId, exam_id: { in: examIds } },
+      include: { exam: true },
     });
 
     const sessionSummaries = sessions.map((s) => ({
       sessionId: s.id,
       examId: s.exam_id,
+      title: s.exam.title,
       current_position: s.current_position ?? 0,
       correct_answers: s.correct_answers ?? 0,
       wrong_answers: s.wrong_answers ?? 0,
@@ -485,14 +488,25 @@ export class ExamService {
       { correct: 0, wrong: 0, empty: 0, scoreSum: 0 },
     );
 
+    const totalQuestions = totals.correct + totals.wrong + totals.empty;
+    // content of packageExam[0]?.exam is typed by Prisma, field is type_exam (enum)
+    const examType = packageExam[0]?.exam?.type_exam;
+
+    let averageScore = 0;
+    if (examType === 'TBI') {
+      averageScore = totalQuestions > 0 ? (totals.correct / 360) * 677 : 360;
+    } else {
+      averageScore =
+        totalQuestions > 0 ? ((totals.correct - totals.wrong) / 400) * 1000 : 0;
+    }
+
     return {
       sessions: sessionSummaries,
       totals: {
         correct: totals.correct,
         wrong: totals.wrong,
         empty: totals.empty,
-        averageScore:
-          sessions.length > 0 ? totals.scoreSum / sessions.length : 0,
+        averageScore,
       },
     };
   }
@@ -513,6 +527,7 @@ export class ExamService {
     }
 
     const examData = exam ?? (await this.repo.findByExamId(session.exam_id));
+    const packageData = exam ?? (await this.repo.findPackageByExamId(session.exam_id));
     const durationMin: number = examData?.duration ?? 0;
 
     const answer = await this.repo.findUserAnswer(sessionId);
@@ -529,14 +544,18 @@ export class ExamService {
     const empty = Math.max(0, totalQuestions - answeredCount);
 
     // Compute raw score using scoring constants (e.g., +4 / -1 / 0)
-    const scoring = getScoringConstants("SARJANA", examData?.type);
+    const scoring = getScoringConstants(packageData?.type, examData?.type);
     const rawScore =
       correct * scoring.CORRECT_ANSWER +
       wrong * scoring.WRONG_ANSWER +
       empty * scoring.NOT_ANSWERED;
     // Optionally compute percentage score too (for convenience)
-    const percentScore =
-      totalQuestions > 0 ? (correct / totalQuestions) * 100 : 0;
+    let finalScore = 0;
+    if (examData?.type === 'TBI') {
+      finalScore = totalQuestions > 0 ? (correct / 360) * 677 : 360;
+    }
+    finalScore =
+      totalQuestions > 0 ? ((correct - wrong) / 400) * 1000 : 0;
 
     await this.prisma.$transaction(async (tx) => {
       await this.repo.updateSessionScore(tx, sessionId, {
@@ -548,6 +567,6 @@ export class ExamService {
       });
     });
 
-    return { correct, wrong, empty, rawScore, percentScore };
+    return { correct, wrong, empty, rawScore, finalScore };
   }
 }
