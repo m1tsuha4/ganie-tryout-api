@@ -489,16 +489,8 @@ export class ExamService {
     );
 
     const totalQuestions = totals.correct + totals.wrong + totals.empty;
-    // content of packageExam[0]?.exam is typed by Prisma, field is type_exam (enum)
-    const examType = packageExam[0]?.exam?.type_exam;
 
-    let averageScore = 0;
-    if (examType === 'TBI') {
-      averageScore = totalQuestions > 0 ? (totals.correct / 360) * 677 : 360;
-    } else {
-      averageScore =
-        totalQuestions > 0 ? ((totals.correct - totals.wrong) / 400) * 1000 : 0;
-    }
+    let averageScore = totalQuestions;
 
     return {
       sessions: sessionSummaries,
@@ -552,7 +544,7 @@ export class ExamService {
     // Optionally compute percentage score too (for convenience)
     let finalScore = 0;
     if (examData?.type === 'TBI') {
-      finalScore = totalQuestions > 0 ? (correct / 360) * 677 : 360;
+      finalScore = totalQuestions > 0 ? (correct / 360) * 677 : 0;
     }
     finalScore =
       totalQuestions > 0 ? ((correct - wrong) / 400) * 1000 : 0;
@@ -562,7 +554,7 @@ export class ExamService {
         correct_answers: correct,
         wrong_answers: wrong,
         empty_answers: empty,
-        score: rawScore,
+        score: finalScore,
         completed_at: txNow,
       });
     });
