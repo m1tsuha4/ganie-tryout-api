@@ -544,9 +544,9 @@ export class ExamService {
     // Optionally compute percentage score too (for convenience)
     let finalScore = 0;
     if (examData?.type === 'TBI') {
-      finalScore = totalQuestions > 0 ? ((rawScore / 360) * 677) : 0;
+      finalScore = totalQuestions > 0 ? Math.round((rawScore / 360) * 677) : 0;
     } else {
-      finalScore = totalQuestions > 0 ? ((rawScore / 400) * 1000) : 0;
+      finalScore = totalQuestions > 0 ? Math.round((rawScore / 400) * 1000) : 0;
     }
 
     await this.prisma.$transaction(async (tx) => {
