@@ -248,18 +248,18 @@ export class PackageService {
     const packageData = await this.findOne(id, true); // Admin bisa akses untuk delete
 
     // Cek apakah package masih digunakan oleh transaction yang aktif
-    const activeTransactions = await this.prismaService.transaction.findFirst({
-      where: {
-        package_id: id,
-        deleted_at: null, // Hanya transaction yang tidak dihapus
-      },
-    });
+    // const activeTransactions = await this.prismaService.transaction.findFirst({
+    //   where: {
+    //     package_id: id,
+    //     deleted_at: null, // Hanya transaction yang tidak dihapus
+    //   },
+    // });
 
-    if (activeTransactions) {
-      throw new BadRequestException(
-        "Package tidak bisa dihapus karena masih ada transaksi yang menggunakan package ini",
-      );
-    }
+    // if (activeTransactions) {
+    //   throw new BadRequestException(
+    //     "Package tidak bisa dihapus karena masih ada transaksi yang menggunakan package ini",
+    //   );
+    // }
 
     // Soft delete (update deleted_at dan deleted_by)
     return this.prismaService.package.update({
