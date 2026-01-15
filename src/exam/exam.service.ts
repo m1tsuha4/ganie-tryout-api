@@ -154,7 +154,7 @@ export class ExamService {
       if (!c) {
         throw new ForbiddenException("Choice not found");
       }
-      return { id: c.id, choice_text: c.choice_text };
+      return { id: c.id, choice_text: c.choice_text, choice_image_url: c.choice_image_url };
     });
 
     const existingAnswer = await this.repo.findUserAnswerForSessionQuestion(
@@ -175,6 +175,7 @@ export class ExamService {
       title: exam?.title,
       questionId: question.id,
       questionText: question.question_text,
+      questionImage: question.question_image_url,
       orderedChoices: orderedChoices,
       position: pos,
       totalQuestions: qOrder.length,
