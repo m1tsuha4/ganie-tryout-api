@@ -152,9 +152,10 @@ model Package {
   deleted_at    DateTime?
   deleted_by    String?
 
-  package_exams PackageExam[]
-  transactions  Transaction[]
-  user_packages UserPackage[]
+  package_exams    PackageExam[]
+  transactions     Transaction[]
+  user_packages    UserPackage[]
+  userExamSessions UserExamSession[]
 }
 
 enum PackageType {
@@ -174,22 +175,22 @@ model PackageExam {
 }
 
 model Transaction {
-  id               Int       @id @default(autoincrement())
-  user             User      @relation(fields: [user_id], references: [id])
-  user_id          String
-  package          Package   @relation(fields: [package_id], references: [id])
-  package_id       Int
-  amount           Float
-  payment_method   String
-  status           String
+  id                Int       @id @default(autoincrement())
+  user              User      @relation(fields: [user_id], references: [id])
+  user_id           String
+  package           Package   @relation(fields: [package_id], references: [id])
+  package_id        Int
+  amount            Float
+  payment_method    String
+  status            String
   payment_proof_url String?   @db.Text
-  transaction_date DateTime  @default(now())
-  created_at       DateTime  @default(now())
-  created_by       String?
-  updated_at       DateTime  @updatedAt
-  updated_by       String?
-  deleted_at       DateTime?
-  deleted_by       String?
+  transaction_date  DateTime  @default(now())
+  created_at        DateTime  @default(now())
+  created_by        String?
+  updated_at        DateTime  @updatedAt
+  updated_by        String?
+  deleted_at        DateTime?
+  deleted_by        String?
 }
 
 model UserPackage {
@@ -210,6 +211,8 @@ model UserExamSession {
   user_id          String
   exam             Exam      @relation(fields: [exam_id], references: [id])
   exam_id          Int
+  package          Package   @relation(fields: [package_id], references: [id])
+  package_id       Int
   question_order   Json
   choice_order     Json
   current_position Int       @default(0)
@@ -225,7 +228,7 @@ model UserExamSession {
 
   user_answers UserAnswer[]
 
-  @@unique([user_id, exam_id])
+  @@unique([user_id, exam_id, package_id])
 }
 
 model UserAnswer {

@@ -72,6 +72,7 @@ export class ExamService {
       const existing = await this.repo.findExistingSessionForUserExam(
         userId,
         pe.exam.id,
+        packageId,
       );
       if (existing) {
         created.push({ ...existing, title: pe.exam.title });
@@ -85,6 +86,7 @@ export class ExamService {
       const session = await this.repo.createUserExamSession({
         user_id: userId,
         exam_id: pe.exam.id,
+        package_id: packageId,
         question_order: questionOrder,
         choice_order: choiceOrder,
       });

@@ -35,6 +35,7 @@ export class ExamRepository {
   async createUserExamSession(data: {
     user_id: string;
     exam_id: number;
+    package_id: number;
     question_order: number[];
     choice_order: Record<number, number[]>;
   }) {
@@ -92,11 +93,12 @@ export class ExamRepository {
     });
   }
 
-  async findExistingSessionForUserExam(userId: string, examId: number) {
+  async findExistingSessionForUserExam(userId: string, examId: number, packageId: number) {
     return this.prismaService.userExamSession.findFirst({
       where: {
         exam_id: examId,
         user_id: userId,
+        package_id: packageId,
       },
     });
   }
