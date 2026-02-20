@@ -61,7 +61,7 @@ export class QuestionController {
     private readonly questionService: QuestionService,
     private readonly cloudinaryService: CloudinaryService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   // Create question TANPA choices (flow baru: buat soal dulu, baru tambah choices)
   @Post()
@@ -75,7 +75,7 @@ export class QuestionController {
 2. Upload gambar soal (jika ada) via POST /question/upload-image
 3. Upload gambar pembahasan (jika ada) - bisa menggunakan URL video
 4. Gunakan endpoint ini untuk membuat soal (TANPA choices)
-5. Setelah soal dibuat, gunakan POST /question/:id/choices untuk menambahkan 5 pilihan jawaban (A, B, C, D, E)
+5. Setelah soal dibuat, gunakan POST /question/:id/choices untuk menambahkan 4 atau 5 pilihan jawaban
     
 **Keamanan:**
 - Soal harus lengkap (dengan image dan pembahasan) sebelum bisa tambah choices
@@ -142,19 +142,19 @@ export class QuestionController {
   @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
     summary: "Tambah pilihan jawaban untuk soal (Admin Only)",
-    description: `Menambahkan 5 pilihan jawaban (A, B, C, D, E) untuk soal yang sudah dibuat.
+    description: `Menambahkan 4 atau 5 pilihan jawaban (A, B, C, D, E) untuk soal yang sudah dibuat.
     **Hanya bisa digunakan setelah soal dibuat via POST /question**
     
 **Flow:**
 1. Buat soal dulu via POST /question (dengan image dan pembahasan)
 2. Upload gambar pilihan jawaban (jika ada) via POST /question/upload-choice-image
-3. Gunakan endpoint ini untuk menambahkan 5 pilihan jawaban
-4. Harus ada tepat 1 jawaban yang benar (is_correct: true)
+3. Gunakan endpoint ini untuk menambahkan 4 atau 5 pilihan jawaban
+    Harus ada tepat 1 jawaban yang benar (is_correct: true)
     
 **Validasi:**
 - Soal harus sudah ada
 - Soal belum boleh punya choices (jika sudah ada, gunakan PATCH /question/:id)
-- Harus ada tepat 5 choices (A, B, C, D, E)
+- Harus ada 4 atau 5 choices
 - Harus ada tepat 1 yang is_correct: true`,
   })
   @ApiParam({
@@ -165,7 +165,7 @@ export class QuestionController {
   })
   @ApiBody({
     description:
-      "Data 5 pilihan jawaban (A, B, C, D, E). Setiap choice bisa punya teks saja, gambar saja, atau teks DAN gambar sekaligus.",
+      "Data 4 atau 5 pilihan jawaban. Setiap choice bisa punya teks saja, gambar saja, atau teks DAN gambar sekaligus.",
     examples: {
       example1: {
         summary: "Contoh choice dengan teks saja",

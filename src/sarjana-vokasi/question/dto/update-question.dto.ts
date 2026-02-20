@@ -11,7 +11,8 @@ export const UpdateQuestionSchema = z.object({
   difficulty: z.string().optional(),
   choices: z
     .array(CreateQuestionChoiceSchema)
-    .length(5, "Must have exactly 5 choices (A, B, C, D, E)")
+    .min(4, "Must have 4 or 5 choices")
+    .max(5, "Must have 4 or 5 choices")
     .refine(
       (choices) => choices.filter((c) => c.is_correct).length === 1,
       "Must have exactly one correct answer",
@@ -19,4 +20,4 @@ export const UpdateQuestionSchema = z.object({
     .optional(),
 });
 
-export class UpdateQuestionDto extends createZodDto(UpdateQuestionSchema) {}
+export class UpdateQuestionDto extends createZodDto(UpdateQuestionSchema) { }
