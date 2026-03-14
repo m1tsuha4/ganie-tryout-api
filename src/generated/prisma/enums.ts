@@ -18,6 +18,17 @@ export const TypeExam = {
 export type TypeExam = (typeof TypeExam)[keyof typeof TypeExam]
 
 
+export const TypeQuestion = {
+  Verbal: 'Verbal',
+  Kuantitatif: 'Kuantitatif',
+  Penalaran: 'Penalaran',
+  StructureAndExpression: 'StructureAndExpression',
+  ReadingComprehension: 'ReadingComprehension'
+} as const
+
+export type TypeQuestion = (typeof TypeQuestion)[keyof typeof TypeQuestion]
+
+
 export const PackageType = {
   SARJANA: 'SARJANA',
   PASCASARJANA: 'PASCASARJANA'

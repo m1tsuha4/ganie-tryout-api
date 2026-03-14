@@ -104,6 +104,7 @@ export class QuestionController {
             "Hasil dari 2 + 2 adalah 4. Penjumlahan adalah operasi dasar matematika.",
           video_discussion: "https://youtube.com/...", // Opsional: URL video pembahasan
           difficulty: "easy",
+          type_question: "Verbal",
         },
       },
     },
@@ -118,6 +119,7 @@ export class QuestionController {
         question_text: "Berapakah hasil dari 2 + 2?",
         question_image_url: "https://res.cloudinary.com/...",
         discussion: "Hasil dari 2 + 2 adalah 4",
+        type_question: "Verbal",
         question_choices: [],
       },
     },

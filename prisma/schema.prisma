@@ -108,6 +108,7 @@ model Question {
   discussion         String    @db.Text
   video_discussion   String?   @db.Text
   difficulty         String?
+  type_question      TypeQuestion @default(Verbal)
   created_at         DateTime  @default(now())
   created_by         String?
   updated_at         DateTime  @updatedAt
@@ -117,6 +118,14 @@ model Question {
 
   question_choices QuestionChoice[]
   user_answers     UserAnswer[]
+}
+
+enum TypeQuestion {
+  Verbal
+  Kuantitatif
+  Penalaran
+  StructureAndExpression
+  ReadingComprehension
 }
 
 model QuestionChoice {

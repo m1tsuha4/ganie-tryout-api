@@ -45,6 +45,7 @@ export type QuestionMinAggregateOutputType = {
   discussion: string | null
   video_discussion: string | null
   difficulty: string | null
+  type_question: $Enums.TypeQuestion | null
   created_at: Date | null
   created_by: string | null
   updated_at: Date | null
@@ -62,6 +63,7 @@ export type QuestionMaxAggregateOutputType = {
   discussion: string | null
   video_discussion: string | null
   difficulty: string | null
+  type_question: $Enums.TypeQuestion | null
   created_at: Date | null
   created_by: string | null
   updated_at: Date | null
@@ -79,6 +81,7 @@ export type QuestionCountAggregateOutputType = {
   discussion: number
   video_discussion: number
   difficulty: number
+  type_question: number
   created_at: number
   created_by: number
   updated_at: number
@@ -108,6 +111,7 @@ export type QuestionMinAggregateInputType = {
   discussion?: true
   video_discussion?: true
   difficulty?: true
+  type_question?: true
   created_at?: true
   created_by?: true
   updated_at?: true
@@ -125,6 +129,7 @@ export type QuestionMaxAggregateInputType = {
   discussion?: true
   video_discussion?: true
   difficulty?: true
+  type_question?: true
   created_at?: true
   created_by?: true
   updated_at?: true
@@ -142,6 +147,7 @@ export type QuestionCountAggregateInputType = {
   discussion?: true
   video_discussion?: true
   difficulty?: true
+  type_question?: true
   created_at?: true
   created_by?: true
   updated_at?: true
@@ -246,6 +252,7 @@ export type QuestionGroupByOutputType = {
   discussion: string
   video_discussion: string | null
   difficulty: string | null
+  type_question: $Enums.TypeQuestion
   created_at: Date
   created_by: string | null
   updated_at: Date
@@ -286,6 +293,7 @@ export type QuestionWhereInput = {
   discussion?: Prisma.StringFilter<"Question"> | string
   video_discussion?: Prisma.StringNullableFilter<"Question"> | string | null
   difficulty?: Prisma.StringNullableFilter<"Question"> | string | null
+  type_question?: Prisma.EnumTypeQuestionFilter<"Question"> | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFilter<"Question"> | Date | string
   created_by?: Prisma.StringNullableFilter<"Question"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Question"> | Date | string
@@ -306,6 +314,7 @@ export type QuestionOrderByWithRelationInput = {
   discussion?: Prisma.SortOrder
   video_discussion?: Prisma.SortOrderInput | Prisma.SortOrder
   difficulty?: Prisma.SortOrderInput | Prisma.SortOrder
+  type_question?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -329,6 +338,7 @@ export type QuestionWhereUniqueInput = Prisma.AtLeast<{
   discussion?: Prisma.StringFilter<"Question"> | string
   video_discussion?: Prisma.StringNullableFilter<"Question"> | string | null
   difficulty?: Prisma.StringNullableFilter<"Question"> | string | null
+  type_question?: Prisma.EnumTypeQuestionFilter<"Question"> | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFilter<"Question"> | Date | string
   created_by?: Prisma.StringNullableFilter<"Question"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Question"> | Date | string
@@ -349,6 +359,7 @@ export type QuestionOrderByWithAggregationInput = {
   discussion?: Prisma.SortOrder
   video_discussion?: Prisma.SortOrderInput | Prisma.SortOrder
   difficulty?: Prisma.SortOrderInput | Prisma.SortOrder
+  type_question?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -374,6 +385,7 @@ export type QuestionScalarWhereWithAggregatesInput = {
   discussion?: Prisma.StringWithAggregatesFilter<"Question"> | string
   video_discussion?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
   difficulty?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
+  type_question?: Prisma.EnumTypeQuestionWithAggregatesFilter<"Question"> | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Question"> | Date | string
   created_by?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Question"> | Date | string
@@ -389,6 +401,7 @@ export type QuestionCreateInput = {
   discussion: string
   video_discussion?: string | null
   difficulty?: string | null
+  type_question?: $Enums.TypeQuestion
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -409,6 +422,7 @@ export type QuestionUncheckedCreateInput = {
   discussion: string
   video_discussion?: string | null
   difficulty?: string | null
+  type_question?: $Enums.TypeQuestion
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -426,6 +440,7 @@ export type QuestionUpdateInput = {
   discussion?: Prisma.StringFieldUpdateOperationsInput | string
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type_question?: Prisma.EnumTypeQuestionFieldUpdateOperationsInput | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -446,6 +461,7 @@ export type QuestionUncheckedUpdateInput = {
   discussion?: Prisma.StringFieldUpdateOperationsInput | string
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type_question?: Prisma.EnumTypeQuestionFieldUpdateOperationsInput | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -465,6 +481,7 @@ export type QuestionCreateManyInput = {
   discussion: string
   video_discussion?: string | null
   difficulty?: string | null
+  type_question?: $Enums.TypeQuestion
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -480,6 +497,7 @@ export type QuestionUpdateManyMutationInput = {
   discussion?: Prisma.StringFieldUpdateOperationsInput | string
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type_question?: Prisma.EnumTypeQuestionFieldUpdateOperationsInput | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -497,6 +515,7 @@ export type QuestionUncheckedUpdateManyInput = {
   discussion?: Prisma.StringFieldUpdateOperationsInput | string
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type_question?: Prisma.EnumTypeQuestionFieldUpdateOperationsInput | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -524,6 +543,7 @@ export type QuestionCountOrderByAggregateInput = {
   discussion?: Prisma.SortOrder
   video_discussion?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
+  type_question?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -546,6 +566,7 @@ export type QuestionMaxOrderByAggregateInput = {
   discussion?: Prisma.SortOrder
   video_discussion?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
+  type_question?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -563,6 +584,7 @@ export type QuestionMinOrderByAggregateInput = {
   discussion?: Prisma.SortOrder
   video_discussion?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
+  type_question?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -623,6 +645,10 @@ export type QuestionUncheckedUpdateManyWithoutExamNestedInput = {
   deleteMany?: Prisma.QuestionScalarWhereInput | Prisma.QuestionScalarWhereInput[]
 }
 
+export type EnumTypeQuestionFieldUpdateOperationsInput = {
+  set?: $Enums.TypeQuestion
+}
+
 export type QuestionCreateNestedOneWithoutQuestion_choicesInput = {
   create?: Prisma.XOR<Prisma.QuestionCreateWithoutQuestion_choicesInput, Prisma.QuestionUncheckedCreateWithoutQuestion_choicesInput>
   connectOrCreate?: Prisma.QuestionCreateOrConnectWithoutQuestion_choicesInput
@@ -658,6 +684,7 @@ export type QuestionCreateWithoutExamInput = {
   discussion: string
   video_discussion?: string | null
   difficulty?: string | null
+  type_question?: $Enums.TypeQuestion
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -676,6 +703,7 @@ export type QuestionUncheckedCreateWithoutExamInput = {
   discussion: string
   video_discussion?: string | null
   difficulty?: string | null
+  type_question?: $Enums.TypeQuestion
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -724,6 +752,7 @@ export type QuestionScalarWhereInput = {
   discussion?: Prisma.StringFilter<"Question"> | string
   video_discussion?: Prisma.StringNullableFilter<"Question"> | string | null
   difficulty?: Prisma.StringNullableFilter<"Question"> | string | null
+  type_question?: Prisma.EnumTypeQuestionFilter<"Question"> | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFilter<"Question"> | Date | string
   created_by?: Prisma.StringNullableFilter<"Question"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Question"> | Date | string
@@ -739,6 +768,7 @@ export type QuestionCreateWithoutQuestion_choicesInput = {
   discussion: string
   video_discussion?: string | null
   difficulty?: string | null
+  type_question?: $Enums.TypeQuestion
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -758,6 +788,7 @@ export type QuestionUncheckedCreateWithoutQuestion_choicesInput = {
   discussion: string
   video_discussion?: string | null
   difficulty?: string | null
+  type_question?: $Enums.TypeQuestion
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -790,6 +821,7 @@ export type QuestionUpdateWithoutQuestion_choicesInput = {
   discussion?: Prisma.StringFieldUpdateOperationsInput | string
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type_question?: Prisma.EnumTypeQuestionFieldUpdateOperationsInput | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -809,6 +841,7 @@ export type QuestionUncheckedUpdateWithoutQuestion_choicesInput = {
   discussion?: Prisma.StringFieldUpdateOperationsInput | string
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type_question?: Prisma.EnumTypeQuestionFieldUpdateOperationsInput | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -825,6 +858,7 @@ export type QuestionCreateWithoutUser_answersInput = {
   discussion: string
   video_discussion?: string | null
   difficulty?: string | null
+  type_question?: $Enums.TypeQuestion
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -844,6 +878,7 @@ export type QuestionUncheckedCreateWithoutUser_answersInput = {
   discussion: string
   video_discussion?: string | null
   difficulty?: string | null
+  type_question?: $Enums.TypeQuestion
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -876,6 +911,7 @@ export type QuestionUpdateWithoutUser_answersInput = {
   discussion?: Prisma.StringFieldUpdateOperationsInput | string
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type_question?: Prisma.EnumTypeQuestionFieldUpdateOperationsInput | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -895,6 +931,7 @@ export type QuestionUncheckedUpdateWithoutUser_answersInput = {
   discussion?: Prisma.StringFieldUpdateOperationsInput | string
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type_question?: Prisma.EnumTypeQuestionFieldUpdateOperationsInput | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -912,6 +949,7 @@ export type QuestionCreateManyExamInput = {
   discussion: string
   video_discussion?: string | null
   difficulty?: string | null
+  type_question?: $Enums.TypeQuestion
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -927,6 +965,7 @@ export type QuestionUpdateWithoutExamInput = {
   discussion?: Prisma.StringFieldUpdateOperationsInput | string
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type_question?: Prisma.EnumTypeQuestionFieldUpdateOperationsInput | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -945,6 +984,7 @@ export type QuestionUncheckedUpdateWithoutExamInput = {
   discussion?: Prisma.StringFieldUpdateOperationsInput | string
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type_question?: Prisma.EnumTypeQuestionFieldUpdateOperationsInput | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -963,6 +1003,7 @@ export type QuestionUncheckedUpdateManyWithoutExamInput = {
   discussion?: Prisma.StringFieldUpdateOperationsInput | string
   video_discussion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type_question?: Prisma.EnumTypeQuestionFieldUpdateOperationsInput | $Enums.TypeQuestion
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1020,6 +1061,7 @@ export type QuestionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   discussion?: boolean
   video_discussion?: boolean
   difficulty?: boolean
+  type_question?: boolean
   created_at?: boolean
   created_by?: boolean
   updated_at?: boolean
@@ -1041,6 +1083,7 @@ export type QuestionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   discussion?: boolean
   video_discussion?: boolean
   difficulty?: boolean
+  type_question?: boolean
   created_at?: boolean
   created_by?: boolean
   updated_at?: boolean
@@ -1059,6 +1102,7 @@ export type QuestionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   discussion?: boolean
   video_discussion?: boolean
   difficulty?: boolean
+  type_question?: boolean
   created_at?: boolean
   created_by?: boolean
   updated_at?: boolean
@@ -1077,6 +1121,7 @@ export type QuestionSelectScalar = {
   discussion?: boolean
   video_discussion?: boolean
   difficulty?: boolean
+  type_question?: boolean
   created_at?: boolean
   created_by?: boolean
   updated_at?: boolean
@@ -1085,7 +1130,7 @@ export type QuestionSelectScalar = {
   deleted_by?: boolean
 }
 
-export type QuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "exam_id" | "question_text" | "question_image_url" | "question_audio_url" | "discussion" | "video_discussion" | "difficulty" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["question"]>
+export type QuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "exam_id" | "question_text" | "question_image_url" | "question_audio_url" | "discussion" | "video_discussion" | "difficulty" | "type_question" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["question"]>
 export type QuestionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
   question_choices?: boolean | Prisma.Question$question_choicesArgs<ExtArgs>
@@ -1115,6 +1160,7 @@ export type $QuestionPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     discussion: string
     video_discussion: string | null
     difficulty: string | null
+    type_question: $Enums.TypeQuestion
     created_at: Date
     created_by: string | null
     updated_at: Date
@@ -1555,6 +1601,7 @@ export interface QuestionFieldRefs {
   readonly discussion: Prisma.FieldRef<"Question", 'String'>
   readonly video_discussion: Prisma.FieldRef<"Question", 'String'>
   readonly difficulty: Prisma.FieldRef<"Question", 'String'>
+  readonly type_question: Prisma.FieldRef<"Question", 'TypeQuestion'>
   readonly created_at: Prisma.FieldRef<"Question", 'DateTime'>
   readonly created_by: Prisma.FieldRef<"Question", 'String'>
   readonly updated_at: Prisma.FieldRef<"Question", 'DateTime'>

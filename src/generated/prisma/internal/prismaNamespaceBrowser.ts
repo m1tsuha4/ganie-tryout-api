@@ -174,6 +174,7 @@ export const QuestionScalarFieldEnum = {
   discussion: 'discussion',
   video_discussion: 'video_discussion',
   difficulty: 'difficulty',
+  type_question: 'type_question',
   created_at: 'created_at',
   created_by: 'created_by',
   updated_at: 'updated_at',

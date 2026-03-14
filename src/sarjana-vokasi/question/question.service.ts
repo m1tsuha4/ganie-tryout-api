@@ -39,6 +39,7 @@ export class QuestionService {
         discussion: createQuestionDto.discussion,
         video_discussion: createQuestionDto.video_discussion,
         difficulty: createQuestionDto.difficulty,
+        type_question: createQuestionDto.type_question as any,
         created_by: userId,
         // deleted_at default null (tidak dihapus)
       },
@@ -134,6 +135,7 @@ export class QuestionService {
           discussion: true,
           video_discussion: true,
           difficulty: true,
+          type_question: true,
           question_choices: {
             select: {
               id: true,
@@ -243,6 +245,9 @@ export class QuestionService {
     }
     if (updateQuestionDto.difficulty !== undefined) {
       updateData.difficulty = updateQuestionDto.difficulty;
+    }
+    if (updateQuestionDto.type_question !== undefined) {
+      updateData.type_question = updateQuestionDto.type_question as any;
     }
 
     const question = await this.prismaService.question.update({
