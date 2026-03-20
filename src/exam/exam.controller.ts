@@ -195,4 +195,17 @@ export class ExamController {
     const userId: string = req.user?.id;
     return this.examService.getPackageProgress(packageId, userId);
   }
+
+  @Get("result/:packageId")
+  @ApiOperation({
+    summary: "Get exam result",
+  })
+  async getExamResult(
+    @Param("packageId") packageIdParam: string,
+    @Req() req: any,
+  ) {
+    const packageId = Number(packageIdParam);
+    const userId: string = req.user?.id;
+    return this.examService.getExamResult(packageId, userId);
+  }
 }

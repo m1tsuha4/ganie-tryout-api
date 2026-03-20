@@ -564,4 +564,82 @@ export class ExamService {
 
     return { correct, wrong, empty, rawScore, finalScore };
   }
+
+  async getExamResult(packageId: number, userId: string) {
+    const sessions = await this.prisma.userExamSession.findMany({
+      where: { user_id: userId, package_id: packageId },
+      include: {
+        exam: true,
+        user_answers: {
+          include: { choice: true },
+        },
+      },
+    });
+
+    const packageExam = await this.repo.findPackageExamWithQeustions(packageId);
+
+    const result: Record<string, any> = {};
+
+    for (const pe of packageExam) {
+      const exam = pe.exam;
+      const typeExam = exam.type_exam || "TKA";
+      
+      if (!result[typeExam]) {
+        result[typeExam] = {
+          score: 0,
+          totalRawScore: 0,
+          details: {},
+        };
+      }
+
+      const session = sessions.find((s) => s.exam_id === exam.id);
+      if (!session) continue;
+
+      result[typeExam].score += session.score || 0;
+
+      const questionOrder = Array.isArray(session.question_order)
+        ? (session.question_order as number[])
+        : [];
+
+      // Find package type using repo
+      const packageData = await this.repo.findPackageByExamId(exam.id);
+      const packageType = packageData?.type || "SARJANA";
+      const scoring = getScoringConstants(packageType, typeExam);
+
+      for (const qIdRaw of questionOrder) {
+        const qId = Number(qIdRaw);
+        const question = exam.questions.find((q) => q.id === qId);
+        if (!question) continue;
+
+        const typeQuestion = question.type_question || "Unknown";
+        if (!result[typeExam].details[typeQuestion]) {
+          result[typeExam].details[typeQuestion] = {
+            correct: 0,
+            wrong: 0,
+            empty: 0,
+            rawScore: 0,
+          };
+        }
+
+        const ans = session.user_answers.find((a) => a.question_id === qId);
+        
+        let point = 0;
+        if (!ans || !ans.choice_id) {
+          result[typeExam].details[typeQuestion].empty += 1;
+          point = scoring.NOT_ANSWERED;
+        } else if (ans.choice?.is_correct) {
+          result[typeExam].details[typeQuestion].correct += 1;
+          point = scoring.CORRECT_ANSWER;
+        } else {
+          result[typeExam].details[typeQuestion].wrong += 1;
+          point = scoring.WRONG_ANSWER;
+        }
+
+        result[typeExam].details[typeQuestion].rawScore += point;
+        result[typeExam].totalRawScore += point;
+      }
+    }
+
+    return result;
+  }
 }
