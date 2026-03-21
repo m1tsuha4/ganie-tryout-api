@@ -21,7 +21,7 @@ export const SCORING_DEFAULT = {
 } as const;
 
 export const SCORING_PASCASARJANA_TBI = {
-  CORRECT_ANSWER: 4,
+  CORRECT_ANSWER: 1,
   WRONG_ANSWER: 0, // Tidak ada minus untuk Pascasarjana TBI
   NOT_ANSWERED: 0,
 } as const;
