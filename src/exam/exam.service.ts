@@ -455,6 +455,17 @@ export class ExamService {
     return { finished: true, result: res };
   }
 
+  private scaleScore(
+    rawScore: number,
+    maxRawScore: number,
+    examType?: string,
+  ) {
+    if (maxRawScore <= 0) return 0;
+    const scaleTarget = examType === "TBI" ? 677 : 1000;
+    const scaled = Math.round((rawScore / maxRawScore) * scaleTarget);
+    return Math.min(scaleTarget, Math.max(0, scaled));
+  }
+
   /**
    * Return per-session details and package-level totals for a user's package attempt.
    * Note: sessions that are not finalized (`completed_at` is null) may have zero scores.
@@ -522,7 +533,7 @@ export class ExamService {
     }
 
     const examData = exam ?? (await this.repo.findByExamId(session.exam_id));
-    const packageData = exam ?? (await this.repo.findPackageByExamId(session.exam_id));
+    const packageData = await this.repo.findPackageByExamId(session.exam_id);
     const durationMin: number = examData?.duration ?? 0;
 
     const answer = await this.repo.findUserAnswer(sessionId);
@@ -539,18 +550,14 @@ export class ExamService {
     const empty = Math.max(0, totalQuestions - answeredCount);
 
     // Compute raw score using scoring constants (e.g., +4 / -1 / 0)
-    const scoring = getScoringConstants(packageData?.type, examData?.type);
+    const scoring = getScoringConstants(packageData?.type ?? "SARJANA", examData?.type);
     const rawScore =
       correct * scoring.CORRECT_ANSWER +
       wrong * scoring.WRONG_ANSWER +
       empty * scoring.NOT_ANSWERED;
-    // Optionally compute percentage score too (for convenience)
-    let finalScore = 0;
-    if (examData?.type === 'TBI') {
-      finalScore = totalQuestions > 0 ? Math.round((rawScore / 360) * 677) : 0;
-    } else {
-      finalScore = totalQuestions > 0 ? Math.round((rawScore / 400) * 1000) : 0;
-    }
+
+    const maxRawScore = totalQuestions * scoring.CORRECT_ANSWER;
+    const finalScore = this.scaleScore(rawScore, maxRawScore, examData?.type);
 
     await this.prisma.$transaction(async (tx) => {
       await this.repo.updateSessionScore(tx, sessionId, {
@@ -588,6 +595,8 @@ export class ExamService {
         result[typeExam] = {
           score: 0,
           totalRawScore: 0,
+          maxRawScore: 0,
+          scaledScore: 0,
           details: {},
         };
       }
@@ -637,7 +646,17 @@ export class ExamService {
 
         result[typeExam].details[typeQuestion].rawScore += point;
         result[typeExam].totalRawScore += point;
+        result[typeExam].maxRawScore += scoring.CORRECT_ANSWER;
       }
+    }
+
+    for (const typeExam of Object.keys(result)) {
+      const item = result[typeExam];
+      item.scaledScore = this.scaleScore(
+        item.totalRawScore,
+        item.maxRawScore,
+        typeExam,
+      );
     }
 
     return result;
