@@ -596,15 +596,12 @@ export class ExamService {
           score: 0,
           totalRawScore: 0,
           maxRawScore: 0,
-          scaledScore: 0,
           details: {},
         };
       }
 
       const session = sessions.find((s) => s.exam_id === exam.id);
       if (!session) continue;
-
-      result[typeExam].score += session.score || 0;
 
       const questionOrder = Array.isArray(session.question_order)
         ? (session.question_order as number[])
@@ -652,7 +649,7 @@ export class ExamService {
 
     for (const typeExam of Object.keys(result)) {
       const item = result[typeExam];
-      item.scaledScore = this.scaleScore(
+      item.score = this.scaleScore(
         item.totalRawScore,
         item.maxRawScore,
         typeExam,
