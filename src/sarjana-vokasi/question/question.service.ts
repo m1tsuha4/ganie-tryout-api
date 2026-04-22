@@ -260,23 +260,59 @@ export class QuestionService {
 
     // Update choices jika ada
     if (updateQuestionDto.choices) {
-      // Delete existing choices
-      await this.prismaService.questionChoice.deleteMany({
-        where: { question_id: id },
+      const existingChoices = await this.prismaService.questionChoice.findMany({
+        where: { question_id: id, deleted_at: null },
+        orderBy: { id: "asc" },
       });
 
-      // Create new choices
-      await this.prismaService.questionChoice.createMany({
-        data: updateQuestionDto.choices.map((choice) => ({
-          question_id: id,
-          choice_text: choice.choice_text,
-          choice_image_url: choice.choice_image_url || "",
-          choice_audio_url: choice.choice_audio_url || "",
-          is_correct: choice.is_correct,
-          created_by: userId,
-          // deleted_at default null (tidak dihapus)
-        })),
+      const operations: any[] = [];
+
+      updateQuestionDto.choices.forEach((choice, index) => {
+        if (index < existingChoices.length) {
+          // Update existing
+          operations.push(
+            this.prismaService.questionChoice.update({
+              where: { id: existingChoices[index].id },
+              data: {
+                choice_text: choice.choice_text,
+                choice_image_url: choice.choice_image_url || "",
+                choice_audio_url: choice.choice_audio_url || "",
+                is_correct: choice.is_correct,
+                updated_by: userId,
+              },
+            })
+          );
+        } else {
+          // Create new
+          operations.push(
+            this.prismaService.questionChoice.create({
+              data: {
+                question_id: id,
+                choice_text: choice.choice_text,
+                choice_image_url: choice.choice_image_url || "",
+                choice_audio_url: choice.choice_audio_url || "",
+                is_correct: choice.is_correct,
+                created_by: userId,
+              },
+            })
+          );
+        }
       });
+
+      // Soft delete excess choices
+      for (let i = updateQuestionDto.choices.length; i < existingChoices.length; i++) {
+        operations.push(
+          this.prismaService.questionChoice.update({
+            where: { id: existingChoices[i].id },
+            data: {
+              deleted_at: new Date(),
+              deleted_by: userId,
+            },
+          })
+        );
+      }
+
+      await this.prismaService.$transaction(operations);
 
       // Get updated question with choices
       return this.findOne(id);
