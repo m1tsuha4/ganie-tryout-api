@@ -118,7 +118,7 @@ export class TransactionService {
 
     const [transactions, total] = await Promise.all([
       this.prismaService.transaction.findMany({
-        where: { deleted_at: null },
+        where: { deleted_at: null, package: { deleted_at: null } },
         include: {
           user: {
             select: { id: true, username: true, name: true, email: true },
@@ -137,7 +137,7 @@ export class TransactionService {
         skip: offset,
         orderBy: { created_at: "desc" },
       }),
-      this.prismaService.transaction.count({ where: { deleted_at: null } }),
+      this.prismaService.transaction.count({ where: { deleted_at: null, package: { deleted_at: null } } }),
     ]);
 
     const data = transactions.map((t) => this.mapToResponseDto(t));
@@ -206,7 +206,7 @@ export class TransactionService {
 
     const [transactions, total] = await Promise.all([
       this.prismaService.transaction.findMany({
-        where: { user_id: userId, deleted_at: null },
+        where: { user_id: userId, deleted_at: null, package: { deleted_at: null } },
         include: {
           package: {
             select: {
@@ -223,7 +223,7 @@ export class TransactionService {
         orderBy: { created_at: "desc" },
       }),
       this.prismaService.transaction.count({
-        where: { user_id: userId, deleted_at: null },
+        where: { user_id: userId, deleted_at: null, package: { deleted_at: null } },
       }),
     ]);
 
