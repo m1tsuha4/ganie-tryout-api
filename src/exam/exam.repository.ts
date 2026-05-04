@@ -31,7 +31,7 @@ export class ExamRepository {
           },
         },
       },
-      orderBy: { exam: { id: "asc" } },
+      orderBy: { id: "asc" },
     });
   }
 
