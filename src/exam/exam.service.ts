@@ -61,11 +61,40 @@ export class ExamService {
     const packageExam = await this.repo.findPackageExamWithQeustions(packageId);
     const created: Array<any> = [];
     for (const pe of packageExam) {
-      const questionIds = pe.exam.questions.map((q) => q.id);
-      const questionOrder = shuffle(questionIds);
+      const randomizableQuestionIds = shuffle(
+        pe.exam.questions
+          .filter(
+            (q) =>
+              q.type_question !== "StructureAndExpression" &&
+              q.type_question !== "ReadingComprehension",
+          )
+          .map((q) => q.id),
+      );
+
+      const questionOrder: number[] = [];
+      let randomIdx = 0;
+      for (const q of pe.exam.questions) {
+        if (
+          q.type_question === "StructureAndExpression" ||
+          q.type_question === "ReadingComprehension"
+        ) {
+          questionOrder.push(q.id);
+        } else {
+          questionOrder.push(randomizableQuestionIds[randomIdx++]);
+        }
+      }
+
       const choiceOrder = {};
       for (const q of pe.exam.questions) {
-        choiceOrder[q.id] = shuffle(q.question_choices.map((qc) => qc.id));
+        const choiceIds = q.question_choices.map((qc) => qc.id);
+        if (
+          q.type_question === "StructureAndExpression" ||
+          q.type_question === "ReadingComprehension"
+        ) {
+          choiceOrder[q.id] = choiceIds;
+        } else {
+          choiceOrder[q.id] = shuffle(choiceIds);
+        }
       }
 
       // If a session for this user+exam already exists, return it 
