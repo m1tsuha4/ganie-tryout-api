@@ -22,8 +22,11 @@ export class ExamRepository {
           include: {
             questions: {
               include: {
-                question_choices: true,
+                question_choices: {
+                  orderBy: { id: "asc" },
+                },
               },
+              orderBy: { id: "asc" },
             },
           },
         },
