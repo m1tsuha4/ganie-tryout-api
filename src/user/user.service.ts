@@ -67,6 +67,7 @@ export class UserService {
           username: true,
           name: true,
           email: true,
+          created_at: true,
         },
         take: limit,
         skip: offset,
