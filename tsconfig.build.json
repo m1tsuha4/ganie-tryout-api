@@ -3,7 +3,7 @@
   "compilerOptions": {
     "declaration": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./"
   },
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts", "prisma.config.ts"]
 }
