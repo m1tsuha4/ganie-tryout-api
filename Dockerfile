@@ -1,5 +1,8 @@
 FROM node:22-alpine AS builder
 
+ARG DIRECT_URL
+ENV DIRECT_URL=$DIRECT_URL
+
 WORKDIR /app
 
 COPY package*.json ./
@@ -16,6 +19,9 @@ RUN npm run build
 
 
 FROM node:22-alpine AS production
+
+ARG DIRECT_URL
+ENV DIRECT_URL=$DIRECT_URL
 
 WORKDIR /app
 
