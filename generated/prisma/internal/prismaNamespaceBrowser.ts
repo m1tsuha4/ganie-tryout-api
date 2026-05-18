@@ -89,11 +89,7 @@ export const AdminScalarFieldEnum = {
   password_hash: 'password_hash',
   role_id: 'role_id',
   created_at: 'created_at',
-  created_by: 'created_by',
-  updated_at: 'updated_at',
-  updated_by: 'updated_by',
-  deleted_at: 'deleted_at',
-  deleted_by: 'deleted_by'
+  updated_at: 'updated_at'
 } as const
 
 export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
@@ -102,15 +98,10 @@ export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof Ad
 export const UserScalarFieldEnum = {
   id: 'id',
   username: 'username',
-  name: 'name',
   email: 'email',
   password_hash: 'password_hash',
   created_at: 'created_at',
-  created_by: 'created_by',
-  updated_at: 'updated_at',
-  updated_by: 'updated_by',
-  deleted_at: 'deleted_at',
-  deleted_by: 'deleted_by'
+  updated_at: 'updated_at'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -121,11 +112,7 @@ export const RoleScalarFieldEnum = {
   name: 'name',
   permissions_mask: 'permissions_mask',
   created_at: 'created_at',
-  created_by: 'created_by',
-  updated_at: 'updated_at',
-  updated_by: 'updated_by',
-  deleted_at: 'deleted_at',
-  deleted_by: 'deleted_by'
+  updated_at: 'updated_at'
 } as const
 
 export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
@@ -137,11 +124,7 @@ export const PermissionScalarFieldEnum = {
   bit_value: 'bit_value',
   description: 'description',
   created_at: 'created_at',
-  created_by: 'created_by',
-  updated_at: 'updated_at',
-  updated_by: 'updated_by',
-  deleted_at: 'deleted_at',
-  deleted_by: 'deleted_by'
+  updated_at: 'updated_at'
 } as const
 
 export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
@@ -151,15 +134,9 @@ export const ExamScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
-  duration: 'duration',
   total_questions: 'total_questions',
-  type_exam: 'type_exam',
   created_at: 'created_at',
-  created_by: 'created_by',
-  updated_at: 'updated_at',
-  updated_by: 'updated_by',
-  deleted_at: 'deleted_at',
-  deleted_by: 'deleted_by'
+  updated_at: 'updated_at'
 } as const
 
 export type ExamScalarFieldEnum = (typeof ExamScalarFieldEnum)[keyof typeof ExamScalarFieldEnum]
@@ -171,16 +148,8 @@ export const QuestionScalarFieldEnum = {
   question_text: 'question_text',
   question_image_url: 'question_image_url',
   question_audio_url: 'question_audio_url',
-  discussion: 'discussion',
-  video_discussion: 'video_discussion',
-  difficulty: 'difficulty',
-  type_question: 'type_question',
   created_at: 'created_at',
-  created_by: 'created_by',
-  updated_at: 'updated_at',
-  updated_by: 'updated_by',
-  deleted_at: 'deleted_at',
-  deleted_by: 'deleted_by'
+  updated_at: 'updated_at'
 } as const
 
 export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
@@ -194,11 +163,7 @@ export const QuestionChoiceScalarFieldEnum = {
   choice_audio_url: 'choice_audio_url',
   is_correct: 'is_correct',
   created_at: 'created_at',
-  created_by: 'created_by',
-  updated_at: 'updated_at',
-  updated_by: 'updated_by',
-  deleted_at: 'deleted_at',
-  deleted_by: 'deleted_by'
+  updated_at: 'updated_at'
 } as const
 
 export type QuestionChoiceScalarFieldEnum = (typeof QuestionChoiceScalarFieldEnum)[keyof typeof QuestionChoiceScalarFieldEnum]
@@ -207,17 +172,10 @@ export type QuestionChoiceScalarFieldEnum = (typeof QuestionChoiceScalarFieldEnu
 export const PackageScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  thumbnail_url: 'thumbnail_url',
   description: 'description',
   price: 'price',
-  published: 'published',
-  type: 'type',
   created_at: 'created_at',
-  created_by: 'created_by',
-  updated_at: 'updated_at',
-  updated_by: 'updated_by',
-  deleted_at: 'deleted_at',
-  deleted_by: 'deleted_by'
+  updated_at: 'updated_at'
 } as const
 
 export type PackageScalarFieldEnum = (typeof PackageScalarFieldEnum)[keyof typeof PackageScalarFieldEnum]
@@ -228,7 +186,6 @@ export const PackageExamScalarFieldEnum = {
   package_id: 'package_id',
   exam_id: 'exam_id',
   created_at: 'created_at',
-  created_by: 'created_by',
   updated_at: 'updated_at'
 } as const
 
@@ -242,14 +199,9 @@ export const TransactionScalarFieldEnum = {
   amount: 'amount',
   payment_method: 'payment_method',
   status: 'status',
-  payment_proof_url: 'payment_proof_url',
   transaction_date: 'transaction_date',
   created_at: 'created_at',
-  created_by: 'created_by',
-  updated_at: 'updated_at',
-  updated_by: 'updated_by',
-  deleted_at: 'deleted_at',
-  deleted_by: 'deleted_by'
+  updated_at: 'updated_at'
 } as const
 
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
@@ -261,7 +213,6 @@ export const UserPackageScalarFieldEnum = {
   package_id: 'package_id',
   purchase_at: 'purchase_at',
   created_at: 'created_at',
-  created_by: 'created_by',
   updated_at: 'updated_at'
 } as const
 
@@ -272,16 +223,10 @@ export const UserExamSessionScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   exam_id: 'exam_id',
-  package_id: 'package_id',
   question_order: 'question_order',
   choice_order: 'choice_order',
   current_position: 'current_position',
-  correct_answers: 'correct_answers',
-  wrong_answers: 'wrong_answers',
-  empty_answers: 'empty_answers',
-  score: 'score',
   started_at: 'started_at',
-  ticked_at: 'ticked_at',
   completed_at: 'completed_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
@@ -317,20 +262,89 @@ export const JsonNullValueInput = {
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
+export const AdminOrderByRelevanceFieldEnum = {
+  id: 'id',
+  username: 'username',
+  email: 'email',
+  password_hash: 'password_hash'
 } as const
 
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+export type AdminOrderByRelevanceFieldEnum = (typeof AdminOrderByRelevanceFieldEnum)[keyof typeof AdminOrderByRelevanceFieldEnum]
 
 
-export const NullsOrder = {
-  first: 'first',
-  last: 'last'
+export const UserOrderByRelevanceFieldEnum = {
+  id: 'id',
+  username: 'username',
+  email: 'email',
+  password_hash: 'password_hash'
 } as const
 
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
+
+
+export const RoleOrderByRelevanceFieldEnum = {
+  name: 'name'
+} as const
+
+export type RoleOrderByRelevanceFieldEnum = (typeof RoleOrderByRelevanceFieldEnum)[keyof typeof RoleOrderByRelevanceFieldEnum]
+
+
+export const PermissionOrderByRelevanceFieldEnum = {
+  name: 'name',
+  description: 'description'
+} as const
+
+export type PermissionOrderByRelevanceFieldEnum = (typeof PermissionOrderByRelevanceFieldEnum)[keyof typeof PermissionOrderByRelevanceFieldEnum]
+
+
+export const ExamOrderByRelevanceFieldEnum = {
+  title: 'title',
+  description: 'description'
+} as const
+
+export type ExamOrderByRelevanceFieldEnum = (typeof ExamOrderByRelevanceFieldEnum)[keyof typeof ExamOrderByRelevanceFieldEnum]
+
+
+export const QuestionOrderByRelevanceFieldEnum = {
+  question_text: 'question_text',
+  question_image_url: 'question_image_url',
+  question_audio_url: 'question_audio_url'
+} as const
+
+export type QuestionOrderByRelevanceFieldEnum = (typeof QuestionOrderByRelevanceFieldEnum)[keyof typeof QuestionOrderByRelevanceFieldEnum]
+
+
+export const QuestionChoiceOrderByRelevanceFieldEnum = {
+  choice_text: 'choice_text',
+  choice_image_url: 'choice_image_url',
+  choice_audio_url: 'choice_audio_url'
+} as const
+
+export type QuestionChoiceOrderByRelevanceFieldEnum = (typeof QuestionChoiceOrderByRelevanceFieldEnum)[keyof typeof QuestionChoiceOrderByRelevanceFieldEnum]
+
+
+export const PackageOrderByRelevanceFieldEnum = {
+  title: 'title',
+  description: 'description'
+} as const
+
+export type PackageOrderByRelevanceFieldEnum = (typeof PackageOrderByRelevanceFieldEnum)[keyof typeof PackageOrderByRelevanceFieldEnum]
+
+
+export const TransactionOrderByRelevanceFieldEnum = {
+  user_id: 'user_id',
+  payment_method: 'payment_method',
+  status: 'status'
+} as const
+
+export type TransactionOrderByRelevanceFieldEnum = (typeof TransactionOrderByRelevanceFieldEnum)[keyof typeof TransactionOrderByRelevanceFieldEnum]
+
+
+export const UserPackageOrderByRelevanceFieldEnum = {
+  user_id: 'user_id'
+} as const
+
+export type UserPackageOrderByRelevanceFieldEnum = (typeof UserPackageOrderByRelevanceFieldEnum)[keyof typeof UserPackageOrderByRelevanceFieldEnum]
 
 
 export const JsonNullValueFilter = {
@@ -340,4 +354,19 @@ export const JsonNullValueFilter = {
 } as const
 
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const UserExamSessionOrderByRelevanceFieldEnum = {
+  user_id: 'user_id'
+} as const
+
+export type UserExamSessionOrderByRelevanceFieldEnum = (typeof UserExamSessionOrderByRelevanceFieldEnum)[keyof typeof UserExamSessionOrderByRelevanceFieldEnum]
 

@@ -39,49 +39,28 @@ export type PackageSumAggregateOutputType = {
 export type PackageMinAggregateOutputType = {
   id: number | null
   title: string | null
-  thumbnail_url: string | null
   description: string | null
   price: number | null
-  published: boolean | null
-  type: $Enums.PackageType | null
   created_at: Date | null
-  created_by: string | null
   updated_at: Date | null
-  updated_by: string | null
-  deleted_at: Date | null
-  deleted_by: string | null
 }
 
 export type PackageMaxAggregateOutputType = {
   id: number | null
   title: string | null
-  thumbnail_url: string | null
   description: string | null
   price: number | null
-  published: boolean | null
-  type: $Enums.PackageType | null
   created_at: Date | null
-  created_by: string | null
   updated_at: Date | null
-  updated_by: string | null
-  deleted_at: Date | null
-  deleted_by: string | null
 }
 
 export type PackageCountAggregateOutputType = {
   id: number
   title: number
-  thumbnail_url: number
   description: number
   price: number
-  published: number
-  type: number
   created_at: number
-  created_by: number
   updated_at: number
-  updated_by: number
-  deleted_at: number
-  deleted_by: number
   _all: number
 }
 
@@ -99,49 +78,28 @@ export type PackageSumAggregateInputType = {
 export type PackageMinAggregateInputType = {
   id?: true
   title?: true
-  thumbnail_url?: true
   description?: true
   price?: true
-  published?: true
-  type?: true
   created_at?: true
-  created_by?: true
   updated_at?: true
-  updated_by?: true
-  deleted_at?: true
-  deleted_by?: true
 }
 
 export type PackageMaxAggregateInputType = {
   id?: true
   title?: true
-  thumbnail_url?: true
   description?: true
   price?: true
-  published?: true
-  type?: true
   created_at?: true
-  created_by?: true
   updated_at?: true
-  updated_by?: true
-  deleted_at?: true
-  deleted_by?: true
 }
 
 export type PackageCountAggregateInputType = {
   id?: true
   title?: true
-  thumbnail_url?: true
   description?: true
   price?: true
-  published?: true
-  type?: true
   created_at?: true
-  created_by?: true
   updated_at?: true
-  updated_by?: true
-  deleted_at?: true
-  deleted_by?: true
   _all?: true
 }
 
@@ -234,17 +192,10 @@ export type PackageGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type PackageGroupByOutputType = {
   id: number
   title: string
-  thumbnail_url: string | null
-  description: string | null
+  description: string
   price: number
-  published: boolean
-  type: $Enums.PackageType
   created_at: Date
-  created_by: string | null
   updated_at: Date
-  updated_by: string | null
-  deleted_at: Date | null
-  deleted_by: string | null
   _count: PackageCountAggregateOutputType | null
   _avg: PackageAvgAggregateOutputType | null
   _sum: PackageSumAggregateOutputType | null
@@ -273,41 +224,26 @@ export type PackageWhereInput = {
   NOT?: Prisma.PackageWhereInput | Prisma.PackageWhereInput[]
   id?: Prisma.IntFilter<"Package"> | number
   title?: Prisma.StringFilter<"Package"> | string
-  thumbnail_url?: Prisma.StringNullableFilter<"Package"> | string | null
-  description?: Prisma.StringNullableFilter<"Package"> | string | null
+  description?: Prisma.StringFilter<"Package"> | string
   price?: Prisma.FloatFilter<"Package"> | number
-  published?: Prisma.BoolFilter<"Package"> | boolean
-  type?: Prisma.EnumPackageTypeFilter<"Package"> | $Enums.PackageType
   created_at?: Prisma.DateTimeFilter<"Package"> | Date | string
-  created_by?: Prisma.StringNullableFilter<"Package"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Package"> | Date | string
-  updated_by?: Prisma.StringNullableFilter<"Package"> | string | null
-  deleted_at?: Prisma.DateTimeNullableFilter<"Package"> | Date | string | null
-  deleted_by?: Prisma.StringNullableFilter<"Package"> | string | null
   package_exams?: Prisma.PackageExamListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
   user_packages?: Prisma.UserPackageListRelationFilter
-  userExamSessions?: Prisma.UserExamSessionListRelationFilter
 }
 
 export type PackageOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  thumbnail_url?: Prisma.SortOrderInput | Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  published?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   package_exams?: Prisma.PackageExamOrderByRelationAggregateInput
   transactions?: Prisma.TransactionOrderByRelationAggregateInput
   user_packages?: Prisma.UserPackageOrderByRelationAggregateInput
-  userExamSessions?: Prisma.UserExamSessionOrderByRelationAggregateInput
+  _relevance?: Prisma.PackageOrderByRelevanceInput
 }
 
 export type PackageWhereUniqueInput = Prisma.AtLeast<{
@@ -316,37 +252,22 @@ export type PackageWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.PackageWhereInput[]
   NOT?: Prisma.PackageWhereInput | Prisma.PackageWhereInput[]
   title?: Prisma.StringFilter<"Package"> | string
-  thumbnail_url?: Prisma.StringNullableFilter<"Package"> | string | null
-  description?: Prisma.StringNullableFilter<"Package"> | string | null
+  description?: Prisma.StringFilter<"Package"> | string
   price?: Prisma.FloatFilter<"Package"> | number
-  published?: Prisma.BoolFilter<"Package"> | boolean
-  type?: Prisma.EnumPackageTypeFilter<"Package"> | $Enums.PackageType
   created_at?: Prisma.DateTimeFilter<"Package"> | Date | string
-  created_by?: Prisma.StringNullableFilter<"Package"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Package"> | Date | string
-  updated_by?: Prisma.StringNullableFilter<"Package"> | string | null
-  deleted_at?: Prisma.DateTimeNullableFilter<"Package"> | Date | string | null
-  deleted_by?: Prisma.StringNullableFilter<"Package"> | string | null
   package_exams?: Prisma.PackageExamListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
   user_packages?: Prisma.UserPackageListRelationFilter
-  userExamSessions?: Prisma.UserExamSessionListRelationFilter
 }, "id">
 
 export type PackageOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  thumbnail_url?: Prisma.SortOrderInput | Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  published?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PackageCountOrderByAggregateInput
   _avg?: Prisma.PackageAvgOrderByAggregateInput
   _max?: Prisma.PackageMaxOrderByAggregateInput
@@ -360,158 +281,97 @@ export type PackageScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PackageScalarWhereWithAggregatesInput | Prisma.PackageScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Package"> | number
   title?: Prisma.StringWithAggregatesFilter<"Package"> | string
-  thumbnail_url?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
-  description?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
+  description?: Prisma.StringWithAggregatesFilter<"Package"> | string
   price?: Prisma.FloatWithAggregatesFilter<"Package"> | number
-  published?: Prisma.BoolWithAggregatesFilter<"Package"> | boolean
-  type?: Prisma.EnumPackageTypeWithAggregatesFilter<"Package"> | $Enums.PackageType
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Package"> | Date | string
-  created_by?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Package"> | Date | string
-  updated_by?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
-  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"Package"> | Date | string | null
-  deleted_by?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
 }
 
 export type PackageCreateInput = {
   title: string
-  thumbnail_url?: string | null
-  description?: string | null
+  description: string
   price: number
-  published?: boolean
-  type?: $Enums.PackageType
   created_at?: Date | string
-  created_by?: string | null
   updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutPackageInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageCreateNestedManyWithoutPackageInput
-  userExamSessions?: Prisma.UserExamSessionCreateNestedManyWithoutPackageInput
 }
 
 export type PackageUncheckedCreateInput = {
   id?: number
   title: string
-  thumbnail_url?: string | null
-  description?: string | null
+  description: string
   price: number
-  published?: boolean
-  type?: $Enums.PackageType
   created_at?: Date | string
-  created_by?: string | null
   updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutPackageInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageUncheckedCreateNestedManyWithoutPackageInput
-  userExamSessions?: Prisma.UserExamSessionUncheckedCreateNestedManyWithoutPackageInput
 }
 
 export type PackageUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.FloatFieldUpdateOperationsInput | number
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUpdateManyWithoutPackageNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUpdateManyWithoutPackageNestedInput
-  userExamSessions?: Prisma.UserExamSessionUpdateManyWithoutPackageNestedInput
 }
 
 export type PackageUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.FloatFieldUpdateOperationsInput | number
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutPackageNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUncheckedUpdateManyWithoutPackageNestedInput
-  userExamSessions?: Prisma.UserExamSessionUncheckedUpdateManyWithoutPackageNestedInput
 }
 
 export type PackageCreateManyInput = {
   id?: number
   title: string
-  thumbnail_url?: string | null
-  description?: string | null
+  description: string
   price: number
-  published?: boolean
-  type?: $Enums.PackageType
   created_at?: Date | string
-  created_by?: string | null
   updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
 }
 
 export type PackageUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.FloatFieldUpdateOperationsInput | number
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PackageUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.FloatFieldUpdateOperationsInput | number
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type PackageOrderByRelevanceInput = {
+  fields: Prisma.PackageOrderByRelevanceFieldEnum | Prisma.PackageOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type PackageCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  thumbnail_url?: Prisma.SortOrder
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  published?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
-  deleted_by?: Prisma.SortOrder
 }
 
 export type PackageAvgOrderByAggregateInput = {
@@ -522,33 +382,19 @@ export type PackageAvgOrderByAggregateInput = {
 export type PackageMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  thumbnail_url?: Prisma.SortOrder
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  published?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
-  deleted_by?: Prisma.SortOrder
 }
 
 export type PackageMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  thumbnail_url?: Prisma.SortOrder
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  published?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
-  deleted_by?: Prisma.SortOrder
 }
 
 export type PackageSumOrderByAggregateInput = {
@@ -567,10 +413,6 @@ export type FloatFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
-}
-
-export type EnumPackageTypeFieldUpdateOperationsInput = {
-  set?: $Enums.PackageType
 }
 
 export type PackageCreateNestedOneWithoutPackage_examsInput = {
@@ -615,55 +457,25 @@ export type PackageUpdateOneRequiredWithoutUser_packagesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PackageUpdateToOneWithWhereWithoutUser_packagesInput, Prisma.PackageUpdateWithoutUser_packagesInput>, Prisma.PackageUncheckedUpdateWithoutUser_packagesInput>
 }
 
-export type PackageCreateNestedOneWithoutUserExamSessionsInput = {
-  create?: Prisma.XOR<Prisma.PackageCreateWithoutUserExamSessionsInput, Prisma.PackageUncheckedCreateWithoutUserExamSessionsInput>
-  connectOrCreate?: Prisma.PackageCreateOrConnectWithoutUserExamSessionsInput
-  connect?: Prisma.PackageWhereUniqueInput
-}
-
-export type PackageUpdateOneRequiredWithoutUserExamSessionsNestedInput = {
-  create?: Prisma.XOR<Prisma.PackageCreateWithoutUserExamSessionsInput, Prisma.PackageUncheckedCreateWithoutUserExamSessionsInput>
-  connectOrCreate?: Prisma.PackageCreateOrConnectWithoutUserExamSessionsInput
-  upsert?: Prisma.PackageUpsertWithoutUserExamSessionsInput
-  connect?: Prisma.PackageWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PackageUpdateToOneWithWhereWithoutUserExamSessionsInput, Prisma.PackageUpdateWithoutUserExamSessionsInput>, Prisma.PackageUncheckedUpdateWithoutUserExamSessionsInput>
-}
-
 export type PackageCreateWithoutPackage_examsInput = {
   title: string
-  thumbnail_url?: string | null
-  description?: string | null
+  description: string
   price: number
-  published?: boolean
-  type?: $Enums.PackageType
   created_at?: Date | string
-  created_by?: string | null
   updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
   transactions?: Prisma.TransactionCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageCreateNestedManyWithoutPackageInput
-  userExamSessions?: Prisma.UserExamSessionCreateNestedManyWithoutPackageInput
 }
 
 export type PackageUncheckedCreateWithoutPackage_examsInput = {
   id?: number
   title: string
-  thumbnail_url?: string | null
-  description?: string | null
+  description: string
   price: number
-  published?: boolean
-  type?: $Enums.PackageType
   created_at?: Date | string
-  created_by?: string | null
   updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageUncheckedCreateNestedManyWithoutPackageInput
-  userExamSessions?: Prisma.UserExamSessionUncheckedCreateNestedManyWithoutPackageInput
 }
 
 export type PackageCreateOrConnectWithoutPackage_examsInput = {
@@ -684,76 +496,44 @@ export type PackageUpdateToOneWithWhereWithoutPackage_examsInput = {
 
 export type PackageUpdateWithoutPackage_examsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.FloatFieldUpdateOperationsInput | number
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUpdateManyWithoutPackageNestedInput
-  userExamSessions?: Prisma.UserExamSessionUpdateManyWithoutPackageNestedInput
 }
 
 export type PackageUncheckedUpdateWithoutPackage_examsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.FloatFieldUpdateOperationsInput | number
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUncheckedUpdateManyWithoutPackageNestedInput
-  userExamSessions?: Prisma.UserExamSessionUncheckedUpdateManyWithoutPackageNestedInput
 }
 
 export type PackageCreateWithoutTransactionsInput = {
   title: string
-  thumbnail_url?: string | null
-  description?: string | null
+  description: string
   price: number
-  published?: boolean
-  type?: $Enums.PackageType
   created_at?: Date | string
-  created_by?: string | null
   updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageCreateNestedManyWithoutPackageInput
-  userExamSessions?: Prisma.UserExamSessionCreateNestedManyWithoutPackageInput
 }
 
 export type PackageUncheckedCreateWithoutTransactionsInput = {
   id?: number
   title: string
-  thumbnail_url?: string | null
-  description?: string | null
+  description: string
   price: number
-  published?: boolean
-  type?: $Enums.PackageType
   created_at?: Date | string
-  created_by?: string | null
   updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutPackageInput
   user_packages?: Prisma.UserPackageUncheckedCreateNestedManyWithoutPackageInput
-  userExamSessions?: Prisma.UserExamSessionUncheckedCreateNestedManyWithoutPackageInput
 }
 
 export type PackageCreateOrConnectWithoutTransactionsInput = {
@@ -774,76 +554,44 @@ export type PackageUpdateToOneWithWhereWithoutTransactionsInput = {
 
 export type PackageUpdateWithoutTransactionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.FloatFieldUpdateOperationsInput | number
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUpdateManyWithoutPackageNestedInput
-  userExamSessions?: Prisma.UserExamSessionUpdateManyWithoutPackageNestedInput
 }
 
 export type PackageUncheckedUpdateWithoutTransactionsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.FloatFieldUpdateOperationsInput | number
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutPackageNestedInput
   user_packages?: Prisma.UserPackageUncheckedUpdateManyWithoutPackageNestedInput
-  userExamSessions?: Prisma.UserExamSessionUncheckedUpdateManyWithoutPackageNestedInput
 }
 
 export type PackageCreateWithoutUser_packagesInput = {
   title: string
-  thumbnail_url?: string | null
-  description?: string | null
+  description: string
   price: number
-  published?: boolean
-  type?: $Enums.PackageType
   created_at?: Date | string
-  created_by?: string | null
   updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
   package_exams?: Prisma.PackageExamCreateNestedManyWithoutPackageInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutPackageInput
-  userExamSessions?: Prisma.UserExamSessionCreateNestedManyWithoutPackageInput
 }
 
 export type PackageUncheckedCreateWithoutUser_packagesInput = {
   id?: number
   title: string
-  thumbnail_url?: string | null
-  description?: string | null
+  description: string
   price: number
-  published?: boolean
-  type?: $Enums.PackageType
   created_at?: Date | string
-  created_by?: string | null
   updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
   package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutPackageInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPackageInput
-  userExamSessions?: Prisma.UserExamSessionUncheckedCreateNestedManyWithoutPackageInput
 }
 
 export type PackageCreateOrConnectWithoutUser_packagesInput = {
@@ -864,129 +612,23 @@ export type PackageUpdateToOneWithWhereWithoutUser_packagesInput = {
 
 export type PackageUpdateWithoutUser_packagesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.FloatFieldUpdateOperationsInput | number
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUpdateManyWithoutPackageNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutPackageNestedInput
-  userExamSessions?: Prisma.UserExamSessionUpdateManyWithoutPackageNestedInput
 }
 
 export type PackageUncheckedUpdateWithoutUser_packagesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.FloatFieldUpdateOperationsInput | number
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutPackageNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPackageNestedInput
-  userExamSessions?: Prisma.UserExamSessionUncheckedUpdateManyWithoutPackageNestedInput
-}
-
-export type PackageCreateWithoutUserExamSessionsInput = {
-  title: string
-  thumbnail_url?: string | null
-  description?: string | null
-  price: number
-  published?: boolean
-  type?: $Enums.PackageType
-  created_at?: Date | string
-  created_by?: string | null
-  updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
-  package_exams?: Prisma.PackageExamCreateNestedManyWithoutPackageInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutPackageInput
-  user_packages?: Prisma.UserPackageCreateNestedManyWithoutPackageInput
-}
-
-export type PackageUncheckedCreateWithoutUserExamSessionsInput = {
-  id?: number
-  title: string
-  thumbnail_url?: string | null
-  description?: string | null
-  price: number
-  published?: boolean
-  type?: $Enums.PackageType
-  created_at?: Date | string
-  created_by?: string | null
-  updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
-  package_exams?: Prisma.PackageExamUncheckedCreateNestedManyWithoutPackageInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPackageInput
-  user_packages?: Prisma.UserPackageUncheckedCreateNestedManyWithoutPackageInput
-}
-
-export type PackageCreateOrConnectWithoutUserExamSessionsInput = {
-  where: Prisma.PackageWhereUniqueInput
-  create: Prisma.XOR<Prisma.PackageCreateWithoutUserExamSessionsInput, Prisma.PackageUncheckedCreateWithoutUserExamSessionsInput>
-}
-
-export type PackageUpsertWithoutUserExamSessionsInput = {
-  update: Prisma.XOR<Prisma.PackageUpdateWithoutUserExamSessionsInput, Prisma.PackageUncheckedUpdateWithoutUserExamSessionsInput>
-  create: Prisma.XOR<Prisma.PackageCreateWithoutUserExamSessionsInput, Prisma.PackageUncheckedCreateWithoutUserExamSessionsInput>
-  where?: Prisma.PackageWhereInput
-}
-
-export type PackageUpdateToOneWithWhereWithoutUserExamSessionsInput = {
-  where?: Prisma.PackageWhereInput
-  data: Prisma.XOR<Prisma.PackageUpdateWithoutUserExamSessionsInput, Prisma.PackageUncheckedUpdateWithoutUserExamSessionsInput>
-}
-
-export type PackageUpdateWithoutUserExamSessionsInput = {
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  package_exams?: Prisma.PackageExamUpdateManyWithoutPackageNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutPackageNestedInput
-  user_packages?: Prisma.UserPackageUpdateManyWithoutPackageNestedInput
-}
-
-export type PackageUncheckedUpdateWithoutUserExamSessionsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  package_exams?: Prisma.PackageExamUncheckedUpdateManyWithoutPackageNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPackageNestedInput
-  user_packages?: Prisma.UserPackageUncheckedUpdateManyWithoutPackageNestedInput
 }
 
 
@@ -998,14 +640,12 @@ export type PackageCountOutputType = {
   package_exams: number
   transactions: number
   user_packages: number
-  userExamSessions: number
 }
 
 export type PackageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   package_exams?: boolean | PackageCountOutputTypeCountPackage_examsArgs
   transactions?: boolean | PackageCountOutputTypeCountTransactionsArgs
   user_packages?: boolean | PackageCountOutputTypeCountUser_packagesArgs
-  userExamSessions?: boolean | PackageCountOutputTypeCountUserExamSessionsArgs
 }
 
 /**
@@ -1039,93 +679,38 @@ export type PackageCountOutputTypeCountUser_packagesArgs<ExtArgs extends runtime
   where?: Prisma.UserPackageWhereInput
 }
 
-/**
- * PackageCountOutputType without action
- */
-export type PackageCountOutputTypeCountUserExamSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UserExamSessionWhereInput
-}
-
 
 export type PackageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  thumbnail_url?: boolean
   description?: boolean
   price?: boolean
-  published?: boolean
-  type?: boolean
   created_at?: boolean
-  created_by?: boolean
   updated_at?: boolean
-  updated_by?: boolean
-  deleted_at?: boolean
-  deleted_by?: boolean
   package_exams?: boolean | Prisma.Package$package_examsArgs<ExtArgs>
   transactions?: boolean | Prisma.Package$transactionsArgs<ExtArgs>
   user_packages?: boolean | Prisma.Package$user_packagesArgs<ExtArgs>
-  userExamSessions?: boolean | Prisma.Package$userExamSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.PackageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["package"]>
 
-export type PackageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  title?: boolean
-  thumbnail_url?: boolean
-  description?: boolean
-  price?: boolean
-  published?: boolean
-  type?: boolean
-  created_at?: boolean
-  created_by?: boolean
-  updated_at?: boolean
-  updated_by?: boolean
-  deleted_at?: boolean
-  deleted_by?: boolean
-}, ExtArgs["result"]["package"]>
 
-export type PackageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  title?: boolean
-  thumbnail_url?: boolean
-  description?: boolean
-  price?: boolean
-  published?: boolean
-  type?: boolean
-  created_at?: boolean
-  created_by?: boolean
-  updated_at?: boolean
-  updated_by?: boolean
-  deleted_at?: boolean
-  deleted_by?: boolean
-}, ExtArgs["result"]["package"]>
 
 export type PackageSelectScalar = {
   id?: boolean
   title?: boolean
-  thumbnail_url?: boolean
   description?: boolean
   price?: boolean
-  published?: boolean
-  type?: boolean
   created_at?: boolean
-  created_by?: boolean
   updated_at?: boolean
-  updated_by?: boolean
-  deleted_at?: boolean
-  deleted_by?: boolean
 }
 
-export type PackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "thumbnail_url" | "description" | "price" | "published" | "type" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["package"]>
+export type PackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "price" | "created_at" | "updated_at", ExtArgs["result"]["package"]>
 export type PackageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   package_exams?: boolean | Prisma.Package$package_examsArgs<ExtArgs>
   transactions?: boolean | Prisma.Package$transactionsArgs<ExtArgs>
   user_packages?: boolean | Prisma.Package$user_packagesArgs<ExtArgs>
-  userExamSessions?: boolean | Prisma.Package$userExamSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.PackageCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type PackageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type PackageIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $PackagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Package"
@@ -1133,22 +718,14 @@ export type $PackagePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     package_exams: Prisma.$PackageExamPayload<ExtArgs>[]
     transactions: Prisma.$TransactionPayload<ExtArgs>[]
     user_packages: Prisma.$UserPackagePayload<ExtArgs>[]
-    userExamSessions: Prisma.$UserExamSessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     title: string
-    thumbnail_url: string | null
-    description: string | null
+    description: string
     price: number
-    published: boolean
-    type: $Enums.PackageType
     created_at: Date
-    created_by: string | null
     updated_at: Date
-    updated_by: string | null
-    deleted_at: Date | null
-    deleted_by: string | null
   }, ExtArgs["result"]["package"]>
   composites: {}
 }
@@ -1267,30 +844,6 @@ export interface PackageDelegate<ExtArgs extends runtime.Types.Extensions.Intern
   createMany<T extends PackageCreateManyArgs>(args?: Prisma.SelectSubset<T, PackageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many Packages and returns the data saved in the database.
-   * @param {PackageCreateManyAndReturnArgs} args - Arguments to create many Packages.
-   * @example
-   * // Create many Packages
-   * const package = await prisma.package.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many Packages and only return the `id`
-   * const packageWithIdOnly = await prisma.package.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends PackageCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, PackageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a Package.
    * @param {PackageDeleteArgs} args - Arguments to delete one Package.
    * @example
@@ -1353,36 +906,6 @@ export interface PackageDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * 
    */
   updateMany<T extends PackageUpdateManyArgs>(args: Prisma.SelectSubset<T, PackageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more Packages and returns the data updated in the database.
-   * @param {PackageUpdateManyAndReturnArgs} args - Arguments to update many Packages.
-   * @example
-   * // Update many Packages
-   * const package = await prisma.package.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more Packages and only return the `id`
-   * const packageWithIdOnly = await prisma.package.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends PackageUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, PackageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Package.
@@ -1546,7 +1069,6 @@ export interface Prisma__PackageClient<T, Null = never, ExtArgs extends runtime.
   package_exams<T extends Prisma.Package$package_examsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Package$package_examsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PackageExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactions<T extends Prisma.Package$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Package$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user_packages<T extends Prisma.Package$user_packagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Package$user_packagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  userExamSessions<T extends Prisma.Package$userExamSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Package$userExamSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserExamSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1578,17 +1100,10 @@ export interface Prisma__PackageClient<T, Null = never, ExtArgs extends runtime.
 export interface PackageFieldRefs {
   readonly id: Prisma.FieldRef<"Package", 'Int'>
   readonly title: Prisma.FieldRef<"Package", 'String'>
-  readonly thumbnail_url: Prisma.FieldRef<"Package", 'String'>
   readonly description: Prisma.FieldRef<"Package", 'String'>
   readonly price: Prisma.FieldRef<"Package", 'Float'>
-  readonly published: Prisma.FieldRef<"Package", 'Boolean'>
-  readonly type: Prisma.FieldRef<"Package", 'PackageType'>
   readonly created_at: Prisma.FieldRef<"Package", 'DateTime'>
-  readonly created_by: Prisma.FieldRef<"Package", 'String'>
   readonly updated_at: Prisma.FieldRef<"Package", 'DateTime'>
-  readonly updated_by: Prisma.FieldRef<"Package", 'String'>
-  readonly deleted_at: Prisma.FieldRef<"Package", 'DateTime'>
-  readonly deleted_by: Prisma.FieldRef<"Package", 'String'>
 }
     
 
@@ -1822,25 +1337,6 @@ export type PackageCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Package createManyAndReturn
- */
-export type PackageCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Package
-   */
-  select?: Prisma.PackageSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Package
-   */
-  omit?: Prisma.PackageOmit<ExtArgs> | null
-  /**
-   * The data used to create many Packages.
-   */
-  data: Prisma.PackageCreateManyInput | Prisma.PackageCreateManyInput[]
-  skipDuplicates?: boolean
-}
-
-/**
  * Package update
  */
 export type PackageUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1870,32 +1366,6 @@ export type PackageUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
  * Package updateMany
  */
 export type PackageUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * The data used to update Packages.
-   */
-  data: Prisma.XOR<Prisma.PackageUpdateManyMutationInput, Prisma.PackageUncheckedUpdateManyInput>
-  /**
-   * Filter which Packages to update
-   */
-  where?: Prisma.PackageWhereInput
-  /**
-   * Limit how many Packages to update.
-   */
-  limit?: number
-}
-
-/**
- * Package updateManyAndReturn
- */
-export type PackageUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Package
-   */
-  select?: Prisma.PackageSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Package
-   */
-  omit?: Prisma.PackageOmit<ExtArgs> | null
   /**
    * The data used to update Packages.
    */
@@ -2046,30 +1516,6 @@ export type Package$user_packagesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.UserPackageScalarFieldEnum | Prisma.UserPackageScalarFieldEnum[]
-}
-
-/**
- * Package.userExamSessions
- */
-export type Package$userExamSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the UserExamSession
-   */
-  select?: Prisma.UserExamSessionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the UserExamSession
-   */
-  omit?: Prisma.UserExamSessionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserExamSessionInclude<ExtArgs> | null
-  where?: Prisma.UserExamSessionWhereInput
-  orderBy?: Prisma.UserExamSessionOrderByWithRelationInput | Prisma.UserExamSessionOrderByWithRelationInput[]
-  cursor?: Prisma.UserExamSessionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.UserExamSessionScalarFieldEnum | Prisma.UserExamSessionScalarFieldEnum[]
 }
 
 /**

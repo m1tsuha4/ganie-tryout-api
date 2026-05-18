@@ -42,11 +42,7 @@ export type PermissionMinAggregateOutputType = {
   bit_value: number | null
   description: string | null
   created_at: Date | null
-  created_by: string | null
   updated_at: Date | null
-  updated_by: string | null
-  deleted_at: Date | null
-  deleted_by: string | null
 }
 
 export type PermissionMaxAggregateOutputType = {
@@ -55,11 +51,7 @@ export type PermissionMaxAggregateOutputType = {
   bit_value: number | null
   description: string | null
   created_at: Date | null
-  created_by: string | null
   updated_at: Date | null
-  updated_by: string | null
-  deleted_at: Date | null
-  deleted_by: string | null
 }
 
 export type PermissionCountAggregateOutputType = {
@@ -68,11 +60,7 @@ export type PermissionCountAggregateOutputType = {
   bit_value: number
   description: number
   created_at: number
-  created_by: number
   updated_at: number
-  updated_by: number
-  deleted_at: number
-  deleted_by: number
   _all: number
 }
 
@@ -93,11 +81,7 @@ export type PermissionMinAggregateInputType = {
   bit_value?: true
   description?: true
   created_at?: true
-  created_by?: true
   updated_at?: true
-  updated_by?: true
-  deleted_at?: true
-  deleted_by?: true
 }
 
 export type PermissionMaxAggregateInputType = {
@@ -106,11 +90,7 @@ export type PermissionMaxAggregateInputType = {
   bit_value?: true
   description?: true
   created_at?: true
-  created_by?: true
   updated_at?: true
-  updated_by?: true
-  deleted_at?: true
-  deleted_by?: true
 }
 
 export type PermissionCountAggregateInputType = {
@@ -119,11 +99,7 @@ export type PermissionCountAggregateInputType = {
   bit_value?: true
   description?: true
   created_at?: true
-  created_by?: true
   updated_at?: true
-  updated_by?: true
-  deleted_at?: true
-  deleted_by?: true
   _all?: true
 }
 
@@ -217,13 +193,9 @@ export type PermissionGroupByOutputType = {
   id: number
   name: string
   bit_value: number
-  description: string | null
+  description: string
   created_at: Date
-  created_by: string | null
   updated_at: Date
-  updated_by: string | null
-  deleted_at: Date | null
-  deleted_by: string | null
   _count: PermissionCountAggregateOutputType | null
   _avg: PermissionAvgAggregateOutputType | null
   _sum: PermissionSumAggregateOutputType | null
@@ -253,26 +225,19 @@ export type PermissionWhereInput = {
   id?: Prisma.IntFilter<"Permission"> | number
   name?: Prisma.StringFilter<"Permission"> | string
   bit_value?: Prisma.IntFilter<"Permission"> | number
-  description?: Prisma.StringNullableFilter<"Permission"> | string | null
+  description?: Prisma.StringFilter<"Permission"> | string
   created_at?: Prisma.DateTimeFilter<"Permission"> | Date | string
-  created_by?: Prisma.StringNullableFilter<"Permission"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Permission"> | Date | string
-  updated_by?: Prisma.StringNullableFilter<"Permission"> | string | null
-  deleted_at?: Prisma.DateTimeNullableFilter<"Permission"> | Date | string | null
-  deleted_by?: Prisma.StringNullableFilter<"Permission"> | string | null
 }
 
 export type PermissionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   bit_value?: Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  _relevance?: Prisma.PermissionOrderByRelevanceInput
 }
 
 export type PermissionWhereUniqueInput = Prisma.AtLeast<{
@@ -282,26 +247,18 @@ export type PermissionWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.PermissionWhereInput[]
   NOT?: Prisma.PermissionWhereInput | Prisma.PermissionWhereInput[]
   bit_value?: Prisma.IntFilter<"Permission"> | number
-  description?: Prisma.StringNullableFilter<"Permission"> | string | null
+  description?: Prisma.StringFilter<"Permission"> | string
   created_at?: Prisma.DateTimeFilter<"Permission"> | Date | string
-  created_by?: Prisma.StringNullableFilter<"Permission"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Permission"> | Date | string
-  updated_by?: Prisma.StringNullableFilter<"Permission"> | string | null
-  deleted_at?: Prisma.DateTimeNullableFilter<"Permission"> | Date | string | null
-  deleted_by?: Prisma.StringNullableFilter<"Permission"> | string | null
 }, "id" | "name">
 
 export type PermissionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   bit_value?: Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PermissionCountOrderByAggregateInput
   _avg?: Prisma.PermissionAvgOrderByAggregateInput
   _max?: Prisma.PermissionMaxOrderByAggregateInput
@@ -316,101 +273,75 @@ export type PermissionScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Permission"> | number
   name?: Prisma.StringWithAggregatesFilter<"Permission"> | string
   bit_value?: Prisma.IntWithAggregatesFilter<"Permission"> | number
-  description?: Prisma.StringNullableWithAggregatesFilter<"Permission"> | string | null
+  description?: Prisma.StringWithAggregatesFilter<"Permission"> | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Permission"> | Date | string
-  created_by?: Prisma.StringNullableWithAggregatesFilter<"Permission"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Permission"> | Date | string
-  updated_by?: Prisma.StringNullableWithAggregatesFilter<"Permission"> | string | null
-  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"Permission"> | Date | string | null
-  deleted_by?: Prisma.StringNullableWithAggregatesFilter<"Permission"> | string | null
 }
 
 export type PermissionCreateInput = {
   name: string
   bit_value?: number
-  description?: string | null
+  description: string
   created_at?: Date | string
-  created_by?: string | null
   updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
 }
 
 export type PermissionUncheckedCreateInput = {
   id?: number
   name: string
   bit_value?: number
-  description?: string | null
+  description: string
   created_at?: Date | string
-  created_by?: string | null
   updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
 }
 
 export type PermissionUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   bit_value?: Prisma.IntFieldUpdateOperationsInput | number
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PermissionUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   bit_value?: Prisma.IntFieldUpdateOperationsInput | number
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PermissionCreateManyInput = {
   id?: number
   name: string
   bit_value?: number
-  description?: string | null
+  description: string
   created_at?: Date | string
-  created_by?: string | null
   updated_at?: Date | string
-  updated_by?: string | null
-  deleted_at?: Date | string | null
-  deleted_by?: string | null
 }
 
 export type PermissionUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   bit_value?: Prisma.IntFieldUpdateOperationsInput | number
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PermissionUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   bit_value?: Prisma.IntFieldUpdateOperationsInput | number
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type PermissionOrderByRelevanceInput = {
+  fields: Prisma.PermissionOrderByRelevanceFieldEnum | Prisma.PermissionOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type PermissionCountOrderByAggregateInput = {
@@ -419,11 +350,7 @@ export type PermissionCountOrderByAggregateInput = {
   bit_value?: Prisma.SortOrder
   description?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
-  deleted_by?: Prisma.SortOrder
 }
 
 export type PermissionAvgOrderByAggregateInput = {
@@ -437,11 +364,7 @@ export type PermissionMaxOrderByAggregateInput = {
   bit_value?: Prisma.SortOrder
   description?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
-  deleted_by?: Prisma.SortOrder
 }
 
 export type PermissionMinOrderByAggregateInput = {
@@ -450,11 +373,7 @@ export type PermissionMinOrderByAggregateInput = {
   bit_value?: Prisma.SortOrder
   description?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
-  deleted_by?: Prisma.SortOrder
 }
 
 export type PermissionSumOrderByAggregateInput = {
@@ -470,38 +389,10 @@ export type PermissionSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   bit_value?: boolean
   description?: boolean
   created_at?: boolean
-  created_by?: boolean
   updated_at?: boolean
-  updated_by?: boolean
-  deleted_at?: boolean
-  deleted_by?: boolean
 }, ExtArgs["result"]["permission"]>
 
-export type PermissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  name?: boolean
-  bit_value?: boolean
-  description?: boolean
-  created_at?: boolean
-  created_by?: boolean
-  updated_at?: boolean
-  updated_by?: boolean
-  deleted_at?: boolean
-  deleted_by?: boolean
-}, ExtArgs["result"]["permission"]>
 
-export type PermissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  name?: boolean
-  bit_value?: boolean
-  description?: boolean
-  created_at?: boolean
-  created_by?: boolean
-  updated_at?: boolean
-  updated_by?: boolean
-  deleted_at?: boolean
-  deleted_by?: boolean
-}, ExtArgs["result"]["permission"]>
 
 export type PermissionSelectScalar = {
   id?: boolean
@@ -509,14 +400,10 @@ export type PermissionSelectScalar = {
   bit_value?: boolean
   description?: boolean
   created_at?: boolean
-  created_by?: boolean
   updated_at?: boolean
-  updated_by?: boolean
-  deleted_at?: boolean
-  deleted_by?: boolean
 }
 
-export type PermissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "bit_value" | "description" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["permission"]>
+export type PermissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "bit_value" | "description" | "created_at" | "updated_at", ExtArgs["result"]["permission"]>
 
 export type $PermissionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Permission"
@@ -525,13 +412,9 @@ export type $PermissionPayload<ExtArgs extends runtime.Types.Extensions.Internal
     id: number
     name: string
     bit_value: number
-    description: string | null
+    description: string
     created_at: Date
-    created_by: string | null
     updated_at: Date
-    updated_by: string | null
-    deleted_at: Date | null
-    deleted_by: string | null
   }, ExtArgs["result"]["permission"]>
   composites: {}
 }
@@ -650,30 +533,6 @@ export interface PermissionDelegate<ExtArgs extends runtime.Types.Extensions.Int
   createMany<T extends PermissionCreateManyArgs>(args?: Prisma.SelectSubset<T, PermissionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many Permissions and returns the data saved in the database.
-   * @param {PermissionCreateManyAndReturnArgs} args - Arguments to create many Permissions.
-   * @example
-   * // Create many Permissions
-   * const permission = await prisma.permission.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many Permissions and only return the `id`
-   * const permissionWithIdOnly = await prisma.permission.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends PermissionCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, PermissionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a Permission.
    * @param {PermissionDeleteArgs} args - Arguments to delete one Permission.
    * @example
@@ -736,36 +595,6 @@ export interface PermissionDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * 
    */
   updateMany<T extends PermissionUpdateManyArgs>(args: Prisma.SelectSubset<T, PermissionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more Permissions and returns the data updated in the database.
-   * @param {PermissionUpdateManyAndReturnArgs} args - Arguments to update many Permissions.
-   * @example
-   * // Update many Permissions
-   * const permission = await prisma.permission.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more Permissions and only return the `id`
-   * const permissionWithIdOnly = await prisma.permission.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends PermissionUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, PermissionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Permission.
@@ -960,11 +789,7 @@ export interface PermissionFieldRefs {
   readonly bit_value: Prisma.FieldRef<"Permission", 'Int'>
   readonly description: Prisma.FieldRef<"Permission", 'String'>
   readonly created_at: Prisma.FieldRef<"Permission", 'DateTime'>
-  readonly created_by: Prisma.FieldRef<"Permission", 'String'>
   readonly updated_at: Prisma.FieldRef<"Permission", 'DateTime'>
-  readonly updated_by: Prisma.FieldRef<"Permission", 'String'>
-  readonly deleted_at: Prisma.FieldRef<"Permission", 'DateTime'>
-  readonly deleted_by: Prisma.FieldRef<"Permission", 'String'>
 }
     
 
@@ -1174,25 +999,6 @@ export type PermissionCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * Permission createManyAndReturn
- */
-export type PermissionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Permission
-   */
-  select?: Prisma.PermissionSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Permission
-   */
-  omit?: Prisma.PermissionOmit<ExtArgs> | null
-  /**
-   * The data used to create many Permissions.
-   */
-  data: Prisma.PermissionCreateManyInput | Prisma.PermissionCreateManyInput[]
-  skipDuplicates?: boolean
-}
-
-/**
  * Permission update
  */
 export type PermissionUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1218,32 +1024,6 @@ export type PermissionUpdateArgs<ExtArgs extends runtime.Types.Extensions.Intern
  * Permission updateMany
  */
 export type PermissionUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * The data used to update Permissions.
-   */
-  data: Prisma.XOR<Prisma.PermissionUpdateManyMutationInput, Prisma.PermissionUncheckedUpdateManyInput>
-  /**
-   * Filter which Permissions to update
-   */
-  where?: Prisma.PermissionWhereInput
-  /**
-   * Limit how many Permissions to update.
-   */
-  limit?: number
-}
-
-/**
- * Permission updateManyAndReturn
- */
-export type PermissionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Permission
-   */
-  select?: Prisma.PermissionSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Permission
-   */
-  omit?: Prisma.PermissionOmit<ExtArgs> | null
   /**
    * The data used to update Permissions.
    */
