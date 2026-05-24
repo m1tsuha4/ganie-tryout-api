@@ -89,23 +89,84 @@ export class UserService {
     });
   }
 
-  async findOne(id: string) {
-    const existingUser = await this.prismaService.user.findUnique({
-      where: {
-        id,
-        deleted_at: null,
-      },
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        email: true,
-      },
-    });
+  async findOne(id: string, paginationDto?: PaginationDto) {
+    let { limit = 10, offset = 0 } = (paginationDto as any) || {};
+    limit = Number(limit) || 10;
+    offset = Number(offset) || 0;
+
+    const [existingUser, transactions, transactionTotal] = await Promise.all([
+      this.prismaService.user.findUnique({
+        where: {
+          id,
+          deleted_at: null,
+        },
+        select: {
+          id: true,
+          username: true,
+          name: true,
+          email: true,
+        },
+      }),
+      this.prismaService.transaction.findMany({
+        where: {
+          user_id: id,
+          deleted_at: null,
+          package: {
+            deleted_at: null,
+          },
+        },
+        select: {
+          id: true,
+          package_id: true,
+          amount: true,
+          payment_method: true,
+          status: true,
+          payment_proof_url: true,
+          transaction_date: true,
+          created_at: true,
+          package: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              price: true,
+              type: true,
+            },
+          },
+        },
+        take: limit,
+        skip: offset,
+        orderBy: {
+          created_at: 'desc',
+        },
+      }),
+      this.prismaService.transaction.count({
+        where: {
+          user_id: id,
+          deleted_at: null,
+          package: {
+            deleted_at: null,
+          },
+        },
+      }),
+    ]);
+
     if (!existingUser) {
       throw new NotFoundException("User Not Found");
     }
-    return existingUser;
+
+    const meta = {
+      total: transactionTotal,
+      limit,
+      offset,
+      nextPage: transactionTotal > offset + limit ? offset + limit : null,
+    };
+
+    return {
+      user: existingUser,
+      transactions,
+      meta,
+    };
   }
 
   async update(id: string, updateUserDto: UpdateUserDto, authId: string) {

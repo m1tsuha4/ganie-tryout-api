@@ -47,12 +47,16 @@ export class UserController {
 
   @Get(":id")
   @ApiOkResponse({
-    description: "User detail",
+    description: "User detail with transaction history",
     type: ResponseUserDto,
   })
   @ApiNotFoundResponse({ description: "User not found" })
-  findOne(@Param("id") id: string) {
-    return this.userService.findOne(id);
+  findOne(
+    @Param("id") id: string,
+    @Query(new ZodValidationPipe(PaginationSchema))
+    paginationDto: PaginationDto,
+  ) {
+    return this.userService.findOne(id, paginationDto);
   }
 
   @Patch(":id")
