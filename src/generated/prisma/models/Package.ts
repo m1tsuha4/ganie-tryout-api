@@ -44,6 +44,8 @@ export type PackageMinAggregateOutputType = {
   price: number | null
   published: boolean | null
   type: $Enums.PackageType | null
+  voucher_code: string | null
+  expired_date: Date | null
   created_at: Date | null
   created_by: string | null
   updated_at: Date | null
@@ -60,6 +62,8 @@ export type PackageMaxAggregateOutputType = {
   price: number | null
   published: boolean | null
   type: $Enums.PackageType | null
+  voucher_code: string | null
+  expired_date: Date | null
   created_at: Date | null
   created_by: string | null
   updated_at: Date | null
@@ -76,6 +80,8 @@ export type PackageCountAggregateOutputType = {
   price: number
   published: number
   type: number
+  voucher_code: number
+  expired_date: number
   created_at: number
   created_by: number
   updated_at: number
@@ -104,6 +110,8 @@ export type PackageMinAggregateInputType = {
   price?: true
   published?: true
   type?: true
+  voucher_code?: true
+  expired_date?: true
   created_at?: true
   created_by?: true
   updated_at?: true
@@ -120,6 +128,8 @@ export type PackageMaxAggregateInputType = {
   price?: true
   published?: true
   type?: true
+  voucher_code?: true
+  expired_date?: true
   created_at?: true
   created_by?: true
   updated_at?: true
@@ -136,6 +146,8 @@ export type PackageCountAggregateInputType = {
   price?: true
   published?: true
   type?: true
+  voucher_code?: true
+  expired_date?: true
   created_at?: true
   created_by?: true
   updated_at?: true
@@ -239,6 +251,8 @@ export type PackageGroupByOutputType = {
   price: number
   published: boolean
   type: $Enums.PackageType
+  voucher_code: string | null
+  expired_date: Date | null
   created_at: Date
   created_by: string | null
   updated_at: Date
@@ -278,6 +292,8 @@ export type PackageWhereInput = {
   price?: Prisma.FloatFilter<"Package"> | number
   published?: Prisma.BoolFilter<"Package"> | boolean
   type?: Prisma.EnumPackageTypeFilter<"Package"> | $Enums.PackageType
+  voucher_code?: Prisma.StringNullableFilter<"Package"> | string | null
+  expired_date?: Prisma.DateTimeNullableFilter<"Package"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"Package"> | Date | string
   created_by?: Prisma.StringNullableFilter<"Package"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Package"> | Date | string
@@ -298,6 +314,8 @@ export type PackageOrderByWithRelationInput = {
   price?: Prisma.SortOrder
   published?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  voucher_code?: Prisma.SortOrderInput | Prisma.SortOrder
+  expired_date?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -321,6 +339,8 @@ export type PackageWhereUniqueInput = Prisma.AtLeast<{
   price?: Prisma.FloatFilter<"Package"> | number
   published?: Prisma.BoolFilter<"Package"> | boolean
   type?: Prisma.EnumPackageTypeFilter<"Package"> | $Enums.PackageType
+  voucher_code?: Prisma.StringNullableFilter<"Package"> | string | null
+  expired_date?: Prisma.DateTimeNullableFilter<"Package"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"Package"> | Date | string
   created_by?: Prisma.StringNullableFilter<"Package"> | string | null
   updated_at?: Prisma.DateTimeFilter<"Package"> | Date | string
@@ -341,6 +361,8 @@ export type PackageOrderByWithAggregationInput = {
   price?: Prisma.SortOrder
   published?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  voucher_code?: Prisma.SortOrderInput | Prisma.SortOrder
+  expired_date?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -365,6 +387,8 @@ export type PackageScalarWhereWithAggregatesInput = {
   price?: Prisma.FloatWithAggregatesFilter<"Package"> | number
   published?: Prisma.BoolWithAggregatesFilter<"Package"> | boolean
   type?: Prisma.EnumPackageTypeWithAggregatesFilter<"Package"> | $Enums.PackageType
+  voucher_code?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
+  expired_date?: Prisma.DateTimeNullableWithAggregatesFilter<"Package"> | Date | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Package"> | Date | string
   created_by?: Prisma.StringNullableWithAggregatesFilter<"Package"> | string | null
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Package"> | Date | string
@@ -380,6 +404,8 @@ export type PackageCreateInput = {
   price: number
   published?: boolean
   type?: $Enums.PackageType
+  voucher_code?: string | null
+  expired_date?: Date | string | null
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -400,6 +426,8 @@ export type PackageUncheckedCreateInput = {
   price: number
   published?: boolean
   type?: $Enums.PackageType
+  voucher_code?: string | null
+  expired_date?: Date | string | null
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -419,6 +447,8 @@ export type PackageUpdateInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expired_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -439,6 +469,8 @@ export type PackageUncheckedUpdateInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expired_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -459,6 +491,8 @@ export type PackageCreateManyInput = {
   price: number
   published?: boolean
   type?: $Enums.PackageType
+  voucher_code?: string | null
+  expired_date?: Date | string | null
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -474,6 +508,8 @@ export type PackageUpdateManyMutationInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expired_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -490,6 +526,8 @@ export type PackageUncheckedUpdateManyInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expired_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -506,6 +544,8 @@ export type PackageCountOrderByAggregateInput = {
   price?: Prisma.SortOrder
   published?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  voucher_code?: Prisma.SortOrder
+  expired_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -527,6 +567,8 @@ export type PackageMaxOrderByAggregateInput = {
   price?: Prisma.SortOrder
   published?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  voucher_code?: Prisma.SortOrder
+  expired_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -543,6 +585,8 @@ export type PackageMinOrderByAggregateInput = {
   price?: Prisma.SortOrder
   published?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  voucher_code?: Prisma.SortOrder
+  expired_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -636,6 +680,8 @@ export type PackageCreateWithoutPackage_examsInput = {
   price: number
   published?: boolean
   type?: $Enums.PackageType
+  voucher_code?: string | null
+  expired_date?: Date | string | null
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -655,6 +701,8 @@ export type PackageUncheckedCreateWithoutPackage_examsInput = {
   price: number
   published?: boolean
   type?: $Enums.PackageType
+  voucher_code?: string | null
+  expired_date?: Date | string | null
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -689,6 +737,8 @@ export type PackageUpdateWithoutPackage_examsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expired_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -708,6 +758,8 @@ export type PackageUncheckedUpdateWithoutPackage_examsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expired_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -726,6 +778,8 @@ export type PackageCreateWithoutTransactionsInput = {
   price: number
   published?: boolean
   type?: $Enums.PackageType
+  voucher_code?: string | null
+  expired_date?: Date | string | null
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -745,6 +799,8 @@ export type PackageUncheckedCreateWithoutTransactionsInput = {
   price: number
   published?: boolean
   type?: $Enums.PackageType
+  voucher_code?: string | null
+  expired_date?: Date | string | null
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -779,6 +835,8 @@ export type PackageUpdateWithoutTransactionsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expired_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -798,6 +856,8 @@ export type PackageUncheckedUpdateWithoutTransactionsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expired_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -816,6 +876,8 @@ export type PackageCreateWithoutUser_packagesInput = {
   price: number
   published?: boolean
   type?: $Enums.PackageType
+  voucher_code?: string | null
+  expired_date?: Date | string | null
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -835,6 +897,8 @@ export type PackageUncheckedCreateWithoutUser_packagesInput = {
   price: number
   published?: boolean
   type?: $Enums.PackageType
+  voucher_code?: string | null
+  expired_date?: Date | string | null
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -869,6 +933,8 @@ export type PackageUpdateWithoutUser_packagesInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expired_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -888,6 +954,8 @@ export type PackageUncheckedUpdateWithoutUser_packagesInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expired_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -906,6 +974,8 @@ export type PackageCreateWithoutUserExamSessionsInput = {
   price: number
   published?: boolean
   type?: $Enums.PackageType
+  voucher_code?: string | null
+  expired_date?: Date | string | null
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -925,6 +995,8 @@ export type PackageUncheckedCreateWithoutUserExamSessionsInput = {
   price: number
   published?: boolean
   type?: $Enums.PackageType
+  voucher_code?: string | null
+  expired_date?: Date | string | null
   created_at?: Date | string
   created_by?: string | null
   updated_at?: Date | string
@@ -959,6 +1031,8 @@ export type PackageUpdateWithoutUserExamSessionsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expired_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -978,6 +1052,8 @@ export type PackageUncheckedUpdateWithoutUserExamSessionsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumPackageTypeFieldUpdateOperationsInput | $Enums.PackageType
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expired_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1055,6 +1131,8 @@ export type PackageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   price?: boolean
   published?: boolean
   type?: boolean
+  voucher_code?: boolean
+  expired_date?: boolean
   created_at?: boolean
   created_by?: boolean
   updated_at?: boolean
@@ -1076,6 +1154,8 @@ export type PackageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   price?: boolean
   published?: boolean
   type?: boolean
+  voucher_code?: boolean
+  expired_date?: boolean
   created_at?: boolean
   created_by?: boolean
   updated_at?: boolean
@@ -1092,6 +1172,8 @@ export type PackageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   price?: boolean
   published?: boolean
   type?: boolean
+  voucher_code?: boolean
+  expired_date?: boolean
   created_at?: boolean
   created_by?: boolean
   updated_at?: boolean
@@ -1108,6 +1190,8 @@ export type PackageSelectScalar = {
   price?: boolean
   published?: boolean
   type?: boolean
+  voucher_code?: boolean
+  expired_date?: boolean
   created_at?: boolean
   created_by?: boolean
   updated_at?: boolean
@@ -1116,7 +1200,7 @@ export type PackageSelectScalar = {
   deleted_by?: boolean
 }
 
-export type PackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "thumbnail_url" | "description" | "price" | "published" | "type" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["package"]>
+export type PackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "thumbnail_url" | "description" | "price" | "published" | "type" | "voucher_code" | "expired_date" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["package"]>
 export type PackageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   package_exams?: boolean | Prisma.Package$package_examsArgs<ExtArgs>
   transactions?: boolean | Prisma.Package$transactionsArgs<ExtArgs>
@@ -1143,6 +1227,8 @@ export type $PackagePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     price: number
     published: boolean
     type: $Enums.PackageType
+    voucher_code: string | null
+    expired_date: Date | null
     created_at: Date
     created_by: string | null
     updated_at: Date
@@ -1583,6 +1669,8 @@ export interface PackageFieldRefs {
   readonly price: Prisma.FieldRef<"Package", 'Float'>
   readonly published: Prisma.FieldRef<"Package", 'Boolean'>
   readonly type: Prisma.FieldRef<"Package", 'PackageType'>
+  readonly voucher_code: Prisma.FieldRef<"Package", 'String'>
+  readonly expired_date: Prisma.FieldRef<"Package", 'DateTime'>
   readonly created_at: Prisma.FieldRef<"Package", 'DateTime'>
   readonly created_by: Prisma.FieldRef<"Package", 'String'>
   readonly updated_at: Prisma.FieldRef<"Package", 'DateTime'>

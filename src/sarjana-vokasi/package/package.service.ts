@@ -16,7 +16,7 @@ export class PackageService {
   constructor(private prismaService: PrismaService) {}
 
   // Helper method untuk map package ke DTO (exclude updated_at, created_at, deleted_at, created_by, updated_by, deleted_by)
-  private mapToResponseDto(packageData: any): ResponsePackageDto {
+  private mapToResponseDto(packageData: any, isAdmin: boolean = false): ResponsePackageDto {
     return {
       id: packageData.id,
       title: packageData.title,
@@ -25,6 +25,8 @@ export class PackageService {
       thumbnail_url: packageData.thumbnail_url,
       published: packageData.published,
       type: packageData.type as "SARJANA" | "PASCASARJANA",
+      voucher_code: isAdmin ? packageData.voucher_code : undefined,
+      expired_date: isAdmin ? packageData.expired_date : undefined,
     };
   }
 
@@ -40,11 +42,12 @@ export class PackageService {
         // deleted_at default null (tidak dihapus)
       },
     });
-    return this.mapToResponseDto(packageData);
+    return this.mapToResponseDto(packageData, true);
   }
 
   // Get all packages (filter by type jika diberikan)
   async findAll(
+    isAdmin: boolean,
     type?: "SARJANA" | "PASCASARJANA",
     pagination?: { limit: number; offset: number },
   ) {
@@ -78,7 +81,7 @@ export class PackageService {
       this.prismaService.package.count({ where }),
     ]);
 
-    const data = packages.map((pkg) => this.mapToResponseDto(pkg));
+    const data = packages.map((pkg) => this.mapToResponseDto(pkg, isAdmin));
 
     return ok(data, "Fetched successfully", {
       total,
@@ -93,6 +96,7 @@ export class PackageService {
 
   // Get packages by published status (filter by type jika diberikan)
   async findByStatus(
+    isAdmin: boolean,
     published: boolean,
     type?: "SARJANA" | "PASCASARJANA",
     pagination?: { limit: number; offset: number },
@@ -128,7 +132,7 @@ export class PackageService {
       this.prismaService.package.count({ where }),
     ]);
 
-    const data = packages.map((pkg) => this.mapToResponseDto(pkg));
+    const data = packages.map((pkg) => this.mapToResponseDto(pkg, isAdmin));
 
     return ok(data, "Fetched successfully", {
       total,
@@ -170,11 +174,11 @@ export class PackageService {
     }
 
     // User biasa tidak bisa akses unpublished package
-    // if (!isAdmin && !packageData.published) {
-    //   throw new ForbiddenException(
-    //     "User biasa tidak bisa mengakses paket yang belum dipublish",
-    //   );
-    // }
+    if (!isAdmin && !packageData.published) {
+      throw new ForbiddenException(
+        "User biasa tidak bisa mengakses paket yang belum dipublish",
+      );
+    }
 
     // Return dengan exclude updated_at dan created_at dari field utama, tapi tetap include nested data
     const {
@@ -186,6 +190,11 @@ export class PackageService {
       deleted_by,
       ...packageMain
     } = packageData;
+
+    if (!isAdmin) {
+      delete (packageMain as any).voucher_code;
+    }
+
     return packageMain;
   }
 
@@ -225,7 +234,7 @@ export class PackageService {
     updatePackageDto: UpdatePackageDto,
     userId: string,
   ): Promise<ResponsePackageDto> {
-    const existingPackage = await this.findOne(id);
+    const existingPackage = await this.findOne(id, true);
 
     // Type tidak bisa diubah setelah package dibuat (untuk keamanan data)
     // UpdatePackageDto sudah tidak punya field type, jadi sudah aman
@@ -240,7 +249,7 @@ export class PackageService {
       },
     });
 
-    return this.mapToResponseDto(updatedPackage);
+    return this.mapToResponseDto(updatedPackage, true);
   }
 
   // Delete package (soft delete)
@@ -274,7 +283,7 @@ export class PackageService {
   // Tambah subtest (Exam) ke package untuk Sarjana & Vokasi
   async createSubtest(createSubtestDto: CreateSubtestDto) {
     // Verify package exists dan untuk Sarjana & Vokasi
-    const packageData = await this.findOne(createSubtestDto.package_id);
+    const packageData = await this.findOne(createSubtestDto.package_id, true);
 
     // Create Exam (subtest) dengan type_exam dari request (TKA atau TKD)
     const exam = await this.prismaService.exam.create({
@@ -313,7 +322,7 @@ export class PackageService {
   // Get available subtest (yang belum dipilih untuk paket ini)
   async getAvailableSubtests(packageId: number) {
     // Verify package exists
-    const packageData = await this.findOne(packageId);
+    const packageData = await this.findOne(packageId, true);
 
     // Get semua exam_id yang sudah dipilih untuk paket ini
     const selectedExamIds = packageData.package_exams.map((pe) => pe.exam_id);
@@ -335,7 +344,7 @@ export class PackageService {
   // Link subtest yang sudah ada ke package
   async linkSubtest(packageId: number, examId: number) {
     // Verify package exists
-    const packageData = await this.findOne(packageId);
+    const packageData = await this.findOne(packageId, true);
 
     // Verify exam exists dan belum dihapus
     const exam = await this.prismaService.exam.findFirst({
@@ -379,7 +388,7 @@ export class PackageService {
   // Delete subtest (Exam) dari package (hanya hapus link, tidak hapus Exam)
   async deleteSubtest(packageId: number, examId: number) {
     // Verify package exists
-    const packageData = await this.findOne(packageId);
+    const packageData = await this.findOne(packageId, true);
 
     // Verify exam belongs to this package
     const packageExam = await this.prismaService.packageExam.findFirst({

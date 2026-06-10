@@ -90,6 +90,8 @@ export class PackageController {
           description: "Paket tryout lengkap untuk persiapan SBMPTN 2025",
           price: 50000,
           type: "SARJANA",
+          voucher_code: "SBMPTN2025",
+          expired_date: "2025-12-31T23:59:59",
         },
       },
       pascasarjana: {
@@ -99,6 +101,8 @@ export class PackageController {
           description: "Paket tryout lengkap untuk persiapan S2",
           price: 75000,
           type: "PASCASARJANA",
+          voucher_code: "PASCASARJANA2025",
+          expired_date: "2025-12-31T23:59:59",
         },
       },
     },
@@ -182,24 +186,24 @@ export class PackageController {
 
     // User biasa: default published=true
     if (!isAdmin && published === undefined) {
-      return this.packageService.findByStatus(true, type, pagination);
+      return this.packageService.findByStatus(isAdmin, true, type, pagination);
     }
 
     if (published !== undefined) {
       const isPublished = published === "true";
 
       if (!isAdmin && !isPublished) {
-        return this.packageService.findByStatus(true, type, pagination);
+        return this.packageService.findByStatus(isAdmin, true, type, pagination);
       }
 
-      return this.packageService.findByStatus(isPublished, type, pagination);
+      return this.packageService.findByStatus(isAdmin, isPublished, type, pagination);
     }
 
     if (isAdmin) {
-      return this.packageService.findAll(type, pagination);
+      return this.packageService.findAll(isAdmin, type, pagination);
     }
 
-    return this.packageService.findByStatus(true, type, pagination);
+    return this.packageService.findByStatus(isAdmin, true, type, pagination);
   }
 
   @Get(":id/summary")
@@ -327,6 +331,8 @@ Bisa untuk paket Sarjana & Vokasi atau Pascasarjana.`,
           description: "Deskripsi baru",
           price: 60000,
           published: true,
+          voucher_code: "SBMPTN2026XY",
+          expired_date: "2025-12-31T23:59:59Z",
         },
       },
     },

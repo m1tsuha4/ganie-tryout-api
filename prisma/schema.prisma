@@ -154,6 +154,8 @@ model Package {
   price         Float
   published     Boolean     @default(false)
   type          PackageType @default(SARJANA)
+  voucher_code  String?
+  expired_date  DateTime?
   created_at    DateTime    @default(now())
   created_by    String?
   updated_at    DateTime    @updatedAt
@@ -193,6 +195,7 @@ model Transaction {
   payment_method    String
   status            String
   payment_proof_url String?   @db.Text
+  voucher_code      String?
   transaction_date  DateTime  @default(now())
   created_at        DateTime  @default(now())
   created_by        String?

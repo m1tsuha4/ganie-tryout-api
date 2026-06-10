@@ -46,4 +46,20 @@ export class ResponsePackageDto {
     enum: ["SARJANA", "PASCASARJANA"],
   })
   type: "SARJANA" | "PASCASARJANA";
+
+  @ApiProperty({
+    example: "VOUCHER123",
+    description: "Kode voucher untuk paket",
+    required: false,
+    nullable: true,
+  })
+  voucher_code?: string;
+
+  @ApiProperty({
+    example: "2026-12-31T23:59:59.000Z",
+    description: "Tanggal kedaluwarsa voucher",
+    required: false,
+    nullable: true,
+  })
+  expired_date?: Date;
 }

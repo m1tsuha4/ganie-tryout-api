@@ -107,6 +107,13 @@ export class ResponseTransactionDto {
   payment_proof_url?: string;
 
   @ApiProperty({
+    example: "VOUCHER123",
+    description: "Kode voucher yang digunakan",
+    required: false,
+  })
+  voucher_code?: string;
+
+  @ApiProperty({
     example: "2025-01-01T00:00:00.000Z",
     description: "Tanggal transaksi",
   })

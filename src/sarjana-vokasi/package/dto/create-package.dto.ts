@@ -9,6 +9,11 @@ export const CreatePackageSchema = z.object({
   type: z.enum(["SARJANA", "PASCASARJANA"], {
     errorMap: () => ({ message: "Type harus SARJANA atau PASCASARJANA" }),
   }),
+  voucher_code: z.string().optional(),
+  expired_date: z.preprocess(
+    (val) => (typeof val === "string" && val ? new Date(val) : val),
+    z.date().optional(),
+  ),
 });
 
 export class CreatePackageDto extends createZodDto(CreatePackageSchema) {}

@@ -46,6 +46,7 @@ export type TransactionMinAggregateOutputType = {
   payment_method: string | null
   status: string | null
   payment_proof_url: string | null
+  voucher_code: string | null
   transaction_date: Date | null
   created_at: Date | null
   created_by: string | null
@@ -63,6 +64,7 @@ export type TransactionMaxAggregateOutputType = {
   payment_method: string | null
   status: string | null
   payment_proof_url: string | null
+  voucher_code: string | null
   transaction_date: Date | null
   created_at: Date | null
   created_by: string | null
@@ -80,6 +82,7 @@ export type TransactionCountAggregateOutputType = {
   payment_method: number
   status: number
   payment_proof_url: number
+  voucher_code: number
   transaction_date: number
   created_at: number
   created_by: number
@@ -111,6 +114,7 @@ export type TransactionMinAggregateInputType = {
   payment_method?: true
   status?: true
   payment_proof_url?: true
+  voucher_code?: true
   transaction_date?: true
   created_at?: true
   created_by?: true
@@ -128,6 +132,7 @@ export type TransactionMaxAggregateInputType = {
   payment_method?: true
   status?: true
   payment_proof_url?: true
+  voucher_code?: true
   transaction_date?: true
   created_at?: true
   created_by?: true
@@ -145,6 +150,7 @@ export type TransactionCountAggregateInputType = {
   payment_method?: true
   status?: true
   payment_proof_url?: true
+  voucher_code?: true
   transaction_date?: true
   created_at?: true
   created_by?: true
@@ -249,6 +255,7 @@ export type TransactionGroupByOutputType = {
   payment_method: string
   status: string
   payment_proof_url: string | null
+  voucher_code: string | null
   transaction_date: Date
   created_at: Date
   created_by: string | null
@@ -289,6 +296,7 @@ export type TransactionWhereInput = {
   payment_method?: Prisma.StringFilter<"Transaction"> | string
   status?: Prisma.StringFilter<"Transaction"> | string
   payment_proof_url?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  voucher_code?: Prisma.StringNullableFilter<"Transaction"> | string | null
   transaction_date?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   created_at?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   created_by?: Prisma.StringNullableFilter<"Transaction"> | string | null
@@ -308,6 +316,7 @@ export type TransactionOrderByWithRelationInput = {
   payment_method?: Prisma.SortOrder
   status?: Prisma.SortOrder
   payment_proof_url?: Prisma.SortOrderInput | Prisma.SortOrder
+  voucher_code?: Prisma.SortOrderInput | Prisma.SortOrder
   transaction_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -330,6 +339,7 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   payment_method?: Prisma.StringFilter<"Transaction"> | string
   status?: Prisma.StringFilter<"Transaction"> | string
   payment_proof_url?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  voucher_code?: Prisma.StringNullableFilter<"Transaction"> | string | null
   transaction_date?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   created_at?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   created_by?: Prisma.StringNullableFilter<"Transaction"> | string | null
@@ -349,6 +359,7 @@ export type TransactionOrderByWithAggregationInput = {
   payment_method?: Prisma.SortOrder
   status?: Prisma.SortOrder
   payment_proof_url?: Prisma.SortOrderInput | Prisma.SortOrder
+  voucher_code?: Prisma.SortOrderInput | Prisma.SortOrder
   transaction_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -374,6 +385,7 @@ export type TransactionScalarWhereWithAggregatesInput = {
   payment_method?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   status?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   payment_proof_url?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  voucher_code?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
   transaction_date?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   created_by?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
@@ -388,6 +400,7 @@ export type TransactionCreateInput = {
   payment_method: string
   status: string
   payment_proof_url?: string | null
+  voucher_code?: string | null
   transaction_date?: Date | string
   created_at?: Date | string
   created_by?: string | null
@@ -407,6 +420,7 @@ export type TransactionUncheckedCreateInput = {
   payment_method: string
   status: string
   payment_proof_url?: string | null
+  voucher_code?: string | null
   transaction_date?: Date | string
   created_at?: Date | string
   created_by?: string | null
@@ -421,6 +435,7 @@ export type TransactionUpdateInput = {
   payment_method?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   payment_proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transaction_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -440,6 +455,7 @@ export type TransactionUncheckedUpdateInput = {
   payment_method?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   payment_proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transaction_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -457,6 +473,7 @@ export type TransactionCreateManyInput = {
   payment_method: string
   status: string
   payment_proof_url?: string | null
+  voucher_code?: string | null
   transaction_date?: Date | string
   created_at?: Date | string
   created_by?: string | null
@@ -471,6 +488,7 @@ export type TransactionUpdateManyMutationInput = {
   payment_method?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   payment_proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transaction_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -488,6 +506,7 @@ export type TransactionUncheckedUpdateManyInput = {
   payment_method?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   payment_proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transaction_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -515,6 +534,7 @@ export type TransactionCountOrderByAggregateInput = {
   payment_method?: Prisma.SortOrder
   status?: Prisma.SortOrder
   payment_proof_url?: Prisma.SortOrder
+  voucher_code?: Prisma.SortOrder
   transaction_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
@@ -538,6 +558,7 @@ export type TransactionMaxOrderByAggregateInput = {
   payment_method?: Prisma.SortOrder
   status?: Prisma.SortOrder
   payment_proof_url?: Prisma.SortOrder
+  voucher_code?: Prisma.SortOrder
   transaction_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
@@ -555,6 +576,7 @@ export type TransactionMinOrderByAggregateInput = {
   payment_method?: Prisma.SortOrder
   status?: Prisma.SortOrder
   payment_proof_url?: Prisma.SortOrder
+  voucher_code?: Prisma.SortOrder
   transaction_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
@@ -659,6 +681,7 @@ export type TransactionCreateWithoutUserInput = {
   payment_method: string
   status: string
   payment_proof_url?: string | null
+  voucher_code?: string | null
   transaction_date?: Date | string
   created_at?: Date | string
   created_by?: string | null
@@ -676,6 +699,7 @@ export type TransactionUncheckedCreateWithoutUserInput = {
   payment_method: string
   status: string
   payment_proof_url?: string | null
+  voucher_code?: string | null
   transaction_date?: Date | string
   created_at?: Date | string
   created_by?: string | null
@@ -722,6 +746,7 @@ export type TransactionScalarWhereInput = {
   payment_method?: Prisma.StringFilter<"Transaction"> | string
   status?: Prisma.StringFilter<"Transaction"> | string
   payment_proof_url?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  voucher_code?: Prisma.StringNullableFilter<"Transaction"> | string | null
   transaction_date?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   created_at?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   created_by?: Prisma.StringNullableFilter<"Transaction"> | string | null
@@ -736,6 +761,7 @@ export type TransactionCreateWithoutPackageInput = {
   payment_method: string
   status: string
   payment_proof_url?: string | null
+  voucher_code?: string | null
   transaction_date?: Date | string
   created_at?: Date | string
   created_by?: string | null
@@ -753,6 +779,7 @@ export type TransactionUncheckedCreateWithoutPackageInput = {
   payment_method: string
   status: string
   payment_proof_url?: string | null
+  voucher_code?: string | null
   transaction_date?: Date | string
   created_at?: Date | string
   created_by?: string | null
@@ -795,6 +822,7 @@ export type TransactionCreateManyUserInput = {
   payment_method: string
   status: string
   payment_proof_url?: string | null
+  voucher_code?: string | null
   transaction_date?: Date | string
   created_at?: Date | string
   created_by?: string | null
@@ -809,6 +837,7 @@ export type TransactionUpdateWithoutUserInput = {
   payment_method?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   payment_proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transaction_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -826,6 +855,7 @@ export type TransactionUncheckedUpdateWithoutUserInput = {
   payment_method?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   payment_proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transaction_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -842,6 +872,7 @@ export type TransactionUncheckedUpdateManyWithoutUserInput = {
   payment_method?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   payment_proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transaction_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -858,6 +889,7 @@ export type TransactionCreateManyPackageInput = {
   payment_method: string
   status: string
   payment_proof_url?: string | null
+  voucher_code?: string | null
   transaction_date?: Date | string
   created_at?: Date | string
   created_by?: string | null
@@ -872,6 +904,7 @@ export type TransactionUpdateWithoutPackageInput = {
   payment_method?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   payment_proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transaction_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -889,6 +922,7 @@ export type TransactionUncheckedUpdateWithoutPackageInput = {
   payment_method?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   payment_proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transaction_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -905,6 +939,7 @@ export type TransactionUncheckedUpdateManyWithoutPackageInput = {
   payment_method?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   payment_proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voucher_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transaction_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -924,6 +959,7 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   payment_method?: boolean
   status?: boolean
   payment_proof_url?: boolean
+  voucher_code?: boolean
   transaction_date?: boolean
   created_at?: boolean
   created_by?: boolean
@@ -943,6 +979,7 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   payment_method?: boolean
   status?: boolean
   payment_proof_url?: boolean
+  voucher_code?: boolean
   transaction_date?: boolean
   created_at?: boolean
   created_by?: boolean
@@ -962,6 +999,7 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   payment_method?: boolean
   status?: boolean
   payment_proof_url?: boolean
+  voucher_code?: boolean
   transaction_date?: boolean
   created_at?: boolean
   created_by?: boolean
@@ -981,6 +1019,7 @@ export type TransactionSelectScalar = {
   payment_method?: boolean
   status?: boolean
   payment_proof_url?: boolean
+  voucher_code?: boolean
   transaction_date?: boolean
   created_at?: boolean
   created_by?: boolean
@@ -990,7 +1029,7 @@ export type TransactionSelectScalar = {
   deleted_by?: boolean
 }
 
-export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "package_id" | "amount" | "payment_method" | "status" | "payment_proof_url" | "transaction_date" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["transaction"]>
+export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "package_id" | "amount" | "payment_method" | "status" | "payment_proof_url" | "voucher_code" | "transaction_date" | "created_at" | "created_by" | "updated_at" | "updated_by" | "deleted_at" | "deleted_by", ExtArgs["result"]["transaction"]>
 export type TransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
@@ -1018,6 +1057,7 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     payment_method: string
     status: string
     payment_proof_url: string | null
+    voucher_code: string | null
     transaction_date: Date
     created_at: Date
     created_by: string | null
@@ -1457,6 +1497,7 @@ export interface TransactionFieldRefs {
   readonly payment_method: Prisma.FieldRef<"Transaction", 'String'>
   readonly status: Prisma.FieldRef<"Transaction", 'String'>
   readonly payment_proof_url: Prisma.FieldRef<"Transaction", 'String'>
+  readonly voucher_code: Prisma.FieldRef<"Transaction", 'String'>
   readonly transaction_date: Prisma.FieldRef<"Transaction", 'DateTime'>
   readonly created_at: Prisma.FieldRef<"Transaction", 'DateTime'>
   readonly created_by: Prisma.FieldRef<"Transaction", 'String'>

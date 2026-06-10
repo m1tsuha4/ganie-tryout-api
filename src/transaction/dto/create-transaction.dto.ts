@@ -6,6 +6,7 @@ export const CreateTransactionSchema = z.object({
   payment_method: z.string().min(1).max(100),
   amount: z.number().positive().optional(),
   payment_proof_url: z.string().url().optional(),
+  voucher_code: z.string().optional(),
 });
 
 export class CreateTransactionDto extends createZodDto(

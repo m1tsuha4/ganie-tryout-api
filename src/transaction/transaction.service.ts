@@ -30,6 +30,7 @@ export class TransactionService {
       status: transaction.status as "unpaid" | "paid",
       payment_proof_url: transaction.payment_proof_url,
       transaction_date: transaction.transaction_date,
+      voucher_code: transaction.voucher_code,
       user: transaction.user
         ? {
             id: transaction.user.id,
@@ -73,39 +74,111 @@ export class TransactionService {
     }
 
     // Gunakan amount dari DTO atau ambil dari package price
-    const amount = createTransactionDto.amount ?? packageData.price;
+    let amount = createTransactionDto.amount ?? packageData.price;
+    let paymentMethod = createTransactionDto.payment_method;
+    let status = "unpaid";
 
-    // Buat transaction dengan status "unpaid" default
-    const transaction = await this.prismaService.transaction.create({
-      data: {
-        user_id: userId,
-        package_id: createTransactionDto.package_id,
-        amount: amount,
-        payment_method: createTransactionDto.payment_method,
-        status: "unpaid",
-        payment_proof_url: createTransactionDto.payment_proof_url, // Simpan bukti bayar jika ada
-        created_by: userId, // User yang membuat transaksi
-        // deleted_at default null (tidak dihapus)
-      },
-      include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-            name: true,
-            email: true,
+    if (createTransactionDto.voucher_code) {
+      const userVoucher = createTransactionDto.voucher_code.trim();
+
+      // Check if package has voucher code configured
+      if (!packageData.voucher_code) {
+        throw new BadRequestException("This package does not accept vouchers");
+      }
+
+      // Check if the voucher code matches (case-insensitive)
+      if (packageData.voucher_code.toLowerCase() !== userVoucher.toLowerCase()) {
+        throw new BadRequestException("Invalid voucher code");
+      }
+
+      // Check if voucher has expired
+      if (packageData.expired_date && new Date() > packageData.expired_date) {
+        throw new BadRequestException("Voucher has expired");
+      }
+
+      // Check if the user has already used this voucher for this package
+      const existingUsedVoucher = await this.prismaService.transaction.findFirst({
+        where: {
+          user_id: userId,
+          package_id: packageData.id,
+          voucher_code: {
+            equals: packageData.voucher_code,
+            mode: "insensitive",
+          },
+          status: "paid",
+          deleted_at: null,
+        },
+      });
+
+      if (existingUsedVoucher) {
+        throw new BadRequestException(
+          "You have already used this voucher for this package",
+        );
+      }
+
+      // Set amount to 0, payment method to "voucher", and status to "paid"
+      amount = 0;
+      paymentMethod = "voucher";
+      status = "paid";
+    }
+
+    // Buat transaction & UserPackage secara atomik
+    const transaction = await this.prismaService.$transaction(async (tx) => {
+      const newTx = await tx.transaction.create({
+        data: {
+          user_id: userId,
+          package_id: createTransactionDto.package_id,
+          amount: amount,
+          payment_method: paymentMethod,
+          status: status,
+          payment_proof_url: createTransactionDto.payment_proof_url,
+          voucher_code: createTransactionDto.voucher_code
+            ? packageData.voucher_code
+            : null,
+          created_by: userId,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              name: true,
+              email: true,
+            },
+          },
+          package: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              price: true,
+              type: true,
+            },
           },
         },
-        package: {
-          select: {
-            id: true,
-            title: true,
-            description: true,
-            price: true,
-            type: true,
+      });
+
+      if (status === "paid") {
+        const existingUserPackage = await tx.userPackage.findFirst({
+          where: {
+            user_id: userId,
+            package_id: packageData.id,
           },
-        },
-      },
+        });
+
+        if (!existingUserPackage) {
+          await tx.userPackage.create({
+            data: {
+              user_id: userId,
+              package_id: packageData.id,
+              created_at: new Date(),
+              updated_at: new Date(),
+            },
+          });
+        }
+      }
+
+      return newTx;
     });
 
     return this.mapToResponseDto(transaction);
