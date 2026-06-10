@@ -52,6 +52,17 @@ export class TransactionService {
   }
 
   async create(userId: string, createTransactionDto: CreateTransactionDto) {
+    // Validasi user exists
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException("User not found or is not a regular user");
+    }
+
     // Validasi package exists
     const packageData = await this.prismaService.package.findUnique({
       where: {

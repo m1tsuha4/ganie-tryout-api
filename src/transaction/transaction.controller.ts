@@ -95,6 +95,14 @@ export class TransactionController {
           payment_proof_url: "https://res.cloudinary.com/...",
         },
       },
+      withVoucher: {
+        summary: "Contoh dengan voucher",
+        value: {
+          package_id: 1,
+          payment_method: "Voucher",
+          voucher_code: "SBMPTN2026XY",
+        },
+      },
     },
   })
   @ApiCreatedResponse({
