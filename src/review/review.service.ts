@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { BadRequestException, Injectable } from "@nestjs/common";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class ReviewService {
-  constructor(private readonly prisma: PrismaService){}
+  constructor(private readonly prisma: PrismaService) {}
 
   async getReview(sessionId: number, questionNo?: number) {
     const session = await this.prisma.userExamSession.findUnique({
@@ -27,20 +27,25 @@ export class ReviewService {
     });
 
     if (!session) {
-      throw new BadRequestException('Session not found');
+      throw new BadRequestException("Session not found");
     }
 
     let questionsToReview = session.exam.questions;
 
     if (questionNo) {
-      if (typeof session.question_order === 'object' && Array.isArray(session.question_order)) {
-         // Assuming question_order is an array of question IDs
-         const questionId = session.question_order[questionNo - 1] as number;
-         if (questionId) {
-            questionsToReview = questionsToReview.filter(q => q.id === questionId);
-         }
+      if (
+        typeof session.question_order === "object" &&
+        Array.isArray(session.question_order)
+      ) {
+        // Assuming question_order is an array of question IDs
+        const questionId = session.question_order[questionNo - 1] as number;
+        if (questionId) {
+          questionsToReview = questionsToReview.filter(
+            (q) => q.id === questionId,
+          );
+        }
       } else {
-         questionsToReview = [questionsToReview[questionNo - 1]].filter(Boolean);
+        questionsToReview = [questionsToReview[questionNo - 1]].filter(Boolean);
       }
     }
 
@@ -75,7 +80,6 @@ export class ReviewService {
       };
     });
 
-    
     return {
       session_id: session.id,
       exam_title: session.exam.title,

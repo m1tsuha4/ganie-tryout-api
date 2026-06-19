@@ -9,7 +9,15 @@ export const UpdateQuestionSchema = z.object({
   discussion: z.string().min(1).optional(),
   video_discussion: z.string().optional(),
   difficulty: z.string().optional(),
-  type_question: z.enum(["Verbal", "Kuantitatif", "Penalaran", "StructureAndExpression", "ReadingComprehension"]).optional(),
+  type_question: z
+    .enum([
+      "Verbal",
+      "Kuantitatif",
+      "Penalaran",
+      "StructureAndExpression",
+      "ReadingComprehension",
+    ])
+    .optional(),
   choices: z
     .array(CreateQuestionChoiceSchema)
     .min(4, "Must have 4 or 5 choices")
@@ -21,4 +29,4 @@ export const UpdateQuestionSchema = z.object({
     .optional(),
 });
 
-export class UpdateQuestionDto extends createZodDto(UpdateQuestionSchema) { }
+export class UpdateQuestionDto extends createZodDto(UpdateQuestionSchema) {}

@@ -193,10 +193,20 @@ export class PackageController {
       const isPublished = published === "true";
 
       if (!isAdmin && !isPublished) {
-        return this.packageService.findByStatus(isAdmin, true, type, pagination);
+        return this.packageService.findByStatus(
+          isAdmin,
+          true,
+          type,
+          pagination,
+        );
       }
 
-      return this.packageService.findByStatus(isAdmin, isPublished, type, pagination);
+      return this.packageService.findByStatus(
+        isAdmin,
+        isPublished,
+        type,
+        pagination,
+      );
     }
 
     if (isAdmin) {

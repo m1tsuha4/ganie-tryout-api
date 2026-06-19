@@ -16,7 +16,10 @@ export class PackageService {
   constructor(private prismaService: PrismaService) {}
 
   // Helper method untuk map package ke DTO (exclude updated_at, created_at, deleted_at, created_by, updated_by, deleted_by)
-  private mapToResponseDto(packageData: any, isAdmin: boolean = false): ResponsePackageDto {
+  private mapToResponseDto(
+    packageData: any,
+    isAdmin: boolean = false,
+  ): ResponsePackageDto {
     return {
       id: packageData.id,
       title: packageData.title,

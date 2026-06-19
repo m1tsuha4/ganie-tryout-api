@@ -96,7 +96,11 @@ export class ExamRepository {
     });
   }
 
-  async findExistingSessionForUserExam(userId: string, examId: number, packageId: number) {
+  async findExistingSessionForUserExam(
+    userId: string,
+    examId: number,
+    packageId: number,
+  ) {
     return this.prismaService.userExamSession.findFirst({
       where: {
         exam_id: examId,
@@ -156,14 +160,12 @@ export class ExamRepository {
     });
   }
 
-  async findPackageByExamId(
-    examId: number
-  ) {
+  async findPackageByExamId(examId: number) {
     const packageId = await this.prismaService.packageExam.findFirst({
       where: { exam_id: examId },
       select: {
         package_id: true,
-      }
+      },
     });
     if (packageId) {
       return await this.prismaService.package.findUnique({
@@ -171,8 +173,8 @@ export class ExamRepository {
         select: {
           title: true,
           type: true,
-        }
-      }) 
+        },
+      });
     }
   }
 }

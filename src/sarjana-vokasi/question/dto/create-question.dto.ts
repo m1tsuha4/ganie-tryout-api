@@ -22,7 +22,15 @@ export const CreateQuestionSchema = z.object({
   discussion: z.string().min(1), // Pembahasan (mandatory)
   video_discussion: z.string().optional(), // Video Pembahasan (opsional)
   difficulty: z.string().optional(),
-  type_question: z.enum(["Verbal", "Kuantitatif", "Penalaran", "StructureAndExpression", "ReadingComprehension"]).optional(),
+  type_question: z
+    .enum([
+      "Verbal",
+      "Kuantitatif",
+      "Penalaran",
+      "StructureAndExpression",
+      "ReadingComprehension",
+    ])
+    .optional(),
   // choices dihapus - dibuat terpisah via POST /question/:id/choices
 });
 

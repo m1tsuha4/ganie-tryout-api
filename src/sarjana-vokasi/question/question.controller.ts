@@ -61,7 +61,7 @@ export class QuestionController {
     private readonly questionService: QuestionService,
     private readonly cloudinaryService: CloudinaryService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   // Create question TANPA choices (flow baru: buat soal dulu, baru tambah choices)
   @Post()

@@ -31,6 +31,7 @@ export class TransactionService {
       payment_proof_url: transaction.payment_proof_url,
       transaction_date: transaction.transaction_date,
       voucher_code: transaction.voucher_code,
+      is_completed: transaction.is_completed ?? false,
       user: transaction.user
         ? {
             id: transaction.user.id,
@@ -49,6 +50,27 @@ export class TransactionService {
           }
         : undefined,
     };
+  }
+
+  // Helper method untuk mendapatkan status kelengkapan ujian dalam paket
+  private async getPackageCompletionStatus(
+    userId: string,
+    packageId: number,
+  ): Promise<boolean> {
+    const totalExams = await this.prismaService.packageExam.count({
+      where: { package_id: packageId },
+    });
+    if (totalExams === 0) return false;
+
+    const completedExams = await this.prismaService.userExamSession.count({
+      where: {
+        user_id: userId,
+        package_id: packageId,
+        completed_at: { not: null },
+      },
+    });
+
+    return completedExams === totalExams;
   }
 
   async create(userId: string, createTransactionDto: CreateTransactionDto) {
@@ -98,7 +120,9 @@ export class TransactionService {
       }
 
       // Check if the voucher code matches (case-insensitive)
-      if (packageData.voucher_code.toLowerCase() !== userVoucher.toLowerCase()) {
+      if (
+        packageData.voucher_code.toLowerCase() !== userVoucher.toLowerCase()
+      ) {
         throw new BadRequestException("Invalid voucher code");
       }
 
@@ -108,18 +132,19 @@ export class TransactionService {
       }
 
       // Check if the user has already used this voucher for this package
-      const existingUsedVoucher = await this.prismaService.transaction.findFirst({
-        where: {
-          user_id: userId,
-          package_id: packageData.id,
-          voucher_code: {
-            equals: packageData.voucher_code,
-            mode: "insensitive",
+      const existingUsedVoucher =
+        await this.prismaService.transaction.findFirst({
+          where: {
+            user_id: userId,
+            package_id: packageData.id,
+            voucher_code: {
+              equals: packageData.voucher_code,
+              mode: "insensitive",
+            },
+            status: "paid",
+            deleted_at: null,
           },
-          status: "paid",
-          deleted_at: null,
-        },
-      });
+        });
 
       if (existingUsedVoucher) {
         throw new BadRequestException(
@@ -221,10 +246,51 @@ export class TransactionService {
         skip: offset,
         orderBy: { created_at: "desc" },
       }),
-      this.prismaService.transaction.count({ where: { deleted_at: null, package: { deleted_at: null } } }),
+      this.prismaService.transaction.count({
+        where: { deleted_at: null, package: { deleted_at: null } },
+      }),
     ]);
 
-    const data = transactions.map((t) => this.mapToResponseDto(t));
+    // Batch query package completion status for multiple users
+    const packageIds = transactions.map((t) => t.package_id);
+    const userIds = transactions.map((t) => t.user_id);
+
+    const packageExams = await this.prismaService.packageExam.findMany({
+      where: { package_id: { in: packageIds } },
+      select: { package_id: true },
+    });
+    const examCountMap = new Map<number, number>();
+    for (const pe of packageExams) {
+      examCountMap.set(
+        pe.package_id,
+        (examCountMap.get(pe.package_id) || 0) + 1,
+      );
+    }
+
+    const completedSessions = await this.prismaService.userExamSession.findMany(
+      {
+        where: {
+          user_id: { in: userIds },
+          package_id: { in: packageIds },
+          completed_at: { not: null },
+        },
+        select: { user_id: true, package_id: true },
+      },
+    );
+    const completedCountMap = new Map<string, number>();
+    for (const s of completedSessions) {
+      const key = `${s.user_id}_${s.package_id}`;
+      completedCountMap.set(key, (completedCountMap.get(key) || 0) + 1);
+    }
+
+    const data = transactions.map((t) => {
+      const totalExams = examCountMap.get(t.package_id) || 0;
+      const completedExams =
+        completedCountMap.get(`${t.user_id}_${t.package_id}`) || 0;
+      const is_completed = totalExams > 0 && completedExams === totalExams;
+      return this.mapToResponseDto({ ...t, is_completed });
+    });
+
     const meta = {
       total,
       limit,
@@ -280,7 +346,11 @@ export class TransactionService {
       );
     }
 
-    return this.mapToResponseDto(transaction);
+    const is_completed = await this.getPackageCompletionStatus(
+      transaction.user_id,
+      transaction.package_id,
+    );
+    return this.mapToResponseDto({ ...transaction, is_completed });
   }
 
   async findByUser(userId: string, paginationDto?: PaginationDto) {
@@ -290,7 +360,11 @@ export class TransactionService {
 
     const [transactions, total] = await Promise.all([
       this.prismaService.transaction.findMany({
-        where: { user_id: userId, deleted_at: null, package: { deleted_at: null } },
+        where: {
+          user_id: userId,
+          deleted_at: null,
+          package: { deleted_at: null },
+        },
         include: {
           package: {
             select: {
@@ -307,11 +381,54 @@ export class TransactionService {
         orderBy: { created_at: "desc" },
       }),
       this.prismaService.transaction.count({
-        where: { user_id: userId, deleted_at: null, package: { deleted_at: null } },
+        where: {
+          user_id: userId,
+          deleted_at: null,
+          package: { deleted_at: null },
+        },
       }),
     ]);
 
-    const data = transactions.map((t) => this.mapToResponseDto(t));
+    // Batch query package completion status for current user
+    const packageIds = transactions.map((t) => t.package_id);
+
+    const packageExams = await this.prismaService.packageExam.findMany({
+      where: { package_id: { in: packageIds } },
+      select: { package_id: true },
+    });
+    const examCountMap = new Map<number, number>();
+    for (const pe of packageExams) {
+      examCountMap.set(
+        pe.package_id,
+        (examCountMap.get(pe.package_id) || 0) + 1,
+      );
+    }
+
+    const completedSessions = await this.prismaService.userExamSession.findMany(
+      {
+        where: {
+          user_id: userId,
+          package_id: { in: packageIds },
+          completed_at: { not: null },
+        },
+        select: { package_id: true },
+      },
+    );
+    const completedCountMap = new Map<number, number>();
+    for (const s of completedSessions) {
+      completedCountMap.set(
+        s.package_id,
+        (completedCountMap.get(s.package_id) || 0) + 1,
+      );
+    }
+
+    const data = transactions.map((t) => {
+      const totalExams = examCountMap.get(t.package_id) || 0;
+      const completedExams = completedCountMap.get(t.package_id) || 0;
+      const is_completed = totalExams > 0 && completedExams === totalExams;
+      return this.mapToResponseDto({ ...t, is_completed });
+    });
+
     const meta = {
       total,
       limit,
@@ -398,7 +515,11 @@ export class TransactionService {
       },
     });
 
-    return this.mapToResponseDto(updatedTransaction);
+    const is_completed = await this.getPackageCompletionStatus(
+      updatedTransaction.user_id,
+      updatedTransaction.package_id,
+    );
+    return this.mapToResponseDto({ ...updatedTransaction, is_completed });
   }
 
   async uploadPaymentProof(
@@ -472,6 +593,10 @@ export class TransactionService {
       },
     });
 
-    return this.mapToResponseDto(updatedTransaction);
+    const is_completed = await this.getPackageCompletionStatus(
+      updatedTransaction.user_id,
+      updatedTransaction.package_id,
+    );
+    return this.mapToResponseDto({ ...updatedTransaction, is_completed });
   }
 }

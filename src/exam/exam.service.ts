@@ -97,7 +97,7 @@ export class ExamService {
         }
       }
 
-      // If a session for this user+exam already exists, return it 
+      // If a session for this user+exam already exists, return it
       const existing = await this.repo.findExistingSessionForUserExam(
         userId,
         pe.exam.id,
@@ -185,7 +185,11 @@ export class ExamService {
       if (!c) {
         throw new ForbiddenException("Choice not found");
       }
-      return { id: c.id, choice_text: c.choice_text, choice_image_url: c.choice_image_url };
+      return {
+        id: c.id,
+        choice_text: c.choice_text,
+        choice_image_url: c.choice_image_url,
+      };
     });
 
     const existingAnswer = await this.repo.findUserAnswerForSessionQuestion(
@@ -484,11 +488,7 @@ export class ExamService {
     return { finished: true, result: res };
   }
 
-  private scaleScore(
-    rawScore: number,
-    maxRawScore: number,
-    examType?: string,
-  ) {
+  private scaleScore(rawScore: number, maxRawScore: number, examType?: string) {
     if (maxRawScore <= 0) return 0;
     const scaleTarget = examType === "TBI" ? 677 : 1000;
     const scaled = Math.round((rawScore / maxRawScore) * scaleTarget);
@@ -533,7 +533,7 @@ export class ExamService {
 
     const totalQuestions = totals.correct + totals.wrong + totals.empty;
 
-    let averageScore = totalQuestions;
+    const averageScore = totalQuestions;
 
     return {
       sessions: sessionSummaries,
@@ -579,7 +579,10 @@ export class ExamService {
     const empty = Math.max(0, totalQuestions - answeredCount);
 
     // Compute raw score using scoring constants (e.g., +4 / -1 / 0)
-    const scoring = getScoringConstants(packageData?.type ?? "SARJANA", examData?.type);
+    const scoring = getScoringConstants(
+      packageData?.type ?? "SARJANA",
+      examData?.type,
+    );
     const rawScore =
       correct * scoring.CORRECT_ANSWER +
       wrong * scoring.WRONG_ANSWER +
@@ -619,7 +622,7 @@ export class ExamService {
     for (const pe of packageExam) {
       const exam = pe.exam;
       const typeExam = exam.type_exam || "TKA";
-      
+
       if (!result[typeExam]) {
         result[typeExam] = {
           score: 0,
@@ -657,7 +660,7 @@ export class ExamService {
         }
 
         const ans = session.user_answers.find((a) => a.question_id === qId);
-        
+
         let point = 0;
         if (!ans || !ans.choice_id) {
           result[typeExam].details[typeQuestion].empty += 1;

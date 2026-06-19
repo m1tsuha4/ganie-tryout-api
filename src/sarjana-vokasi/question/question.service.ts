@@ -280,7 +280,7 @@ export class QuestionService {
                 is_correct: choice.is_correct,
                 updated_by: userId,
               },
-            })
+            }),
           );
         } else {
           // Create new
@@ -294,13 +294,17 @@ export class QuestionService {
                 is_correct: choice.is_correct,
                 created_by: userId,
               },
-            })
+            }),
           );
         }
       });
 
       // Soft delete excess choices
-      for (let i = updateQuestionDto.choices.length; i < existingChoices.length; i++) {
+      for (
+        let i = updateQuestionDto.choices.length;
+        i < existingChoices.length;
+        i++
+      ) {
         operations.push(
           this.prismaService.questionChoice.update({
             where: { id: existingChoices[i].id },
@@ -308,7 +312,7 @@ export class QuestionService {
               deleted_at: new Date(),
               deleted_by: userId,
             },
-          })
+          }),
         );
       }
 

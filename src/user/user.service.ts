@@ -137,7 +137,7 @@ export class UserService {
         take: limit,
         skip: offset,
         orderBy: {
-          created_at: 'desc',
+          created_at: "desc",
         },
       }),
       this.prismaService.transaction.count({

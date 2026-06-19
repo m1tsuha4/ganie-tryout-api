@@ -132,4 +132,10 @@ export class ResponseTransactionDto {
     required: false,
   })
   package?: PackageInfoDto;
+
+  @ApiProperty({
+    example: false,
+    description: "Apakah user sudah menyelesaikan semua ujian dalam paket ini",
+  })
+  is_completed: boolean;
 }

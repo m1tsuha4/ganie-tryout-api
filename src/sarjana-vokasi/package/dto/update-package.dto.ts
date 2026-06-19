@@ -9,7 +9,12 @@ export const UpdatePackageSchema = z.object({
   published: z.boolean().optional(),
   voucher_code: z.string().nullable().optional(),
   expired_date: z.preprocess(
-    (val) => (typeof val === "string" && val ? new Date(val) : val === null || val === "" ? null : val),
+    (val) =>
+      typeof val === "string" && val
+        ? new Date(val)
+        : val === null || val === ""
+          ? null
+          : val,
     z.date().nullable().optional(),
   ),
 });
