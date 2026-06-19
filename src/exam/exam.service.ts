@@ -204,6 +204,22 @@ export class ExamService {
         ).toISOString()
       : undefined;
 
+    const user = await this.prisma.user.findUnique({
+      where: { id: session.user_id },
+      select: { name: true, email: true },
+    });
+
+    const transaction = await this.prisma.transaction.findFirst({
+      where: {
+        user_id: session.user_id,
+        package_id: session.package_id,
+        status: "paid",
+        deleted_at: null,
+      },
+      select: { id: true },
+      orderBy: { created_at: "desc" },
+    });
+
     return {
       sessionId: session.id,
       examId: session.exam_id,
@@ -217,6 +233,9 @@ export class ExamService {
       selectedChoiceId: selectedChoiceId,
       secondsLeft: secondsLeft,
       expiresAt: expiresAt,
+      userName: user?.name ?? null,
+      userEmail: user?.email ?? null,
+      transactionId: transaction?.id ?? null,
     };
   }
 
