@@ -58,6 +58,13 @@ class PackageInfoDto {
     enum: ["SARJANA", "PASCASARJANA"],
   })
   type: "SARJANA" | "PASCASARJANA";
+
+  @ApiProperty({
+    example: "https://res.cloudinary.com/your-cloud/image/upload/v1234567890/packages/thumbnail.jpg",
+    description: "URL thumbnail paket",
+    required: false,
+  })
+  thumbnail_url?: string;
 }
 
 export class ResponseTransactionDto {
