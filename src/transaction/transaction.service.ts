@@ -373,6 +373,7 @@ export class TransactionService {
               description: true,
               price: true,
               type: true,
+              thumbnail_url: true,
             },
           },
         },
